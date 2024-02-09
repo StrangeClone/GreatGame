@@ -289,7 +289,7 @@ information containers. This method will be called when the Behaviour is damaged
 ```mermaid
 classDiagram
     class Factory~E~ {
-        - Map~String, Pattern~ patterns
+        - Map<String, Pattern> patterns
         + addPattern(Pattern~E~)
         + final create(String) E
     }
@@ -431,7 +431,7 @@ classDiagram
         <<interface>>
     }
     class ConcreteCreature {
-        - Map~Characteristic, int~ characteristics
+        - Map<Characteristic,int> characteristics
         - int speed
         - int maxHealthPoints
         - int healthPoints
@@ -953,8 +953,8 @@ classDiagram
     class CreaturePattern {
         - Texture texture
         - int speed
-        - Map~Characteristic, int~ characteristics
-        - Map~String, int~ skills
+        - Map<Characteristic,int> characteristics
+        - Map<String,int> skills
         + build() CreatureBehaviour
     }
     Pattern~CreatureBehaviour~ <|-- CreaturePattern
@@ -1134,7 +1134,7 @@ classDiagram
     }
     PathFinder -- Environment
     class FreePositionPathFinder {
-        - Map~Vector2, boolean~ freePositions
+        - Map<Vector2,boolean> freePositions
         - update()
         + findPath(Vector2 start, Vector2 finish, float maxDistance) List~Vector2~
     }

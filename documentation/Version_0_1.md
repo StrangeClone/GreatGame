@@ -256,6 +256,12 @@ classDiagram
     Actor <|-- Behaviour
     Location <-- Behaviour : originalLocation
     Environment <-- Behaviour : environment
+    class RandomMap~E~ {
+        - Map weights
+        + setWeight(int weight, E value)
+        + getWeight(E value) int
+        + generate() E
+    }
 ```
 
 The location class represents a little portion of the map that contains Items and Creatures. It
@@ -283,6 +289,11 @@ act(delta) method will render objects on the screen. The saveBehaviourInfo() met
 the Location, The BehaviourInfo class contains information that can't be procedurally generated: the HP of
 the behaviour, if it was damaged, its position if it had moved, and so on. So this class and its extensions are just
 information containers. This method will be called when the Behaviour is damaged or moves.
+
+The RandomMap will be used in the game to generate random values with different probabilities: it has a map of
+values, where the keys are the values, each associated to a weight. The greater the weight, the greater the probability
+that the generate function will return that particular weight. The probability that a particular value is generated
+is w/W, where w is the weight of the value and W the sum of the weights.
 
 ### Factory package
 
@@ -432,7 +443,7 @@ classDiagram
     }
     class ConcreteCreature {
         - Map<Characteristic,int> characteristics
-        - int speed
+        - int speed = 9
         - int maxHealthPoints
         - int healthPoints
         - int coins
@@ -461,7 +472,7 @@ classDiagram
 ```
 
 Every ConcreteCreature instance has a map that has the Skills as keys and their levels as values and a map that has
-the Characteristics as keys and their values.
+the Characteristics as keys and their values. The Characteristics will be all set to 10, by default.
 The upgradeSkill method follows this process:
 
 ```mermaid
@@ -950,78 +961,120 @@ The player can press esc to pause the game.
 
 ```mermaid
 classDiagram
-    class CreaturePattern {
-        - Texture texture
-        - int speed
-        - Map<Characteristic,int> characteristics
-        - Map<String,int> skills
+    class CompositePattern {
+        + CompositePattern(Texture, Action...)
+        + modify(Modifier) CompositePattern
         + build() CreatureBehaviour
     }
-    Pattern~CreatureBehaviour~ <|-- CreaturePattern
-    Item "1" <-- CreaturePattern : primaryItem
-    Item "1" <-- CreaturePattern : headItem
-    Item "1" <-- CreaturePattern : chestItem
-    Item "1-8" <-- CreaturePattern : inventory
-    class VillagerPattern {
-        + build() CreatureBehaviour
+    Pattern~CreatureBehaviour~ <|-- CompositePattern
+    Action "*" <-- CompositePattern : allowedActions
+    class Modifier {
+        <<interface>>
+        + modify(Creature)
     }
-    CreaturePattern <|-- VillagerPattern
+    Modifier "*" <-- CompositePattern : modifiers
+    class CharacteristicSetter {
+        + CharacteristicSetter(Characteristic, int value)
+        + modify(Creature)
+    }
+    Modifier <|-- CharacteristicSetter
+    class SpeedSetter {
+        + SpeedSetter(int value)
+        + modify(Creature)
+    }
+    Modifier <|-- SpeedSetter
+    class SkillGiver {
+        + SkillGiver(String, int)
+        + modify(Creature)
+    }
+    Modifier <|-- SkillGiver
+    class ItemEquipper {
+        + ItemEquipper(Item)
+        + modify(Creature)
+    }
+    Modifier <|-- ItemEquipper
+    class ItemGiver {
+        + ItemGiver(Item...)
+        + modify(Creature)
+    }
+    Modifier <|-- ItemGiver
+    class RandomModifier {
+        + RandomModifier()
+        + addModifier(Modifier, weight) RandomModifier
+        + modify(Creature)
+    }
+    Modifier <|-- RandomModifier
+    RandomMap "1" <-- RandomModifier
 ```
 
-The creatureFactory class will be used to create instances of the CreatureBehaviour class. The build method of CreaturePattern
-(implementation of Pattern<CreatureBehaviour>) works as shown by the Diagram:
+The CompositePattern creates a CreatureBehaviour using a Decorator, the Modifier interface. The class has a list
+of modifiers, that will be applied in the build method:
 
 ```mermaid
 sequenceDiagram
-    creatureFactory ->>+ CreaturePattern : build()
-    CreaturePattern ->> newCreature : new ConcreteCreature()
-    CreaturePattern ->> newCreature : setSpeed(speed)
-    loop for each entry (c, v) in the characteristic map of the pattern
-        CreaturePattern ->> newCreature : setCharacteristic(c, v)
+    Factory ->>+ CompositePattern : build()
+    CompositePattern ->> creature : new ConcreteCreature
+    loop for each Modifier m in the list 
+        CompositePattern --> Modifier : modify(creature)
     end
-    loop for each entry (s, l) in the skill map of the pattern
-    loop for l times
-        CreaturePattern ->> newCreature : upgradeSkill(s)
-    end
-    CreaturePattern ->> newCreature : setPrimaryItem(primaryItem)
-    CreaturePattern ->> newCreature : setHeadItem(headItem)
-    CreaturePattern ->> newCreature : setChestItem(chestItem)
-    loop for each item i in inventory 
-        newCreature ->> inventory : add(i) 
-    end
-    end
-    CreaturePattern ->> newBehaviour : new CreatureBehaviour(newCreature)
-    CreaturePattern ->> newBehaviour : setTexture(texture)
-    CreaturePattern ->> newBehaviour : setTouchable(true)
-    CreaturePattern ->> newBehaviour : getAllowedActionList().add(Attack(player, newBehaviour)
-    CreaturePattern -->>- creatureFactory : return newBehaviour
+    CompositePattern ->> behaviour : new CreatureBehaviour(creature)
+    CompositePattern ->> behaviour : setTexture(texture)
+    CompositePattern ->> behaviour : setAllowedActions(allowedActions)
+    CompositePattern -->- Factory : return behaviour
 ```
 
-Here are some patterns, with their values, of the Creatures of the game:
+The Modifiers are added to the array with the modify(Modifier) method of the CompositePattern class. It returns
+the instance itself, allowing waterfall calls.
 
-| Name   | speed | Physique | Agility | Skills                  | Primary Item | Head | Chest   | Inventory    |
-|--------|-------|----------|---------|-------------------------|--------------|------|---------|--------------|
-| Bandit | 9     | 12       | 12      | Fencing(1), Vitality(1) | ShortSword   | helm | leather | Silver Coins |
-| Wolf   | 12    | 14       | 13      | Bite(2), Vitality(1)    | Wolf Fangs   | null | null    | fur          |
-| Bear   | 12    | 16       | 10      | Bite(2), Vitality(2)    | Bear Fangs   | null | null    | fur          |
-| Fox    | 9     | 8        | 14      | Bite(1), Vitality(1)    | Fox Fangs    | null | null    | fur          |
-| Player | 9     | 10       | 10      | None                    | ShortSword   | null | null    | empty        |
+This is a description of Modifier's implementations:
+- CharacteristicSetter(Characteristic, value) sets the Characteristic passed as parameter to value
+- SpeedSetter(value) sets the speed to value
+- SkillGiver(String, level) gives the Skill with the name passed as parameter, with the level passed as parameter
+- ItemEquipper(Item) equips the Item passed as parameter if the Item can be equipped
+- ItemGiver(Item...) adds the Items passed as parameters to the Creature's inventory
+- RandomModifier() will be given various Modifiers, with the addModifier method, and then randomly use one of them
+when its modify method is called. Each Modifier passed with the addModifier method has a probability of w/W to be
+selected, where w is its weight, passed as parameter, and W is the sum of the weights of the modifiers passed with
+the method addModifier. The method also returns the object itself, allowing waterfall calls.
 
-The VillagerPattern extensions will work as the previous one, will put only the Action TalkAction(player, newBehaviour)
-in the AllowedActionList.
-
-| Name     | speed | Physique | Agility | Skills | Primary Item | Head | Chest | Inventory |
-|----------|-------|----------|---------|--------|--------------|------|-------|-----------|
-| Villager | 9     | 10       | 10      | None   | null         | null | null  | Variable  |
-
-This pattern will set the Inventory as one of these options (random):
-
-| Name        | Items                                 |
-|-------------|---------------------------------------|
-| WeaponSmith | ShortSword(x2), LongSword, Dagger(x2) |
-| Armorer     | ChainMail, Helm(x2)                   |
-| Hunter      | ShortBow(x2), LongBow(x2)             |
-| Doctor      | Healing Potion(x3)                    |
+Here are some patterns, with their Modifiers, of the Creatures of the game:
+- Bandit: allowed actions: Attack
+  - CharacteristicSetter(Physique, 12)
+  - CharacteristicSetter(Agility, 12)
+  - SkillGiver(Fencing, 1)
+  - SkillGiver(Vitality, 1)
+  - ItemEquipper(ShortSword)
+  - ItemEquipper(Helm)
+  - ItemEquipper(LeatherArmor)
+  - ItemGiver(Silver Coins)
+- Wolf: allowed actions: Attack
+  - SpeedSetter(12)
+  - CharacteristicSetter(Physique, 14)
+  - CharacteristicSetter(Agility, 13)
+  - SkillGiver(Bite, 2)
+  - SkillGiver(Vitality, 1)
+  - ItemEquipper(Wolf fangs)
+  - ItemGiver(fur)
+- Bear: allowed actions : Attack
+  - CharacteristicSetter(Physique, 16)
+  - CharacteristicSetter(Agility, 10)
+  - SkillGiver(Bite, 2)
+  - SkillGiver(Vitality, 2)
+  - ItemEquipper(Bear Fangs)
+  - ItemGiver(fur, fur)
+- Fox: allowed actions : Attack
+  - CharacteristicSetter(Physique, 8)
+  - CharacteristicSetter(Agility, 14)
+  - SkillGiver(Bite, 1)
+  - SkillGiver(Vitality, 1)
+  - ItemEquipper(Fox Fangs)
+  - ItemGiver(fur)
+- Villager: allowed actions : talk
+  - RandomModifier() with these options:
+    - ItemGiver(ShortSword, ShortSword, LongSword, Dagger, Dagger), weight 1
+    - ItemGiver(ChaiMail, Helm, Helm), weight 1
+    - ItemGiver(ShortBow, ShortBow, LongBow, LongBow)
+    - ItemGiver(HealingPotion, HealingPotion, HealingPotion)
 
 ### ItemsFactory package
 
@@ -1151,12 +1204,10 @@ The Location class in this package has two int attributes, x and y, an attribute
 The StandardGenerator implementation of WorldGenerator has a set with every location already defined in the world,
 associated to its biome. When the player triggers the generation of a new location, the generate method will be
 called, defining the biome of the new location with the following algorithm:
-1. For each member of biomes enumeration, create a variable weight[i] = 1
-2. For each location l, adjacent to the location to define, check the biome: increase the corresponding weight.
-3. Generate a random number r from 0 to s - 1, where s is the sum of the values of weight[] array
-4. Set i = 0; If r > weight[i], decrease r by weight[i] and increase i. Repeat until r <= weight[i].
-5. The location's biome is the one corresponding to variable i.
-6. If the biome is grassland, there's a 0.5% probability that it's got a village and a 0.5% probability that it's got
+1. Create a RandomMap with all the biomes as values, all of them with weight 1.
+2. For each location l, adjacent to the location to define, check the biome: increase its weight by 1.
+3. Generate a value (Biome) with the generate method of the RandomMap
+4. If the biome is grassland, there's a 0.5% probability that it's got a village and a 0.5% probability that it's got
 a camp.
 
 The contents(seed, x, y) method first gets the Location in x, y in the locationSet, and if it has a structure,
@@ -1462,7 +1513,8 @@ The draw method also checks if the Player is the only Behaviour in the fighters 
 dead or have run away. So it calls triggerModeChange(exploration). At every frame, the method also checks that
 the Creatures in the fighter array are still alive: if one has less than 0 HP, it removes it from the array. If the
 Behaviour that has less than 0 HP is the player, a little dialog "Game Over" will appear and then the game will
-pass to MainMenuMode.
+pass to MainMenuMode. Else, if the one that has less than 0 HP isn't the player, the EP of the player will be increased
+by 100.
 
 In Fight Mode there will be the buttons "Skills" and "Inventory" just like in ExplorationMode.
 

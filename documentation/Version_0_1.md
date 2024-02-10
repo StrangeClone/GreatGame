@@ -193,18 +193,27 @@ Creature can do to an Item.
 classDiagram
     class Location {
         int x, y
-        Biomes b
-        Structure s
     }
     BehaviourInfo "1" <-- Location : locationBehaviourInfos
-    class Biomes {
+    class Biome {
+        <<interface>>
+        + getName() BiomeName
+        + generate() List~Behaviour~;
+    }
+    Biome "1" <-- Location
+    class BiomeName {
         <<enumeration>>
         + grassLand
         + forest
     }
     class Structure {
+        <<interface>>
+        + getName() StructureName
+        + generate() List~Behaviour~
+    }
+    Structure "1" <-- Location
+    class StructureName {
         <<enumeration>>
-        + none
         + village
         + camp
     }
@@ -1150,12 +1159,12 @@ Here are some patterns, with their values, of the Items of the game:
 classDiagram
     class World {
         - int seed
-        + generate(x, y) Biomes
+        + generate(x, y) Biome
         + contents(x, y) List~Behaviour~
     }
     class WorldGenerator {
         <<interface>>
-        + generate(x, y) Biomes
+        + generate(x, y) Biome
         + contents(seed, x, y) List~Behaviour~
     }
     WorldGenerator <|-- StandardGenerator
@@ -1163,7 +1172,7 @@ classDiagram
     Location "*" <-- Environment : loadedLocationsArray
     WorldGenerator "1" <-- World : generator
     class StandardGenerator {
-        + generate(x, y) Biomes
+        + generate(x, y) Biome
         + contents(seed, x, y) List~Behaviour~
     }
     class ConcreteEnvironment {
@@ -1204,16 +1213,15 @@ The Location class in this package has two int attributes, x and y, an attribute
 The StandardGenerator implementation of WorldGenerator has a set with every location already defined in the world,
 associated to its biome. When the player triggers the generation of a new location, the generate method will be
 called, defining the biome of the new location with the following algorithm:
-1. Create a RandomMap with all the biomes as values, all of them with weight 1.
+1. Create a RandomMap with all the biomeNames as values, all of them with weight 1.
 2. For each location l, adjacent to the location to define, check the biome: increase its weight by 1.
-3. Generate a value (Biome) with the generate method of the RandomMap
-4. If the biome is grassland, there's a 0.5% probability that it's got a village and a 0.5% probability that it's got
+3. Generate a value (BiomeName) with the generate method of the RandomMap
+4. Create a Biome with that name
+5. If the biome is grassland, there's a 0.5% probability that it's got a village and a 0.5% probability that it's got
 a camp.
 
 The contents(seed, x, y) method first gets the Location in x, y in the locationSet, and if it has a structure,
-it calls the corresponding ContentGenerator: VillageGenerator.generate(s) for villages, CampGenerator.generate(s) for
-camps. Then it calls the ContentGenerator corresponding to its biome: GrassLandGenerator.generate(s) for grassLand
-and ForestGenerator.generate(s) for forests. The seed (s) passed to these methods is always (seed + x / y).
+it calls its generate method. Then calls the Biome's generate method.
 
 The ConcreteEnvironment class contains the Behaviours that are currently on the screen in Exploration or Fight mode. It has 
 many methods useful to Behaviours:
@@ -1317,6 +1325,18 @@ F.position is equal to s.
 
 ```mermaid
 classDiagram
+    class ConcreteBiome {
+        - BiomeName name
+        + getName() BiomeName
+        + generate() List~Behaviour~
+    }
+    Biome <|-- ConcreteBiome
+    ContentGenerator "1" <-- ConcreteBiome
+    class ConcreteStructure {
+        - StructureName name
+        + getName() StructureName
+        + generate() List~Behaviour~
+    }
     class ContentGenerator {
         <<abstract>>
         # generateContent(int seed) List~Behaviour~

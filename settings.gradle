@@ -1,1 +1,4 @@
 include 'desktop', 'ios', 'html', 'core'
+include 'core:tests'
+findProject(':core:tests')?.name = 'tests'
+

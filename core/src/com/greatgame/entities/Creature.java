@@ -3,13 +3,15 @@ package com.greatgame.entities;
 import java.util.List;
 
 public interface Creature {
-    int getCharacteristicBonus(Creature creature);
+    int getCharacteristicBonus(Characteristic characteristic);
+    void setCharacteristic(Characteristic characteristic, int value);
     int check(String skillName);
     void upgradeSkill(String skillName);
+    int getLevel(String skillName);
     int getHP();
-    int setHP(int value);
+    void setHP(int value);
     int getMaxHP();
-    void setMaxHP(int value);
+    void updateMaxHP();
     int getSpeed();
     void setSpeed(int value);
     Item getPrimaryItem();

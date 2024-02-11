@@ -145,11 +145,10 @@ class Creature {
     <<interface>>
     + getCharacteristicBonus(Characteristic)
     + check(String) int
-    + getLevel(String) int
     + upgradeSkill(String)
     + getHP() int
     + getMaxHP() int
-    + setMaxHP(int)
+    + updateMxHP()
     + getSpeed() int
     + getPrimaryItem() Item
     + setPrimaryItem(Item)
@@ -461,6 +460,7 @@ classDiagram
         + check(String) int
         + upgradeSkill(String)
         + getMaxHP() int
+        + updateMaxHP()
         + setSpeed(int)
         + getPrimaryItem() Item
         + setPrimaryItem(Item)
@@ -473,7 +473,7 @@ classDiagram
         + setCoins(int)
     }
     Creature <|-- ConcreteCreature
-    Skill "*" <-- ConcreteCreature : skillList
+    Skill "*" <-- ConcreteCreature : skillMap
     Item "1" <-- ConcreteCreature : primaryItem
     Item "1" <-- ConcreteCreature : headItem
     Item "1" <-- ConcreteCreature : chestItem
@@ -487,13 +487,13 @@ The upgradeSkill method follows this process:
 ```mermaid
 sequenceDiagram
     Application ->>+ ConcreteCreature : upgradeSkill(name)
-    alt if skillList doesn't already have the skill
+    alt if skillMap doesn't already have the skill
         ConcreteCreature ->>+ SkillFactory : create(name)
         SkillFactory -->>- ConcreteCreature : return skill
-        ConcreteCreature ->> skillList : add(skill)
+        ConcreteCreature ->> skillMap : put(skill)
     else
-        ConcreteCreature ->>+ skillList : stream.filter(s -> s.getName().equals(name))
-        skillList -->>- ConcreteCreature : return skill
+        ConcreteCreature ->>+ skillMap : get(skill)
+        skillMap -->>- ConcreteCreature : return skill
         ConcreteCreature ->>+ skill : levelUp(this)
     end
     ConcreteCreature -->>- Application : return

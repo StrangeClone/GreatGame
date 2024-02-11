@@ -15,7 +15,7 @@ public class Factory<E> {
     public final E create(String name) {
         Pattern<E> pattern = patterns.get(name);
         if(pattern == null) {
-            throw new IllegalArgumentException("Pattern named " + name + "not found");
+            throw new IllegalArgumentException("Pattern named " + name + " not found");
         }
         return pattern.build();
     }

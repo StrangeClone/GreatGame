@@ -150,12 +150,8 @@ class Creature {
     + getMaxHP() int
     + updateMxHP()
     + getSpeed() int
-    + getPrimaryItem() Item
-    + setPrimaryItem(Item)
-    + getHeadItem() Item
-    + setHeadItem(Item)
-    + getChestItem() Item
-    + setChestItem(Item)
+    + getItem(ItemSlot) Item
+    + setItem(ItemSlot, Item)
     + getInventory() List~Item~
     + getCoins() int
     + setCoins(int)
@@ -165,13 +161,19 @@ class Item {
     + break(int)
     + getAC() int
     + canBeUsed() boolean
-    + use()
+    + use(Creature)
     + canBeCollected() boolean
-    + collect()
+    + collect(Creature)
     + canBeEquipped() boolean
-    + equip()
+    + equip(Creature)
     + unequip()
 }
+  class ItemSlot {
+    <<enumeration>>
+    + primary
+    + head
+    + chest
+  }
 ```
 
 The interfaces in this package represent basic concepts. The Characteristic enumeration simply defines the two
@@ -462,21 +464,15 @@ classDiagram
         + getMaxHP() int
         + updateMaxHP()
         + setSpeed(int)
-        + getPrimaryItem() Item
-        + setPrimaryItem(Item)
-        + getHeadItem() Item
-        + setHeadItem(Item)
-        + getChestItem() Item
-        + setChestItem(Item)
+        + getItem(ItemSlot) Item
+        + setItem(ItemSlot, Item)
         + getInventory() List~Item~
         + getCoins() int
         + setCoins(int)
     }
     Creature <|-- ConcreteCreature
     Skill "*" <-- ConcreteCreature : skillMap
-    Item "1" <-- ConcreteCreature : primaryItem
-    Item "1" <-- ConcreteCreature : headItem
-    Item "1" <-- ConcreteCreature : chestItem
+    Item <-- ConcreteCreature : equippedItemMap
     Item "0-8" <-- ConcreteCreature : inventory
 ```
 
@@ -505,17 +501,18 @@ sequenceDiagram
 classDiagram
     class CollectManager {
         <<interface>>
-        + collect(Creature)
+        + collect(Item, Creature)
     }
     CollectManager "1" <-- ConcreteItem : collectManager
     class StandardCollectManager {
         + StandardCollectManager()
-        + collect(Creature)
+        + collect(Item, Creature)
     }
     CollectManager <|-- StandardCollectManager
     class CoinsCollectManager {
-        + CoinsCollectManager()
-        + collect(Creature)
+        - int coins
+        + CoinsCollectManager(int)
+        + collect(Item, Creature)
     }
     CollectManager <|-- CoinsCollectManager
     class Item {
@@ -528,7 +525,7 @@ classDiagram
         + break(int d)
         + canBeEquipped() boolean
         + equip(Creature)
-        + unEquip(Creature)
+        + unEquip()
         + canBeCollected() boolean
         + collect(Creature)
         + canBeUsed() boolean
@@ -536,22 +533,18 @@ classDiagram
     }
     Item <|-- ConcreteItem
     class EquipManager {
-        <<interface>>
-        + equip(Creature)
-        + unequip(Creature)
+        <<abstract>>
+        + equip(Item, Creature)
+        + unequip(Item)
     }
+    Creature "1" <-- EquipManager : equippedCreature
     EquipManager "1" <-- ConcreteItem : equipManager
     class Armor {
         - int value
-        - ArmorSlot
-        + Armor(int, ArmorSlot)
-        + equip(Creature)
-        + unEquip(Creature)
-    }
-    class ArmorSlot {
-        <<enumeration>>
-        + head
-        + chest
+        - ItemSlot
+        + Armor(int, ItemSlot)
+        + equip(Item, Creature)
+        + unEquip(Item, Creature)
     }
     EquipManager <|-- Armor
     class Weapon {
@@ -565,11 +558,11 @@ classDiagram
     EquipManager <|-- Weapon
     class UseManager {
         <<interface>>
-        + useOn(Creature)
+        + useOn(Item, Creature)
     }
     UseManager "1" <-- ConcreteItem
     class PotionManager {
-        + useOn(Creature)
+        + useOn(Item, Creature)
     }
     UseManager <|-- PotionManager
 ```
@@ -583,20 +576,20 @@ ConcreteItem has an Optional<UseManager> useManager. If the Item triggers partic
 the instance inside the Optional will be an implementation of UseManager interface. Else it will be null.
 
 The Armor implementation of EquipManager interface increases the AC of the Creature when equipped and decreases it
-when unequipped (by the value). If the ArmorSlot value is head, it will set the item as HeadItem, if the ArmorSlot
-value is chest, it will set the item as HeadItem
+when unequipped (by the value). If the ItemSlot value is head, it will set the item as Head Item, if the ItemSlot
+value is chest, it will set the item as Chest Item.
 
 The Weapon implementation of EquipManager interface sets the Primary Item of the Creature as itself when equipped,
 if the Primary Item is null, and set it as null when unequipped. The String skill is the name of the Skill needed to use
 the weapon.
 
 The StandardCollectManager implementation of CollectManager interface will add the Item to the Creature's inventory in the
-collect method, if it's not full (8 items).
+collect method, if it's not full (8 items). It's a singleton.
 
-The CoinsCollectManager implementation of CollectManager interface will increase the Creature's coins by 25 in the
-collect method.
+The CoinsCollectManager implementation of CollectManager interface will increase the Creature's coins by the value
+of the attribute coins, in the collect method.
 
-The PotionManager implementation of UseManager increases the Creature's HP by 5.
+The PotionManager implementation of UseManager increases the Creature's HP by 5. It's a Singleton.
 
 ### Behaviour package
 
@@ -1499,7 +1492,7 @@ Experience Points of the Player. There will be a button near to every Skill, tha
 to spend XP to increase his level. This can be done only if the player has enough XP for that.
 There will also be an "Inventory" button that will show a little dialog when clicked, a dialog with 8 images displayed:
 they will display the textures of the items in the Player's inventory. There will also be three other images: one for
-the PrimaryItem, one for the HeadItem, one for the ChestItem. Clicking on the texture of an Item that can be equipped
+the Primary Item, one for the Head Item, one for the Chest Item. Clicking on the texture of an Item that can be equipped
 will make the game equip it in the corresponding slot. If the slot is already taken, then the item in the slot will be
 first unequipped. Clicking on the texture of an Item that can be used will make the game activate it.
 

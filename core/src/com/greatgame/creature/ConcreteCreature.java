@@ -1,9 +1,6 @@
 package com.greatgame.creature;
 
-import com.greatgame.entities.Characteristic;
-import com.greatgame.entities.Creature;
-import com.greatgame.entities.Item;
-import com.greatgame.entities.Skill;
+import com.greatgame.entities.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,12 +14,11 @@ public class ConcreteCreature implements Creature {
     private final Map<Characteristic, Integer> characteristicValues;
     private final Map<String, Skill> skillMap;
     private int speed = 9;
-    private int maxHealthPoints;
-    private int healthPoints;
+    private int AC = 8;
+    private int maxHealthPoints = 6;
+    private int healthPoints = 6;
     private int coins = 0;
-    private Item primaryItem = null;
-    private Item headItem = null;
-    private Item chestItem = null;
+    private final Map<ItemSlot, Item> equippedItemsMap;
     List<Item> inventory;
 
     public ConcreteCreature() {
@@ -30,6 +26,7 @@ public class ConcreteCreature implements Creature {
         skillMap = new HashMap<>();
         setCharacteristic(Characteristic.Physique, 10);
         setCharacteristic(Characteristic.Agility, 10);
+        equippedItemsMap = new HashMap<>();
         inventory = new ArrayList<>();
     }
 
@@ -41,7 +38,7 @@ public class ConcreteCreature implements Creature {
 
     @Override
     public void setCharacteristic(Characteristic characteristic, int value) {
-        characteristicValues.put(characteristic, value);
+        characteristicValues.put(characteristic, Math.max(value, 0));
         if(characteristic == Characteristic.Physique) {
             updateMaxHP();
         }
@@ -74,6 +71,16 @@ public class ConcreteCreature implements Creature {
     }
 
     @Override
+    public int getAC() {
+        return AC + getCharacteristicBonus(Characteristic.Agility);
+    }
+
+    @Override
+    public void increaseAC(int value) {
+        AC += value;
+    }
+
+    @Override
     public int getHP() {
         return healthPoints;
     }
@@ -94,11 +101,7 @@ public class ConcreteCreature implements Creature {
         int bonus = getCharacteristicBonus(Characteristic.Physique);
         int oldValue = maxHealthPoints;
         maxHealthPoints = (6 + bonus) * (level + 1);
-        if(oldValue == 0) {
-            healthPoints = maxHealthPoints;
-        } else {
-            healthPoints = healthPoints / oldValue * maxHealthPoints;
-        }
+        setHP(healthPoints / oldValue * maxHealthPoints);
     }
 
     @Override
@@ -112,33 +115,13 @@ public class ConcreteCreature implements Creature {
     }
 
     @Override
-    public Item getPrimaryItem() {
-        return primaryItem;
+    public Item getItem(ItemSlot slot) {
+        return equippedItemsMap.get(slot);
     }
 
     @Override
-    public void setPrimaryItem(Item item) {
-        primaryItem = item;
-    }
-
-    @Override
-    public Item getHeadItem() {
-        return headItem;
-    }
-
-    @Override
-    public void setHeadItem(Item item) {
-        headItem = item;
-    }
-
-    @Override
-    public Item getChestItem() {
-        return chestItem;
-    }
-
-    @Override
-    public void setChestItem(Item item) {
-        chestItem = item;
+    public void setItem(ItemSlot slot, Item item) {
+        equippedItemsMap.put(slot, item);
     }
 
     @Override

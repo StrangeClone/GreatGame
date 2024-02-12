@@ -7,28 +7,35 @@ public class ConcreteItem implements Item {
     String type;
     int HP;
     int AC;
-    int prize;
+    int price;
     CollectManager collectManager;
     EquipManager equipManager;
     UseManager useManager = null;
 
-    public ConcreteItem(String type, int HP, int AC, int prize, CollectManager collectManager, EquipManager equipManager) {
+    public ConcreteItem(String type, int HP, int AC, int price) {
         this.type = type;
         this.HP = HP;
         this.AC = AC;
-        this.prize = prize;
+        this.price = price;
+    }
+
+    public ConcreteItem(String type, int HP, int AC, int price, CollectManager collectManager, EquipManager equipManager) {
+        this.type = type;
+        this.HP = HP;
+        this.AC = AC;
+        this.price = price;
         this.collectManager = collectManager;
         this.equipManager = equipManager;
     }
 
-    public ConcreteItem(String type, int HP, int AC, int prize,
+    public ConcreteItem(String type, int HP, int AC, int price,
                         CollectManager collectManager,
                         EquipManager equipManager,
                         UseManager useManager) {
         this.type = type;
         this.HP = HP;
         this.AC = AC;
-        this.prize = prize;
+        this.price = price;
         this.collectManager = collectManager;
         this.equipManager = equipManager;
         this.useManager = useManager;
@@ -71,6 +78,10 @@ public class ConcreteItem implements Item {
         }
     }
 
+    public void setUseManager(UseManager useManager) {
+        this.useManager = useManager;
+    }
+
     @Override
     public boolean canBeCollected() {
         return collectManager != null;
@@ -91,6 +102,10 @@ public class ConcreteItem implements Item {
         }
     }
 
+    public void setCollectManager(CollectManager collectManager) {
+        this.collectManager = collectManager;
+    }
+
     @Override
     public boolean canBeEquipped() {
         return equipManager != null;
@@ -108,5 +123,9 @@ public class ConcreteItem implements Item {
         if(canBeEquipped()) {
             equipManager.unEquip(this);
         }
+    }
+
+    public void setEquipManager(EquipManager equipManager) {
+        this.equipManager = equipManager;
     }
 }

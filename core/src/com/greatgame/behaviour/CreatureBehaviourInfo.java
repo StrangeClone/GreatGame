@@ -7,6 +7,7 @@ import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.BehaviourInfo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,18 +37,21 @@ public class CreatureBehaviourInfo extends BehaviourInfo {
     }
 
     private void fixInventory(Creature c) {
-        List<String> presentItemTypes = c.getInventory().stream().
+        List<String> itemsThatAreThere = c.getInventory().stream().
                 map(Item::getType).
                 collect(Collectors.toList());
-        List<String> absentItemTypes = new ArrayList<>(inventory);
-        for(String type : presentItemTypes) {
-            absentItemTypes.remove(type);
-            presentItemTypes.remove(type);
+        List<String> itemsThatShouldBeThere = new ArrayList<>(inventory);
+        for(Iterator<String> typeIterator = itemsThatAreThere.iterator(); typeIterator.hasNext();) {
+            String current = typeIterator.next();
+            if(itemsThatShouldBeThere.contains(current)) {
+                itemsThatShouldBeThere.remove(current);
+                typeIterator.remove();
+            }
         }
-        for(String itemNotPresent : absentItemTypes) {
-            c.getInventory().add(itemsFactory.create(itemNotPresent).getItem());
+        for(String itemNotPresentType : itemsThatShouldBeThere) {
+            c.getInventory().add(itemsFactory.create(itemNotPresentType).getItem());
         }
-        for(String itemThatShouldNotBeThere : presentItemTypes) {
+        for(String itemThatShouldNotBeThere : itemsThatAreThere) {
             for(Item item : c.getInventory()) {
                 if(item.getType().equals(itemThatShouldNotBeThere)) {
                     c.getInventory().remove(item);

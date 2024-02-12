@@ -1087,12 +1087,14 @@ classDiagram
         - int HP
         - int AC
         - int price
-        - boolean collectable
         - boolean touchable
         + build() ItemBehaviour
     }
     Pattern~ItemBehaviour~ <|-- ItemPattern
-    EquipManager <-- ItemPattern : equipManager
+    class ItemPatternModifier {
+        <<interface>>
+        + modify(ConcreteItem)
+    }
 ```
 
 The itemFactory class will be used to create instances of the ItemBehaviour class. The touchable attribute of the ItemPattern
@@ -1105,8 +1107,9 @@ sequenceDiagram
     ItemPattern ->> newItem : new ConcreteItem()
     ItemPattern ->> newItem : setHP(HP)
     ItemPattern ->> newItem : setAC(AC)
-    ItemPattern ->> newItem : setCollectable(collectable)
+    ItemPattern ->> newItem : setCollectManager(collectManager)
     ItemPattern ->> newItem : setEquipManager(equipManager)
+    ItemPattern ->> newItem : setCollectManager(equipManager)
     ItemPattern ->> newBehaviour : new ItemBehaviour(newItem)
     ItemPattern ->> newBehaviour : setTexture(texture)
     ItemPattern ->> newBehaviour : setTouchable(touchable)
@@ -1117,34 +1120,34 @@ sequenceDiagram
 
 Here are some patterns, with their values, of the Items of the game:
 
-| Name              | HP   | AC | price       | touchable | collectable | EquipManager               | CollectManager           | UseManager      |
-|-------------------|------|----|-------------|-----------|-------------|----------------------------|--------------------------|-----------------|
-| Tree              | 50   | 10 | 0           | yes       | no          | null                       | null                     | null            |
-| Big Rock          | 100  | 10 | 0           | yes       | no          | null                       | null                     | null            |
-| Little Rock       | 25   | 12 | 2           | no        | yes         | null                       | StandardCollectManager() | null            |
-| Bush              | 25   | 10 | 0           | yes       | no          | null                       | null                     | null            |
-| Little Bush       | 15   | 12 | 0           | no        | no          | null                       | null                     | null            |
-| Flower            | 1    | 12 | 1           | no        | yes         | null                       | StandardCollectManager() | null            |
-| Helm              | 25   | 12 | 10          | no        | yes         | Armor(2)                   | StandardCollectManager() | null            |
-| Leather Armor     | 25   | 12 | 10          | no        | yes         | Armor(2)                   | StandardCollectManager() | null            |
-| ChainMail         | 40   | 12 | 50          | no        | yes         | Armor(4)                   | StandardCollectManager() | null            |
-| ChestPlate        | 50   | 12 | 150         | no        | yes         | Armor(5)                   | StandardCollectManager() | null            |
-| ShortSword        | 40   | 13 | 50          | no        | yes         | Weapon(6, 1, fencing)      | StandardCollectManager() | null            |
-| LongSword         | 40   | 13 | 40          | no        | yes         | Weapon(8, 1, fencing)      | StandardCollectManager() | null            |
-| Dagger            | 30   | 13 | 25          | no        | yes         | Weapon(4, 1, fencing)      | StandardCollectManager() | null            |
-| ShortBow          | 20   | 13 | 40          | no        | yes         | Weapon(6, 30, archery)     | StandardCollectManager() | null            |
-| LongBow           | 20   | 13 | 50          | no        | yes         | Weapon(8, 45, archery)     | StandardCollectManager() | null            |
-| Improvised Weapon | 25   | 10 | 0           | no        | no          | Weapon(3, 1, unarmedFight) | null                     | null            |
-| House             | 1000 | 15 | 0           | yes       | no          | null                       | null                     | null            |
-| Tent              | 20   | 8  | 0           | yes       | no          | null                       | null                     | null            |
-| Fireplace         | 20   | 8  | 0           | yes       | no          | null                       | null                     | null            |
-| Garpez's Leg      | 1000 | 20 | 170 000 000 | no        | yes         | null                       | StandardCollectManager() | null            |
-| Silver Coins      | 20   | 10 | 0           | no        | yes         | null                       | CoinsCollectManager()    | null            |
-| Fur               | 10   | 10 | 5           | no        | yes         | null                       | StandardCollectManager() | null            |
-| Wolf Fangs        | 10   | 12 | 3           | no        | yes         | Weapon(4, 1, Bite)         | StandardCollectManager() | null            |
-| Bear Fangs        | 15   | 12 | 4           | no        | yes         | Weapon(6, 1, Bite)         | StandardCollectManager() | null            |
-| Fox Fangs         | 7    | 12 | 2           | no        | yes         | Weapon(2, 1, Bite)         | StandardCollectManager() | null            |
-| Healing Potion    | 5    | 10 | 20          | no        | yes         | null                       | StandardCollectManager() | PotionManager() |
+| Name              | HP   | AC | price       | touchable | EquipManager               | CollectManager           | UseManager      |
+|-------------------|------|----|-------------|-----------|----------------------------|--------------------------|-----------------|
+| Tree              | 50   | 10 | 0           | yes       | null                       | null                     | null            |
+| Big Rock          | 100  | 10 | 0           | yes       | null                       | null                     | null            |
+| Little Rock       | 25   | 12 | 2           | no        | null                       | StandardCollectManager() | null            |
+| Bush              | 25   | 10 | 0           | yes       | null                       | null                     | null            |
+| Little Bush       | 15   | 12 | 0           | no        | null                       | null                     | null            |
+| Flower            | 1    | 12 | 1           | no        | null                       | StandardCollectManager() | null            |
+| Helm              | 25   | 12 | 10          | no        | Armor(2)                   | StandardCollectManager() | null            |
+| Leather Armor     | 25   | 12 | 10          | no        | Armor(2)                   | StandardCollectManager() | null            |
+| ChainMail         | 40   | 12 | 50          | no        | Armor(4)                   | StandardCollectManager() | null            |
+| ChestPlate        | 50   | 12 | 150         | no        | Armor(5)                   | StandardCollectManager() | null            |
+| ShortSword        | 40   | 13 | 50          | no        | Weapon(6, 1, fencing)      | StandardCollectManager() | null            |
+| LongSword         | 40   | 13 | 40          | no        | Weapon(8, 1, fencing)      | StandardCollectManager() | null            |
+| Dagger            | 30   | 13 | 25          | no        | Weapon(4, 1, fencing)      | StandardCollectManager() | null            |
+| ShortBow          | 20   | 13 | 40          | no        | Weapon(6, 30, archery)     | StandardCollectManager() | null            |
+| LongBow           | 20   | 13 | 50          | no        | Weapon(8, 45, archery)     | StandardCollectManager() | null            |
+| Improvised Weapon | 25   | 10 | 0           | no        | Weapon(3, 1, unarmedFight) | null                     | null            |
+| House             | 1000 | 15 | 0           | yes       | null                       | null                     | null            |
+| Tent              | 20   | 8  | 0           | yes       | null                       | null                     | null            |
+| Fireplace         | 20   | 8  | 0           | yes       | null                       | null                     | null            |
+| Garpez's Leg      | 1000 | 20 | 170 000 000 | no        | null                       | StandardCollectManager() | null            |
+| Silver Coins      | 20   | 10 | 0           | no        | null                       | CoinsCollectManager()    | null            |
+| Fur               | 10   | 10 | 5           | no        | null                       | StandardCollectManager() | null            |
+| Wolf Fangs        | 10   | 12 | 3           | no        | Weapon(4, 1, Bite)         | StandardCollectManager() | null            |
+| Bear Fangs        | 15   | 12 | 4           | no        | Weapon(6, 1, Bite)         | StandardCollectManager() | null            |
+| Fox Fangs         | 7    | 12 | 2           | no        | Weapon(2, 1, Bite)         | StandardCollectManager() | null            |
+| Healing Potion    | 5    | 10 | 20          | no        | null                       | StandardCollectManager() | PotionManager() |
 
 ### World package
 

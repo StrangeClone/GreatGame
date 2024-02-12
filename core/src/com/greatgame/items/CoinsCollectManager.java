@@ -16,4 +16,9 @@ public class CoinsCollectManager implements CollectManager {
         int currentCoins = creature.getCoins();
         creature.setCoins(currentCoins + coins);
     }
+
+    @Override
+    public boolean hasBeenCollected() {
+        return false;
+    }
 }

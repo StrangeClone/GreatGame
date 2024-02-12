@@ -5,4 +5,6 @@ import com.greatgame.entities.Item;
 
 public interface CollectManager {
     void collect(Item item, Creature creature);
+
+    boolean hasBeenCollected();
 }

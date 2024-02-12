@@ -12,18 +12,18 @@ public class ArmorTest extends TestCase {
 
     public void testEquip() {
         Creature dude = new ConcreteCreature();
-        Item helm = new ConcreteItem(10, 10, 0, null, new Armor(ItemSlot.Head, 3));
+        Item helm = new ConcreteItem("", 10, 10, 0, null, new Armor(ItemSlot.Head, 3));
         helm.equip(dude);
         assertSame(dude.getItem(ItemSlot.Head), helm);
         assertEquals(11, dude.getAC());
-        Item chainMail = new ConcreteItem(10, 10, 0, null, new Armor(ItemSlot.Chest, 3));
+        Item chainMail = new ConcreteItem("", 10, 10, 0, null, new Armor(ItemSlot.Chest, 3));
         chainMail.equip(dude);
         assertSame(chainMail, dude.getItem(ItemSlot.Chest));
         assertEquals(14, dude.getAC());
 
         assertThrownException(() -> chainMail.equip(dude), e -> e instanceof IllegalStateException);
         assertThrownException(() -> {
-            Item helm2 = new ConcreteItem(10, 10, 0, null, new Armor(ItemSlot.Head, 1));
+            Item helm2 = new ConcreteItem("", 10, 10, 0, null, new Armor(ItemSlot.Head, 1));
             helm2.equip(dude);
         }, e -> e instanceof IllegalStateException);
 

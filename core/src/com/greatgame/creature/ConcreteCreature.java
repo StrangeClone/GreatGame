@@ -11,6 +11,7 @@ import static com.greatgame.environment.RandomMap.randomGenerator;
 import static com.greatgame.skills.ConcreteSkill.skillFactory;
 
 public class ConcreteCreature implements Creature {
+    private String type;
     private final Map<Characteristic, Integer> characteristicValues;
     private final Map<String, Skill> skillMap;
     private int speed = 9;
@@ -28,6 +29,11 @@ public class ConcreteCreature implements Creature {
         setCharacteristic(Characteristic.Agility, 10);
         equippedItemsMap = new HashMap<>();
         inventory = new ArrayList<>();
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     @Override

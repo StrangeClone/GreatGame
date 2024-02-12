@@ -10,7 +10,7 @@ public class PotionUseManagerTest extends TestCase {
     public void testUseOn() {
         Creature dude = new ConcreteCreature();
         dude.setHP(0);
-        Item potion = new ConcreteItem(10, 10, 0, null, null, PotionUseManager.get());
+        Item potion = new ConcreteItem("", 10, 10, 0, null, null, PotionUseManager.get());
         potion.use(dude);
         assertEquals(5, dude.getHP());
         potion.use(dude);

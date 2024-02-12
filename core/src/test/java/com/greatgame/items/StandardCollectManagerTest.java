@@ -11,7 +11,7 @@ public class StandardCollectManagerTest extends TestCase {
 
     public void testCollect() {
         Creature dude = new ConcreteCreature();
-        Item item = new ConcreteItem(10,10,0, StandardCollectManager.getInstance(), null);
+        Item item = new ConcreteItem("", 10,10,0, new StandardCollectManager(), null);
         item.collect(dude);
         List<Item> inventory = dude.getInventory();
         assertEquals(inventory.get(0), item);

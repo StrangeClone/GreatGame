@@ -4,6 +4,7 @@ import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
 
 public class ConcreteItem implements Item {
+    String type;
     int HP;
     int AC;
     int prize;
@@ -11,7 +12,8 @@ public class ConcreteItem implements Item {
     EquipManager equipManager;
     UseManager useManager = null;
 
-    public ConcreteItem(int HP, int AC, int prize, CollectManager collectManager, EquipManager equipManager) {
+    public ConcreteItem(String type, int HP, int AC, int prize, CollectManager collectManager, EquipManager equipManager) {
+        this.type = type;
         this.HP = HP;
         this.AC = AC;
         this.prize = prize;
@@ -19,10 +21,11 @@ public class ConcreteItem implements Item {
         this.equipManager = equipManager;
     }
 
-    public ConcreteItem(int HP, int AC, int prize,
+    public ConcreteItem(String type, int HP, int AC, int prize,
                         CollectManager collectManager,
                         EquipManager equipManager,
                         UseManager useManager) {
+        this.type = type;
         this.HP = HP;
         this.AC = AC;
         this.prize = prize;
@@ -30,6 +33,12 @@ public class ConcreteItem implements Item {
         this.equipManager = equipManager;
         this.useManager = useManager;
     }
+
+    @Override
+    public String getType() {
+        return type;
+    }
+
     @Override
     public void breakItem(int damage) {
         HP -= damage;
@@ -38,6 +47,16 @@ public class ConcreteItem implements Item {
     @Override
     public int getAC() {
         return AC;
+    }
+
+    @Override
+    public void setHP(int value) {
+        HP = value;
+    }
+
+    @Override
+    public int getHP() {
+        return HP;
     }
 
     @Override
@@ -58,8 +77,16 @@ public class ConcreteItem implements Item {
     }
 
     @Override
+    public boolean hasBeenCollected() {
+        if(canBeCollected()) {
+            return collectManager.hasBeenCollected();
+        }
+        return false;
+    }
+
+    @Override
     public void collect(Creature creature) {
-        if (canBeCollected()) {
+        if (canBeCollected() && !hasBeenCollected()) {
             collectManager.collect(this, creature);
         }
     }

@@ -584,7 +584,7 @@ if the Primary Item is null, and set it as null when unequipped. The String skil
 the weapon.
 
 The StandardCollectManager implementation of CollectManager interface will add the Item to the Creature's inventory in the
-collect method, if it's not full (8 items). It's a singleton.
+collect method, if it's not full (8 items).
 
 The CoinsCollectManager implementation of CollectManager interface will increase the Creature's coins by the value
 of the attribute coins, in the collect method.

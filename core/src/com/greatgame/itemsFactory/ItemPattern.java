@@ -34,10 +34,10 @@ public class ItemPattern extends Pattern<ItemBehaviour> {
     @Override
     public ItemBehaviour build() {
         ConcreteItem item = new ConcreteItem(getName(), HP, AC, price);
-        ItemBehaviour behaviour = new ItemBehaviour(texture, item);
         for(ItemPatternModifier m : modifiers) {
             m.modify(item);
         }
+        ItemBehaviour behaviour = new ItemBehaviour(texture, item);
         if(!touchable) {
             behaviour.setTouchable(Touchable.disabled);
         }

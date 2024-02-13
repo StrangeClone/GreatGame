@@ -1,7 +1,7 @@
 package com.greatgame.behaviour;
 
 public abstract class BehaviourState {
-    private CreatureBehaviour behaviour;
+    protected CreatureBehaviour behaviour;
     void changeBehaviour(BehaviourState newState) {
         behaviour.state = newState;
     }

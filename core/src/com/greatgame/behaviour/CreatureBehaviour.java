@@ -6,7 +6,7 @@ import com.greatgame.environment.Behaviour;
 import com.greatgame.factory.Factory;
 
 public class CreatureBehaviour extends Behaviour {
-    public static Factory<CreatureBehaviour> creatureFactory = new Factory<>();
+    public static Factory<CreatureBehaviour> creaturesFactory = new Factory<>();
     private final Creature creature;
     private boolean hostile;
     BehaviourState state;

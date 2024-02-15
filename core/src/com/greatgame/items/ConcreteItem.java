@@ -108,12 +108,12 @@ public class ConcreteItem implements Item {
 
     @Override
     public boolean canBeEquipped() {
-        return equipManager != null && !equipManager.isEquipped();
+        return equipManager != null;
     }
 
     @Override
     public void equip(Creature creature) {
-        if(canBeEquipped()) {
+        if(canBeEquipped() && !equipManager.isEquipped()) {
             equipManager.equip(this, creature);
         }
     }

@@ -1,6 +1,7 @@
 package com.greatgame.environment;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RandomMap<V> {
     static public final Random randomGenerator = new Random();
@@ -19,12 +20,20 @@ public class RandomMap<V> {
     }
 
     public V generate() {
-        Set<Map.Entry<V, Integer>> entries = weights.entrySet();
+        return generate(randomGenerator);
+    }
+
+    public V generate(Random generator) {
+        List<Map.Entry<V, Integer>> entries = weights.entrySet().stream().
+                sorted(Comparator.comparing(o -> o.getKey().toString())).
+                collect(Collectors.toList());
         int sum = 0;
         for(Map.Entry<V, Integer> entry : entries) {
             sum += entry.getValue();
         }
-        int random = randomGenerator.nextInt(0,sum);
+        int random = generator.nextInt(0,sum);
+        System.out.println(weights);
+        System.out.println(random);
         for(Map.Entry<V, Integer> entry : entries) {
             if(random < entry.getValue()) {
                 return entry.getKey();

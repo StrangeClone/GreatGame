@@ -7,9 +7,6 @@ public abstract class EquipManager {
     protected Creature equippedCreature = null;
 
     public void equip(Item item, Creature creature) {
-        if(equippedCreature != null) {
-            throw new IllegalStateException("Item is already equipped");
-        }
         equippedCreature = creature;
     }
     public void unEquip(Item item) {

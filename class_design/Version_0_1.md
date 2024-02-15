@@ -1172,7 +1172,6 @@ classDiagram
         + contents(seed, x, y) List~Behaviour~
     }
     class ConcreteEnvironment {
-        - Stage stage
         - ModeName currentMode
         - ModeName nextMode
         + checkContents(x,y)
@@ -1184,6 +1183,7 @@ classDiagram
         - addLocation(x,y)
         - removeLocation(x,y)
     }
+    Behaviour "*" <-- ConcreteEnvironment
     Environment <|-- ConcreteEnvironment
     World -- Environment
     class PathFinder {
@@ -1204,10 +1204,10 @@ the world (position x, y) has to be generated. The method contents(x, y) will be
 Exploring or Fight mode, to get all the things (trees, rocks, houses, creatures, and so on)  that are in the location 
 whose coordinates are x, y.
 
-The Location class in this package has two int attributes, x and y, an attribute Biomes and an attribute Structure.
+The Location class has two int attributes, x and y, an attribute Biomes and an attribute Structure.
 
-The StandardGenerator implementation of WorldGenerator has a set with every location already defined in the world,
-associated to its biome. When the player triggers the generation of a new location, the generate method will be
+The StandardGenerator implementation of WorldGenerator has a set with every location already defined in the world.
+When the player triggers the generation of a new location, the generate method will be
 called, defining the biome of the new location with the following algorithm:
 1. Create a RandomMap with all the biomeNames as values, all of them with weight 1.
 2. For each location l, adjacent to the location to define, check the biome: increase its weight by 1.
@@ -1234,7 +1234,7 @@ sequenceDiagram
     Environment ->>+ World : contents(x, y)
     World -->>- Environment : return contentsList
     loop for each Behaviour b in contentsList
-        Environment ->> stage : addActor(b)
+        Environment ->> behaviours : add(b)
     end
 ```
 
@@ -1245,38 +1245,20 @@ sequenceDiagram
     Environment ->>+ loadedLocationsArray : remove(location)
     loop for each Behaviour b in the Stage
         alt b.originalLocation == location
-            Environment ->> stage : removeActor(b)
+            Environment ->> behaviours : remove(b)
         end
     end
 ```
 
 The allowedMovement(x,y) method will return true if the coordinates (floats, they don't show a location but an actual
-position in the map) are free and a Creature can move in it. It works calling the hit method on the stage object of
-the ExplorationMode class: the method will return the actor (a Behaviour, in our case) that is in that particular
-location. It will block the movement if its touchable attribute is set as true. Things like Creatures and big solid
+position in the map) are free and a Creature can move in it. Things like Creatures and big solid
 Items (walls, trees, rocks, ...) blocks the movement.
 
 The dist(Vector2, Vector2) method returns the distance between two points, by simply finding them in the stage
 and calculating the distance with the Pythagoras Theorem.
 
 The freeView(Vector2, Vector2) method returns if it's possible draw a line between the two points passed as
-parameters:
-
-```mermaid
-sequenceDiagram
-    Application ->>+ Environment : freeView(p1, p2)
-    Environment ->> Environment : dist.x = p2.x - p1.x
-    Environment ->> Environment : dist.y = p2.y - p1.y
-    Environment ->> Environment : vector p1 = p1.position
-    loop for i, from 0 to dist.module / 10
-        Environment ->>+ stage : hit(x + dist.x / 10 * i, y + dist.y / 10 * i)
-        stage -->>- Environment : return hitActor
-        alt hitActor != null AND hitActor != Behaviour1 AND hitActor != Behaviour2
-             Environment -->> Application : return false
-        end
-    end
-    Environment -->>- Application : return true
-```
+parameters.
 
 The currentMode and nextMode attributes of Environment will be modified if the game has to change its mode, with the
 triggerModeChange(nextMode) method, that simply sets nextMode as the value passed as parameter. Then the GreatGame

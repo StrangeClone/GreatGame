@@ -21,7 +21,6 @@ public class ArmorTest extends TestCase {
         assertSame(chainMail, dude.getItem(ItemSlot.Chest));
         assertEquals(14, dude.getAC());
 
-        assertThrownException(() -> chainMail.equip(dude), e -> e instanceof IllegalStateException);
         assertThrownException(() -> {
             Item helm2 = new ConcreteItem("", 10, 10, 0, null, new Armor(ItemSlot.Head, 1));
             helm2.equip(dude);

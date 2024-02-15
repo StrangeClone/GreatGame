@@ -30,13 +30,17 @@ public abstract class Behaviour extends Actor {
         this.originalLocation = originalLocation;
     }
 
+    public Location getOriginalLocation() {
+        return originalLocation;
+    }
+
     public void setEnvironment(Environment environment) {
         this.environment = environment;
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture, getX(), getY());
+        batch.draw(texture, getX() - getWidth() / 2, getY() - getHeight() / 2);
     }
 
     public List<Action> getAllowedActions() {

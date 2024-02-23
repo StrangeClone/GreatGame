@@ -1,18 +1,21 @@
 package com.greatgame.world;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.Environment;
 import com.greatgame.environment.Location;
 import com.greatgame.environment.ModeName;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ConcreteEnvironment implements Environment {
     World world;
-    List<Behaviour> behaviours;
+    Stage stage;
     List<Location> loadedLocations;
     Behaviour player;
     ModeName currentMode;
@@ -20,11 +23,13 @@ public class ConcreteEnvironment implements Environment {
     int originalScreenX = 0, originalScreenY = 0;
 
     public ConcreteEnvironment() {
-        behaviours = new ArrayList<>();
+        stage = new Stage(new ScreenViewport());
+        loadedLocations = new ArrayList<>();
     }
 
     public void addBehaviour(Behaviour behaviour) {
-        behaviours.add(behaviour);
+        stage.addActor(behaviour);
+        behaviour.setEnvironment(world.getEnvironment());
     }
 
     @Override
@@ -33,24 +38,59 @@ public class ConcreteEnvironment implements Environment {
     }
 
     @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-        behaviours.forEach(b -> b.draw(batch, parentAlpha));
+    public void setPlayer(Behaviour behaviour) {
+        this.player = behaviour;
+    }
+
+    @Override
+    public Stage getStage() {
+        return stage;
+    }
+
+    @Override
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    @Override
+    public void update(float delta) {
+        stage.act(delta);
+
+        stage.getViewport().getCamera().
+                position.set(world.getEnvironment().getPlayer().getX(),
+                        world.getEnvironment().getPlayer().getY(), 1);
+        stage.getActors().sort((o1, o2) -> {
+            float bottom1 = o1.getY() - o1.getHeight() / 2;
+            float bottom2 = o2.getY() - o2.getHeight() / 2;
+            if(bottom1 > bottom2) {
+                return -1;
+            } else if(bottom1 < bottom2) {
+                return 1;
+            }
+            return 0;
+        });
+
+        stage.draw();
     }
 
     @Override
     public void checkContents(int x, int y) {
-        for(int i = 0; i < 2; i++) {
-            for(int o = 0; o < 2; o++) {
-                if(loadedLocations.stream().noneMatch(l -> l.x == x && l.y  == y)) {
-                    loadLocation(x,y);
+        int dim = 1;
+        for(int i = -dim; i <= dim; i++) {
+            for(int o = -dim; o <= dim; o++) {
+                final int i_ = i, o_ = o;
+                if(loadedLocations.stream().noneMatch(l -> l.x == x + i_ && l.y  == y + o_)) {
+                    loadLocation(x + i,y + o);
                 }
             }
         }
-        loadedLocations.forEach(l -> {
-            if(Math.abs(l.x - x) > 2  || Math.abs(l.y - y) > 2) {
+        for(Iterator<Location> locationIterator = loadedLocations.iterator(); locationIterator.hasNext();) {
+            Location l = locationIterator.next();
+            if(Math.abs(l.x - x) > dim || Math.abs(l.y - y) > dim) {
                 removeLocation(l);
+                locationIterator.remove();
             }
-        });
+        }
     }
 
     private void loadLocation(int x, int y) {
@@ -61,27 +101,45 @@ public class ConcreteEnvironment implements Environment {
     }
 
     private void removeLocation(Location l) {
-        behaviours.removeIf(behaviour -> behaviour.getOriginalLocation() == l);
+        for(Iterator<Actor> iterator = stage.getActors().iterator(); iterator.hasNext();) {
+            Behaviour behaviour = (Behaviour) iterator.next();
+            if(behaviour.getOriginalLocation() == l) {
+                iterator.remove();
+            }
+        }
     }
 
     @Override
     public boolean freePoint(float x, float y) {
-        return behaviours.stream().noneMatch(behaviour ->
-                behaviour.getX() - behaviour.getWidth() / 2 < x && x < behaviour.getX() + behaviour.getWidth() / 2 &&
-                behaviour.getY() - behaviour.getHeight() / 2 < y && y < behaviour.getY() + behaviour.getHeight() / 2);
+        for(Actor actor : stage.getActors()) {
+            if(actor.getX() - actor.getWidth() / 2 < x && x < actor.getX() + actor.getWidth() / 2 &&
+            actor.getY() - actor.getHeight() / 2 < y && y < actor.getY() + actor.getHeight() / 2) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
-    public boolean allowedPosition(Behaviour behaviour, float newX, float newY) {
+    public boolean allowedPosition(Behaviour behaviour, float newX, float newY, boolean touchable) {
         float left = newX - behaviour.getWidth() / 2;
         float right = newX + behaviour.getWidth() / 2;
-        float up = newY - behaviour.getHeight() / 2;
-        float down = newY + behaviour.getHeight() / 2;
-        return behaviours.stream().allMatch(b ->
-                b == behaviour || !((b.getX() - b.getWidth() / 2 <= right && right <= b.getX() + b.getWidth() / 2
-                || b.getX() - b.getWidth() / 2 <= left && left <= b.getX() + b.getWidth() / 2) &&
-                (b.getY() - b.getHeight() / 2 <= up && up <= b.getY() + b.getHeight() / 2
-                        || b.getY() - b.getHeight() / 2 <= down && down <= b.getY() + b.getHeight() / 2)));
+        float up = newY + behaviour.getHeight() / 2;
+        float down = newY - behaviour.getHeight() / 2;
+        for(Actor b : stage.getActors()) {
+            float b_left = b.getX() - b.getWidth() / 2;
+            float b_right = b.getX() + b.getHeight() / 2;
+            float b_up = b.getY() + b.getHeight() / 2;
+            float b_down = b.getY() - b.getHeight() / 2;
+            if((!touchable || b.isTouchable()) && b != behaviour
+                    && (((b_left <= right && right <= b_right) || (b_left <= left && left <= b_right) ||
+                    (left <= b_left && b_left <= right) || (left <= b_right && b_right <= right)) &&
+                    ((b_down <= up && up <= b_up) || (b_down <= down && down <= b_up) ||
+                            (down <= b_down && b_down <= up) || (down <= b_up && b_up <= up)))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -90,27 +148,38 @@ public class ConcreteEnvironment implements Environment {
     }
 
     @Override
-    public boolean freeView(Vector2 v1, Vector2 v2) {
-        Segment segment = new Segment(v1.x, v1.y, v2.x, v2.y);
-        return behaviours.stream().noneMatch(b ->
-                segment.intersectsHorizontalLine(b.getY() - b.getHeight() / 2,
-                        b.getX() - b.getWidth() / 2, b.getX() + b.getWidth() / 2) ||
-                        segment.intersectVerticalLine(b.getX() - b.getWidth() / 2,
-                                b.getY() - b.getHeight() / 2, b.getY() + b.getHeight() / 2) ||
-                        segment.intersectsHorizontalLine(b.getY() + b.getHeight() / 2,
-                                b.getX() - b.getWidth() / 2, b.getX() + b.getWidth() / 2) ||
-                        segment.intersectVerticalLine(b.getX() + b.getWidth() / 2,
-                                b.getY() - b.getHeight() / 2, b.getY() + b.getHeight() / 2));
-    }
-
-    @Override
-    public void act(float delta) {
-        behaviours.forEach(b -> b.act(delta));
+    public boolean freeView(Behaviour b1, Behaviour b2) {
+        Segment segment = new Segment(b1.getX(), b1.getY(), b2.getX(), b2.getY());
+        for(Actor b : stage.getActors()) {
+            boolean down = segment.intersectsHorizontalLine(b.getY() - b.getHeight() / 2,
+                    b.getX() - b.getWidth() / 2, b.getX() + b.getWidth() / 2);
+            boolean left = segment.intersectVerticalLine(b.getX() - b.getWidth() / 2,
+                    b.getY() - b.getHeight() / 2, b.getY() + b.getHeight() / 2);
+            boolean up = segment.intersectsHorizontalLine(b.getY() + b.getHeight() / 2,
+                    b.getX() - b.getWidth() / 2, b.getX() + b.getWidth() / 2);
+            boolean right = segment.intersectVerticalLine(b.getX() + b.getWidth() / 2,
+                    b.getY() - b.getHeight() / 2, b.getY() + b.getHeight() / 2);
+            if(b.isTouchable() && b != b1 && b != b2 &&
+                    (down || left || up || right)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public void triggerModeChange(ModeName newMode) {
         nextMode = newMode;
+    }
+
+    @Override
+    public ModeName getCurrentMode() {
+        return currentMode;
+    }
+
+    @Override
+    public ModeName getNextMode() {
+        return nextMode;
     }
 
     @Override
@@ -151,7 +220,7 @@ public class ConcreteEnvironment implements Environment {
               return x1 < this.x1 && this.x1 < x2;
             } else {
                 float xIntersection = (yLine - q) / m;
-                return x1 < xIntersection && xIntersection < x2;
+                return this.x1 < xIntersection && xIntersection < this.x2;
             }
         }
 
@@ -167,7 +236,7 @@ public class ConcreteEnvironment implements Environment {
                 return y1 < this.y1 && this.y1 < y2;
             } else {
                 float yIntersection = xLine * m + q;
-                return y1 < yIntersection && yIntersection < y2;
+                return this.y1 < yIntersection && yIntersection < this.y2;
             }
         }
     }

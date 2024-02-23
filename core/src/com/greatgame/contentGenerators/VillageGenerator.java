@@ -25,36 +25,35 @@ public class VillageGenerator extends ContentGenerator {
         int nHouses = randomGenerator.nextInt(4,9);
         for(int i = 0; i < nHouses; i++) {
             Behaviour house = itemsFactory.create("house");
-            house.setOriginalLocation(location);
             if(setRandomPosition(house, environment, location)) {
                 environment.addBehaviour(house);
                 Behaviour villager = creaturesFactory.create("villager");
                 villager.setOriginalLocation(location);
-                if(setVillagerPositionAroundHouse(environment, villager, house, location)) {
+                if(setVillagerPositionAroundHouse(environment, villager, house)) {
                     environment.addBehaviour(villager);
                 }
             }
         }
     }
 
-    private boolean setVillagerPositionAroundHouse(Environment environment, Behaviour villager, Behaviour house, Location location) {
+    private boolean setVillagerPositionAroundHouse(Environment environment, Behaviour villager, Behaviour house) {
         Vector2 position = new Vector2(house.getX(),
                 house.getY() + house.getHeight() / 2 + villager.getHeight() / 2 + 20);
         if(environment.allowedPosition(villager,
                 position.x,
-                position.y)) {
+                position.y, false)) {
             villager.setPosition(position.x, position.y);
         } else if (environment.allowedPosition(villager,
                 position.x = house.getX(),
-                position.y = house.getY() - house.getHeight() / 2 - villager.getHeight() / 2 - 20)) {
+                position.y = house.getY() - house.getHeight() / 2 - villager.getHeight() / 2 - 20, false)) {
             villager.setPosition(position.x, position.y);
         } else if (environment.allowedPosition(villager,
                 position.x = house.getX() + house.getWidth() / 2 + villager.getWidth() / 2 + 20,
-                position.y = house.getY())) {
+                position.y = house.getY(), false)) {
             villager.setPosition(position.x, position.y);
         } else if (environment.allowedPosition(villager,
                 position.x = house.getX() - house.getWidth() / 2 - villager.getWidth() / 2 - 20,
-                position.y = house.getY())) {
+                position.y = house.getY(), false)) {
             villager.setPosition(position.x, position.y);
         } else {
             return false;

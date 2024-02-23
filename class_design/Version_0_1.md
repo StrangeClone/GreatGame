@@ -1141,7 +1141,7 @@ Here are some patterns, with their values, of the Items of the game:
 | House             | 1000 | 15 | 0           | yes       | null                       | null                     | null            |
 | Tent              | 20   | 8  | 0           | yes       | null                       | null                     | null            |
 | Fireplace         | 20   | 8  | 0           | yes       | null                       | null                     | null            |
-| Garpez's Leg      | 1000 | 20 | 170 000 000 | no        | null                       | StandardCollectManager() | null            |
+| wooden leg        | 1000 | 20 | 170 000 000 | no        | null                       | StandardCollectManager() | null            |
 | Silver Coins      | 20   | 10 | 0           | no        | null                       | CoinsCollectManager()    | null            |
 | Fur               | 10   | 10 | 5           | no        | null                       | StandardCollectManager() | null            |
 | Wolf Fangs        | 10   | 12 | 3           | no        | Weapon(4, 1, Bite)         | StandardCollectManager() | null            |
@@ -1365,7 +1365,7 @@ The CampGenerator method generate:
 - places three tents around the fireplace
 - place some bandits (3-6) near the tents
 - EASTER EGG: if the Random is able to randomly generate the letters: 'G', 'a', 'r', 'p', 'e', 'z', in this order,
-adds a Garpez's Leg near the fireplace
+adds a wooden Leg near the fireplace
 
 The GrassLandGenerator method generate:
 - places some trees (1-5) randomly
@@ -1398,9 +1398,6 @@ in that Location.
 
 ```mermaid
 classDiagram
-    class Mode {
-        <<abstract>>
-    }
     class GreatGame {
         + create()
         + render()

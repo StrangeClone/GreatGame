@@ -56,4 +56,9 @@ public class CreatureBehaviour extends Behaviour {
     public Creature getCreature() {
         return creature;
     }
+
+    public void setState(BehaviourState state) {
+        this.state = state;
+        state.behaviour = this;
+    }
 }

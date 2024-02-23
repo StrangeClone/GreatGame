@@ -19,7 +19,7 @@ public class GrassLandGenerator extends ContentGenerator {
         super.generate(environment, location, seed);
         placeItemsAtRandomPositions(environment, location, "tree", randomGenerator.nextInt(1,6));
         placeItemsAtRandomPositions(environment, location, "bush", randomGenerator.nextInt(3,11));
-        placeItemsAtRandomPositions(environment, location, "rock", randomGenerator.nextInt(3,7));
+        placeItemsAtRandomPositions(environment, location, "big rock", randomGenerator.nextInt(3,7));
         placeItemsAtRandomPositions(environment, location, "little bush", randomGenerator.nextInt(10, 21));
         placeItemsAtRandomPositions(environment, location, "little rock", randomGenerator.nextInt(10, 21));
         placeItemsAtRandomPositions(environment, location, "flower", randomGenerator.nextInt(30, 51));

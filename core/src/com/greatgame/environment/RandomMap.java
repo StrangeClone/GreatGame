@@ -32,8 +32,6 @@ public class RandomMap<V> {
             sum += entry.getValue();
         }
         int random = generator.nextInt(0,sum);
-        System.out.println(weights);
-        System.out.println(random);
         for(Map.Entry<V, Integer> entry : entries) {
             if(random < entry.getValue()) {
                 return entry.getKey();

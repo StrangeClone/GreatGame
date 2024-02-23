@@ -13,6 +13,7 @@ public class World {
         this.seed = seed;
         generator = new StandardWorldGenerator(seed);
         this.environment = environment;
+        environment.setWorld(this);
     }
     public Location generate(int x, int y) {
         return generator.generate(x,y);
@@ -20,5 +21,9 @@ public class World {
 
     public void generateContents(int x, int y) {
         generator.generateContents(seed, environment, x, y);
+    }
+
+    public Environment getEnvironment() {
+        return environment;
     }
 }

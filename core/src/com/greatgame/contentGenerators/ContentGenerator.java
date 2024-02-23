@@ -9,24 +9,24 @@ import static com.greatgame.behaviour.ItemBehaviour.itemsFactory;
 import static com.greatgame.environment.RandomMap.randomGenerator;
 
 public abstract class ContentGenerator {
-    protected static final float PIXELS_PER_LOCATION = 10000f;
+    public static final float PIXELS_PER_LOCATION = 2000f;
+
     protected void generate(Environment environment, Location location, long seed) {
         randomGenerator.setSeed(seed);
     }
 
     protected boolean setRandomPosition(Behaviour behaviour, Environment environment, Location location) {
-        boolean ok = false;
-        int i = 0;
-        while (!ok && i < 10) {
+        for (int i = 0; i < 10; i++) {
             float x = randomGenerator.nextFloat(0, PIXELS_PER_LOCATION);
             float y = randomGenerator.nextFloat(0, PIXELS_PER_LOCATION);
-            if (environment.allowedPosition(behaviour, x, y)) {
+            if (environment.allowedPosition(behaviour, x + location.getScreenX() * PIXELS_PER_LOCATION,
+                    y + location.getScreenY() * PIXELS_PER_LOCATION, false)) {
                 setLocalPosition(behaviour, location, x, y);
-                ok = true;
+                behaviour.setOriginalLocation(location);
+                return true;
             }
-            i++;
         }
-        return ok;
+        return false;
     }
 
     protected void setLocalPosition(Behaviour behaviour, Location location, float localX, float localY) {
@@ -35,18 +35,18 @@ public abstract class ContentGenerator {
     }
 
     protected void placeCreaturesAtRandomPositions(Environment environment, Location location, String type, int n) {
-        for(int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             Behaviour creature = creaturesFactory.create(type);
-            if(setRandomPosition(creature, environment, location)) {
+            if (setRandomPosition(creature, environment, location)) {
                 environment.addBehaviour(creature);
             }
         }
     }
 
     protected void placeItemsAtRandomPositions(Environment environment, Location location, String type, int n) {
-        for(int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             Behaviour creature = itemsFactory.create(type);
-            if(setRandomPosition(creature, environment, location)) {
+            if (setRandomPosition(creature, environment, location)) {
                 environment.addBehaviour(creature);
             }
         }

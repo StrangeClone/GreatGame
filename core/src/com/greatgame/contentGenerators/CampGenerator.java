@@ -1,6 +1,5 @@
 package com.greatgame.contentGenerators;
 
-import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.behaviour.ItemBehaviour;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.Environment;
@@ -35,7 +34,7 @@ public class CampGenerator extends ContentGenerator {
 
     private void addLegEasterEgg(Environment environment, Location location) {
         if(legRandomWorld()) {
-            Behaviour leg = ItemBehaviour.itemsFactory.create("garpez's leg");
+            Behaviour leg = ItemBehaviour.itemsFactory.create("wooden leg");
             setLocalPosition(leg, location, PIXELS_PER_LOCATION / 2 + 200, PIXELS_PER_LOCATION / 2);
             environment.addBehaviour(leg);
         }

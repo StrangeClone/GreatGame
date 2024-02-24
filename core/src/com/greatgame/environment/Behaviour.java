@@ -22,6 +22,10 @@ public abstract class Behaviour extends Actor {
         this.allowedActions = new ArrayList<>();
     }
 
+    public String getType() {
+        return type;
+    }
+
     public abstract int getAC();
 
     public abstract void damage(int Damage);

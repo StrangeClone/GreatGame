@@ -220,7 +220,7 @@ public class ConcreteEnvironment implements Environment {
               return x1 < this.x1 && this.x1 < x2;
             } else {
                 float xIntersection = (yLine - q) / m;
-                return this.x1 < xIntersection && xIntersection < this.x2;
+                return x1 < xIntersection && xIntersection < x2;
             }
         }
 
@@ -236,7 +236,7 @@ public class ConcreteEnvironment implements Environment {
                 return y1 < this.y1 && this.y1 < y2;
             } else {
                 float yIntersection = xLine * m + q;
-                return this.y1 < yIntersection && yIntersection < this.y2;
+                return y1 < yIntersection && yIntersection < y2;
             }
         }
     }

@@ -10,6 +10,7 @@ import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.creatureFactory.CreatureBehaviourModifier;
 import com.greatgame.creatureFactory.CreatureInitializer;
 import com.greatgame.creatureFactory.PlayerBehaviourModifier;
+import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.ModeName;
 import com.greatgame.itemsFactory.ItemInitializer;
 import com.greatgame.skills.SkillInitializer;
@@ -37,6 +38,10 @@ public class GreatGame extends ApplicationAdapter {
 		CreatureBehaviourModifier playerModifier = PlayerBehaviourModifier.getInstance();
 		playerModifier.modify(player);
 		world.getEnvironment().checkContents(0,0);
+
+		Behaviour fox = creaturesFactory.create("fox");
+		world.getEnvironment().addBehaviour(fox);
+		fox.setPosition(100, 100);
 
 		mode = new ExplorationMode(this, world.getEnvironment());
 

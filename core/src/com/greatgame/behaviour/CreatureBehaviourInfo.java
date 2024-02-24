@@ -16,7 +16,7 @@ import static com.greatgame.behaviour.ItemBehaviour.itemsFactory;
 
 public class CreatureBehaviourInfo extends BehaviourInfo {
     Vector2 position;
-    List<String> inventory;
+    public final List<String> inventory;
 
     public CreatureBehaviourInfo(CreatureBehaviour behaviour) {
         super(behaviour.getName(), behaviour.getCreature().getHP());

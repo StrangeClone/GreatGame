@@ -26,7 +26,7 @@ public class CampGenerator extends ContentGenerator {
             Behaviour tent = ItemBehaviour.itemsFactory.create("tent");
             setLocalPosition(tent, location, PIXELS_PER_LOCATION / 20 * (float) Math.sin(Math.PI * 2 / 3 * i),
                     PIXELS_PER_LOCATION / 20 * (float) Math.cos(Math.PI * 2 / 3 * i));
-            environment.addBehaviour(fireCamp);
+            environment.addBehaviour(tent);
         }
         placeCreaturesAtRandomPositions(environment, location, "bandit", randomGenerator.nextInt(3,7));
         addLegEasterEgg(environment, location);

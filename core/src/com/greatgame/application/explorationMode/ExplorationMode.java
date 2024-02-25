@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.greatgame.application.GreatGame;
+import com.greatgame.application.SkillDialog;
 import com.greatgame.application.Mode;
 import com.greatgame.environment.Environment;
 import com.greatgame.environment.ModeName;
@@ -36,6 +37,15 @@ public class ExplorationMode extends Mode {
         stage.addActor(table);
 
         Button skillButton = new TextButton("Skills", skin);
+        skillButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                SkillDialog skillDialog = new SkillDialog(environment.getPlayer());
+                skillDialog.show(stage);
+            }
+        });
+
         Button inventoryButton = new TextButton("Inventory", skin);
 
         Table buttons = new Table();

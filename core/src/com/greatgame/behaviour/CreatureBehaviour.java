@@ -17,6 +17,18 @@ public class CreatureBehaviour extends Behaviour {
         this.creature = creature;
     }
 
+    public int getEP() {
+        return EP;
+    }
+
+    public void increaseEP(int value) {
+        EP += value;
+    }
+
+    public void decreaseEP(int value) {
+        EP -= value;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.Environment;
 import com.greatgame.environment.Location;
@@ -17,7 +18,7 @@ public class ConcreteEnvironment implements Environment {
     World world;
     Stage stage;
     List<Location> loadedLocations;
-    Behaviour player;
+    CreatureBehaviour player;
     ModeName currentMode;
     ModeName nextMode;
     int originalScreenX = 0, originalScreenY = 0;
@@ -33,12 +34,12 @@ public class ConcreteEnvironment implements Environment {
     }
 
     @Override
-    public Behaviour getPlayer() {
+    public CreatureBehaviour getPlayer() {
         return player;
     }
 
     @Override
-    public void setPlayer(Behaviour behaviour) {
+    public void setPlayer(CreatureBehaviour behaviour) {
         this.player = behaviour;
     }
 

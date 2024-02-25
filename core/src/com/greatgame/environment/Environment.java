@@ -2,6 +2,7 @@ package com.greatgame.environment;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.world.World;
 
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
 public interface Environment {
 
     void addBehaviour(Behaviour behaviour);
-    Behaviour getPlayer();
-    void setPlayer(Behaviour behaviour);
+    CreatureBehaviour getPlayer();
+    void setPlayer(CreatureBehaviour behaviour);
     Stage getStage();
     void setWorld(World world);
     void update(float delta);

@@ -2,7 +2,7 @@ package com.greatgame.environment;
 
 public abstract class Action {
     private final String name;
-    private long endTime = 0;
+    protected long endTime = 0;
     public Action(String name) {
         this.name = name;
     }

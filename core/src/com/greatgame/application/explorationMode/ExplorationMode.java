@@ -1,12 +1,10 @@
 package com.greatgame.application.explorationMode;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.greatgame.application.GreatGame;
 import com.greatgame.application.SkillDialog;
 import com.greatgame.application.Mode;
@@ -16,7 +14,6 @@ import com.greatgame.environment.ModeName;
 public class ExplorationMode extends Mode {
     private final Environment environment;
     public ExplorationMode(GreatGame application, Environment environment) {
-        this.stage = new Stage(new ScreenViewport());
         this.app = application;
         this.environment = environment;
 

@@ -5,7 +5,7 @@ import com.greatgame.behaviour.CreatureBehaviour;
 
 public abstract class ExplorationBehaviourState extends BehaviourState {
 
-    protected static final float PIXELS_PER_METER = 100.f;
+    public static final float PIXELS_PER_METER = 100.f;
 
     public ExplorationBehaviourState(CreatureBehaviour behaviour) {
         super(behaviour);

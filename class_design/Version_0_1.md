@@ -808,7 +808,7 @@ classDiagram
 ```
 
 In the FightBehaviourState, the attribute active is true if it's this Creature turn. Every Creature, at the
-beginning of its turn, has 2 actions. The class has a reference to FightModeAction class, representing the action
+beginning of its turn, has 2 actions. The class has a reference to Action class, representing the action
 that the Creature is currently doing if it's active. It will be updated at every frame in the act method.
 
 The Aggressive Fight Behaviour will make the Creature behave in this way:

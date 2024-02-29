@@ -3,7 +3,10 @@ package com.greatgame.explorationBehaviourState;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.greatgame.application.Mode;
+import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.behaviour.CreatureBehaviour;
+import com.greatgame.fightBehaviourState.PlayerFightBehaviourState;
 
 import static com.greatgame.contentGenerators.ContentGenerator.PIXELS_PER_LOCATION;
 
@@ -48,6 +51,13 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
             getEnvironment().setPlayer(behaviour);
         }
 
+    }
+
+    @Override
+    public void changeMode(Mode newMode) {
+        if(newMode instanceof FightMode) {
+            behaviour.setState(new PlayerFightBehaviourState(behaviour));
+        }
     }
 
     @Override

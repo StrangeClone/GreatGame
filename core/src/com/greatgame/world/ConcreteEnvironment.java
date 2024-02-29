@@ -22,6 +22,7 @@ public class ConcreteEnvironment implements Environment {
     ModeName currentMode;
     ModeName nextMode;
     int originalScreenX = 0, originalScreenY = 0;
+    PathFinder pathFinder = new FreePositionPathFinder(this);
 
     public ConcreteEnvironment() {
         stage = new Stage(new ScreenViewport());
@@ -46,6 +47,11 @@ public class ConcreteEnvironment implements Environment {
     @Override
     public Stage getStage() {
         return stage;
+    }
+
+    @Override
+    public List<Location> getLoadedLocations() {
+        return loadedLocations;
     }
 
     @Override
@@ -152,16 +158,18 @@ public class ConcreteEnvironment implements Environment {
     public boolean freeView(Behaviour b1, Behaviour b2) {
         Segment segment = new Segment(b1.getX(), b1.getY(), b2.getX(), b2.getY());
         for(Actor b : stage.getActors()) {
-            boolean down = segment.intersectsHorizontalLine(b.getY() - b.getHeight() / 2,
-                    b.getX() - b.getWidth() / 2, b.getX() + b.getWidth() / 2);
-            boolean left = segment.intersectVerticalLine(b.getX() - b.getWidth() / 2,
-                    b.getY() - b.getHeight() / 2, b.getY() + b.getHeight() / 2);
-            boolean up = segment.intersectsHorizontalLine(b.getY() + b.getHeight() / 2,
-                    b.getX() - b.getWidth() / 2, b.getX() + b.getWidth() / 2);
-            boolean right = segment.intersectVerticalLine(b.getX() + b.getWidth() / 2,
-                    b.getY() - b.getHeight() / 2, b.getY() + b.getHeight() / 2);
-            if(b.isTouchable() && b != b1 && b != b2 &&
-                    (down || left || up || right)) {
+            if(b.isTouchable() && b != b1 && b != b2 && segment.intersectsActor(b)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean freeView(Vector2 pos1, Vector2 pos2) {
+        Segment segment = new Segment(pos1.x, pos1.y, pos2.x, pos2.y);
+        for(Actor b : stage.getActors()) {
+            if(b.isTouchable() && segment.intersectsActor(b)) {
                 return false;
             }
         }
@@ -184,8 +192,8 @@ public class ConcreteEnvironment implements Environment {
     }
 
     @Override
-    public List<Vector2> findPath(Vector2 start, Vector2 end) {
-        return null;
+    public List<Vector2> findPath(CreatureBehaviour creature, Vector2 start, Vector2 end) {
+        return pathFinder.findPath(creature, start, end);
     }
 
     static class Segment {
@@ -201,15 +209,15 @@ public class ConcreteEnvironment implements Environment {
             q = y1 - m * x1;
         }
 
-        boolean horizontal() {
+        private boolean horizontal() {
             return y1 == y2;
         }
 
-        boolean vertical() {
+        private boolean vertical() {
             return x1 == x2;
         }
 
-        boolean intersectsHorizontalLine(float yLine, float x1, float x2) {
+        private boolean intersectsHorizontalLine(float yLine, float x1, float x2) {
             if(x1 > x2) {
                 float t = x1;
                 x1 = x2;
@@ -227,7 +235,7 @@ public class ConcreteEnvironment implements Environment {
             }
         }
 
-        boolean intersectVerticalLine(float xLine, float y1, float y2) {
+        private boolean intersectVerticalLine(float xLine, float y1, float y2) {
             if(y1 > y2) {
                 float t = y1;
                 y1 = y2;
@@ -243,6 +251,17 @@ public class ConcreteEnvironment implements Environment {
                         (this.y1 < this.y2 ? this.y1 < yIntersection && yIntersection < this.y2 :
                             this.y2 < yIntersection && yIntersection < this.y1);
             }
+        }
+
+        boolean intersectsActor(Actor b) {
+            return intersectsHorizontalLine(b.getY() - b.getHeight() / 2,
+                    b.getX() - b.getWidth() / 2, b.getX() + b.getWidth() / 2) ||
+                    intersectVerticalLine(b.getX() - b.getWidth() / 2,
+                            b.getY() - b.getHeight() / 2, b.getY() + b.getHeight() / 2) ||
+                    intersectsHorizontalLine(b.getY() + b.getHeight() / 2,
+                            b.getX() - b.getWidth() / 2, b.getX() + b.getWidth() / 2) ||
+                    intersectVerticalLine(b.getX() + b.getWidth() / 2,
+                            b.getY() - b.getHeight() / 2, b.getY() + b.getHeight() / 2);
         }
     }
 }

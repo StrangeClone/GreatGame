@@ -1,6 +1,7 @@
 package com.greatgame.behaviour;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.greatgame.application.Mode;
 import com.greatgame.entities.Creature;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.factory.Factory;
@@ -72,5 +73,13 @@ public class CreatureBehaviour extends Behaviour {
     public void setState(BehaviourState state) {
         this.state = state;
         state.behaviour = this;
+    }
+
+    public BehaviourState getState() {
+        return state;
+    }
+
+    public void changeMode(Mode newMode) {
+        state.changeMode(newMode);
     }
 }

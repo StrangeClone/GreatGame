@@ -1,5 +1,6 @@
 package com.greatgame.behaviour;
 
+import com.greatgame.application.Mode;
 import com.greatgame.environment.Environment;
 
 public abstract class BehaviourState {
@@ -7,9 +8,7 @@ public abstract class BehaviourState {
     public BehaviourState(CreatureBehaviour behaviour) {
         this.behaviour = behaviour;
     }
-    void changeBehaviour(BehaviourState newState) {
-        behaviour.state = newState;
-    }
+    public abstract void changeMode(Mode newMode);
 
     protected Environment getEnvironment() {
         return behaviour.getEnvironment();

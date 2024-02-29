@@ -3,9 +3,11 @@ package com.greatgame.application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.greatgame.application.explorationMode.ExplorationMode;
+import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.creatureFactory.CreatureBehaviourModifier;
 import com.greatgame.creatureFactory.CreatureInitializer;
@@ -21,6 +23,7 @@ import static com.greatgame.behaviour.CreatureBehaviour.creaturesFactory;
 public class GreatGame extends ApplicationAdapter {
 	Mode mode;
 	World world;
+	InputMultiplexer multiProcessor;
 	
 	@Override
 	public void create () {
@@ -40,9 +43,9 @@ public class GreatGame extends ApplicationAdapter {
 
 		world.getEnvironment().checkContents(0,0);
 
-		mode = new ExplorationMode(this, world.getEnvironment());
+		world.getEnvironment().triggerModeChange(ModeName.fightMode);
+		manageModeChange();
 
-		InputMultiplexer multiProcessor = new InputMultiplexer(mode.stage, world.getEnvironment().getStage());
 		Gdx.input.setInputProcessor(multiProcessor);
 	}
 
@@ -65,6 +68,15 @@ public class GreatGame extends ApplicationAdapter {
 		if(world.getEnvironment().getCurrentMode() != world.getEnvironment().getNextMode()) {
 			if(world.getEnvironment().getNextMode() == ModeName.explorationMode) {
 				mode = new ExplorationMode(this, world.getEnvironment());
+			} if(world.getEnvironment().getNextMode() == ModeName.fightMode) {
+				mode = new FightMode(this, world.getEnvironment());
+			}
+			multiProcessor = new InputMultiplexer(mode.stage, world.getEnvironment().getStage());
+
+			for(Actor actor : world.getEnvironment().getStage().getActors()) {
+				if(actor instanceof CreatureBehaviour) {
+					((CreatureBehaviour)actor).changeMode(mode);
+				}
 			}
 		}
 	}

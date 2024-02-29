@@ -1,6 +1,7 @@
 package com.greatgame.explorationBehaviourState;
 
 import com.badlogic.gdx.math.Vector2;
+import com.greatgame.application.Mode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.ModeName;
 
@@ -15,6 +16,10 @@ public class IdleExplorationBehaviourState extends ExplorationBehaviourState {
         super(behaviour);
         direction = new Vector2();
         this.moves = moves;
+    }
+
+    @Override
+    public void changeMode(Mode newMode) {
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.greatgame.application.GreatGame;
-import com.greatgame.application.SkillDialog;
 import com.greatgame.application.Mode;
 import com.greatgame.environment.Environment;
 import com.greatgame.environment.ModeName;
@@ -14,6 +13,7 @@ import com.greatgame.environment.ModeName;
 public class ExplorationMode extends Mode {
     private final Environment environment;
     public ExplorationMode(GreatGame application, Environment environment) {
+        super();
         this.app = application;
         this.environment = environment;
 
@@ -33,25 +33,7 @@ public class ExplorationMode extends Mode {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Button skillButton = new TextButton("Skills", skin);
-        skillButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                SkillDialog skillDialog = new SkillDialog(environment.getPlayer());
-                skillDialog.show(stage);
-            }
-        });
-
-        Button inventoryButton = new TextButton("Inventory", skin);
-
-        Table buttons = new Table();
-        buttons.add(skillButton).width(200).height(40).row();
-        buttons.add(inventoryButton).width(200).height(40).padTop(10);
-        buttons.bottom().left();
-        buttons.padBottom(20).padLeft(20);
-        buttons.setFillParent(true);
-        stage.addActor(buttons);
+        addPlayerUI(environment);
     }
 
     @Override

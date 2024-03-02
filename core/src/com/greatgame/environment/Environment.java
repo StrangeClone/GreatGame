@@ -18,6 +18,7 @@ public interface Environment {
     void update(float delta);
     void checkContents(int x, int y);
     boolean freePoint(float x, float y);
+    Behaviour behaviourInPosition(float x, float y);
     boolean allowedPosition(Behaviour behaviour, float newX, float newY, boolean touchable);
     float dist(Vector2 v1, Vector2 v2);
     boolean freeView(Behaviour b1, Behaviour b2);

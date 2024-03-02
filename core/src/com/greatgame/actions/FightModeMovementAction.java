@@ -14,8 +14,8 @@ public class FightModeMovementAction extends Action {
     Vector2 end;
     int currentIndex = 0;
 
-    public FightModeMovementAction(String name, Environment environment, CreatureBehaviour creature, Vector2 end) {
-        super(name);
+    public FightModeMovementAction(Environment environment, CreatureBehaviour creature, Vector2 end) {
+        super("Movement");
         validator = new MovementValidator(creature, end);
         this.environment = environment;
         this.creature = creature;

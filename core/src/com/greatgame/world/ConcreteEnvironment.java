@@ -61,6 +61,7 @@ public class ConcreteEnvironment implements Environment {
 
     @Override
     public void update(float delta) {
+        currentMode = nextMode;
         stage.act(delta);
 
         stage.getViewport().getCamera().
@@ -125,6 +126,17 @@ public class ConcreteEnvironment implements Environment {
             }
         }
         return true;
+    }
+
+    @Override
+    public Behaviour behaviourInPosition(float x, float y) {
+        for(Actor actor : stage.getActors()) {
+            if(actor.getX() - actor.getWidth() / 2 < x && x < actor.getX() + actor.getWidth() / 2 &&
+                    actor.getY() - actor.getHeight() / 2 < y && y < actor.getY() + actor.getHeight() / 2) {
+                return (Behaviour) actor;
+            }
+        }
+        return null;
     }
 
     @Override

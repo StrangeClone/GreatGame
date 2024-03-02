@@ -56,7 +56,7 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
     @Override
     public void changeMode(Mode newMode) {
         if(newMode instanceof FightMode) {
-            behaviour.setState(new PlayerFightBehaviourState(behaviour));
+            behaviour.setState(new PlayerFightBehaviourState(behaviour, newMode.getStage()));
         }
     }
 

@@ -23,6 +23,12 @@ public class FightMode extends Mode {
         this.app = application;
         fighters = new ArrayList<>();
 
+        handleFighters();
+
+        addPlayerUI(environment);
+    }
+
+    private void handleFighters() {
         for (Actor a : environment.getStage().getActors()) {
             if (a instanceof CreatureBehaviour) {
                 fighters.add((CreatureBehaviour) a);

@@ -30,6 +30,13 @@ public abstract class FightBehaviourState extends BehaviourState {
         }
     }
 
+    public void startAction(Action action, long durationInMillis) {
+        if(isActive() && currentAction == null) {
+            currentAction = action;
+            action.start(durationInMillis);
+        }
+    }
+
     public void deactivate() {
         active = false;
     }

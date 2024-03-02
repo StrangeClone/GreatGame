@@ -45,8 +45,6 @@ public class GreatGame extends ApplicationAdapter {
 
 		world.getEnvironment().triggerModeChange(ModeName.fightMode);
 		manageModeChange();
-
-		Gdx.input.setInputProcessor(multiProcessor);
 	}
 
 	@Override
@@ -68,10 +66,13 @@ public class GreatGame extends ApplicationAdapter {
 		if(world.getEnvironment().getCurrentMode() != world.getEnvironment().getNextMode()) {
 			if(world.getEnvironment().getNextMode() == ModeName.explorationMode) {
 				mode = new ExplorationMode(this, world.getEnvironment());
-			} if(world.getEnvironment().getNextMode() == ModeName.fightMode) {
+			} else if(world.getEnvironment().getNextMode() == ModeName.fightMode) {
 				mode = new FightMode(this, world.getEnvironment());
 			}
-			multiProcessor = new InputMultiplexer(mode.stage, world.getEnvironment().getStage());
+			multiProcessor = new InputMultiplexer();
+			multiProcessor.addProcessor(mode.stage);
+			multiProcessor.addProcessor(world.getEnvironment().getStage());
+			Gdx.input.setInputProcessor(multiProcessor);
 
 			for(Actor actor : world.getEnvironment().getStage().getActors()) {
 				if(actor instanceof CreatureBehaviour) {

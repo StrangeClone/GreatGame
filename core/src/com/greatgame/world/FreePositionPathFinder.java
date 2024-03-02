@@ -24,40 +24,27 @@ public class FreePositionPathFinder implements PathFinder {
             return Collections.emptyList();
         }
         update(creature);
-        Vector2 first = nearest(start, creature.getWidth() / 2);
-        Vector2 last;
         try {
-            last = nearest(end, creature.getWidth() / 2);
+            Vector2 first = nearest(start, creature.getWidth() / 2);
+            Vector2 last = nearest(end, creature.getWidth() / 2);
+            Set<Node> done = new HashSet<>(), current = new HashSet<>(), checking = new HashSet<>();
+            current.add(new Node(first, start, environment.dist(first, start)));
+            Node lastNode = null;
+            boolean found = false;
+            while (!found) {
+                current.forEach(node -> expand(node, creature, done, current, checking));
+                Optional<Node> opt =  searchNodeByPosition(checking, last);
+                if(opt.isPresent()) {
+                    lastNode = opt.get();
+                    found = true;
+                }
+                flushSets(done, current, checking);
+            }
+            done.addAll(current);
+            return buildPath(end, start, lastNode, done);
         } catch (RuntimeException e) {
             return Collections.emptyList();
         }
-        Set<Node> done = new HashSet<>(), current = new HashSet<>(), checking = new HashSet<>();
-        current.add(new Node(first, start, environment.dist(first, start)));
-        Node lastNode = null;
-        boolean found = false;
-        while (!found) {
-            for (Node c : current) {
-                if(c.distance + creature.getWidth() / 2 > creature.getSpeed() * PIXELS_PER_METER) {
-                    return Collections.emptyList();
-                }
-                Vector2 position = c.position;
-                considerPosition(new Vector2(position.x + creature.getWidth() / 2, position.y), position, c.distance, done, current, checking);
-                considerPosition(new Vector2(position.x - creature.getWidth() / 2, position.y), position, c.distance, done, current, checking);
-                considerPosition(new Vector2(position.x, position.y + creature.getHeight() / 2), position, c.distance, done, current, checking);
-                considerPosition(new Vector2(position.x, position.y - creature.getHeight() / 2), position, c.distance, done, current, checking);
-            }
-            Optional<Node> opt =  searchNodeByPosition(checking, last);
-            if(opt.isPresent()) {
-                lastNode = opt.get();
-                found = true;
-            }
-            done.addAll(current);
-            current.clear();
-            current.addAll(checking);
-            checking.clear();
-        }
-        done.addAll(current);
-        return buildPath(end, start, lastNode, done);
     }
 
     private boolean endBlocked(CreatureBehaviour creature, Vector2 end) {
@@ -132,6 +119,17 @@ public class FreePositionPathFinder implements PathFinder {
         }
     }
 
+    private void expand(Node c, CreatureBehaviour creature, Set<Node> done, Set<Node> current, Set<Node> checking) {
+        if(c.distance + creature.getWidth() / 2 > creature.getSpeed() * PIXELS_PER_METER) {
+            throw new RuntimeException("We have gone too far...");
+        }
+        Vector2 position = c.position;
+        considerPosition(new Vector2(position.x + creature.getWidth() / 2, position.y), position, c.distance, done, current, checking);
+        considerPosition(new Vector2(position.x - creature.getWidth() / 2, position.y), position, c.distance, done, current, checking);
+        considerPosition(new Vector2(position.x, position.y + creature.getHeight() / 2), position, c.distance, done, current, checking);
+        considerPosition(new Vector2(position.x, position.y - creature.getHeight() / 2), position, c.distance, done, current, checking);
+    }
+
     private void considerPosition(Vector2 position, Vector2 previous, float distance, Set<Node> doneSet, Set<Node> currentSet, Set<Node> checkingSet) {
         if(!searchNodeByPosition(doneSet, position).isPresent() && !searchNodeByPosition(currentSet, position).isPresent() &&
             freePositions.get(position)) {
@@ -141,6 +139,13 @@ public class FreePositionPathFinder implements PathFinder {
 
     private Optional<Node> searchNodeByPosition(Set<Node> nodes, Vector2 position) {
         return nodes.stream().filter(n -> n.position.equals(position)).findAny();
+    }
+
+    private void flushSets(Set<Node> done, Set<Node> current, Set<Node> checking) {
+        done.addAll(current);
+        current.clear();
+        current.addAll(checking);
+        checking.clear();
     }
 
     private List<Vector2> buildPath(Vector2 end, Vector2 start, Node node, Set<Node> nodeSet) {

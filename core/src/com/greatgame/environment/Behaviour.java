@@ -2,6 +2,7 @@ package com.greatgame.environment;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.ArrayList;
@@ -32,6 +33,10 @@ public abstract class Behaviour extends Actor {
 
     public abstract int getSpeed();
 
+    public Vector2 getPosition() {
+        return new Vector2(getX(), getY());
+    }
+
     public void setOriginalLocation(Location originalLocation) {
         this.originalLocation = originalLocation;
     }
@@ -55,6 +60,10 @@ public abstract class Behaviour extends Actor {
 
     public List<Action> getAllowedActions() {
         return allowedActions;
+    }
+
+    public void allowAction(Action action) {
+        allowedActions.add(action);
     }
 
     public abstract void saveBehaviourInfo();

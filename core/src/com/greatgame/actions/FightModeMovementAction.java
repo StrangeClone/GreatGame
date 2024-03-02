@@ -12,7 +12,8 @@ public class FightModeMovementAction extends Action {
     Environment environment;
     CreatureBehaviour creature;
     Vector2 end;
-    int currentIndex = 0;
+    private boolean readyToStart = false;
+    int currentIndex;
 
     public FightModeMovementAction(Environment environment, CreatureBehaviour creature, Vector2 end) {
         super("Movement");
@@ -24,9 +25,9 @@ public class FightModeMovementAction extends Action {
 
     @Override
     public boolean validate() {
-        boolean result = validator.validate(environment);
+        readyToStart = validator.validate(environment);
         currentIndex = validator.getPath().size() - 1;
-        return result;
+        return readyToStart;
     }
 
     @Override
@@ -36,21 +37,23 @@ public class FightModeMovementAction extends Action {
 
     @Override
     public void update(float delta) {
-        List<Vector2> path = validator.getPath();
-        Vector2 nextPosition = path.get(currentIndex - 1);
-        Vector2 previousPosition = path.get(currentIndex);
-        Vector2 direction = new Vector2(nextPosition.x - previousPosition.x, nextPosition.y - previousPosition.y).nor();
-        Vector2 currentPos = new Vector2(creature.getX(), creature.getY());
-        float speed = validator.getDist() / 3;
-        Vector2 newPosition = new Vector2(currentPos.x + delta * direction.x * speed,
-                currentPos.y + delta * direction.y * speed);
-        float sectionLength = environment.dist(nextPosition, previousPosition);
-        float currentDist = environment.dist(previousPosition, newPosition);
-        if (sectionLength <= currentDist) {
-            creature.setPosition(nextPosition.x, nextPosition.y);
-            currentIndex--;
-        } else {
-            creature.setPosition(newPosition.x, newPosition.y);
+        if (readyToStart) {
+            List<Vector2> path = validator.getPath();
+            Vector2 nextPosition = path.get(currentIndex - 1);
+            Vector2 previousPosition = path.get(currentIndex);
+            Vector2 direction = new Vector2(nextPosition.x - previousPosition.x, nextPosition.y - previousPosition.y).nor();
+            Vector2 currentPos = new Vector2(creature.getX(), creature.getY());
+            float speed = validator.getDist() / 3;
+            Vector2 newPosition = new Vector2(currentPos.x + delta * direction.x * speed,
+                    currentPos.y + delta * direction.y * speed);
+            float sectionLength = environment.dist(nextPosition, previousPosition);
+            float currentDist = environment.dist(previousPosition, newPosition);
+            if (sectionLength <= currentDist) {
+                creature.setPosition(nextPosition.x, nextPosition.y);
+                currentIndex--;
+            } else {
+                creature.setPosition(newPosition.x, newPosition.y);
+            }
         }
     }
 }

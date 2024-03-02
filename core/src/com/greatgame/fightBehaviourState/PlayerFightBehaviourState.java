@@ -17,21 +17,25 @@ import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
 
 public class PlayerFightBehaviourState extends FightBehaviourState {
     InputListener listener;
+
     public PlayerFightBehaviourState(CreatureBehaviour behaviour, Stage uiStage) {
         super(behaviour);
 
         listener = new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Behaviour touched = getEnvironment().behaviourInPosition(x,y);
+                Behaviour touched = getEnvironment().behaviourInPosition(x, y);
                 if ((touched == null || !touched.isTouchable())
                         && currentAction == null
                         && button == Input.Buttons.LEFT) {
                     Action movement = new FightModeMovementAction(getEnvironment(), behaviour, new Vector2(x, y));
-                    if (movement.validate()) {
-                        currentAction = movement;
-                        movement.start(3000);
-                    }
+                    Thread thread = new Thread(() -> {
+                        if (movement.validate()) {
+                            currentAction = movement;
+                            movement.start(3000);
+                        }
+                    });
+                    thread.start();
                 } else if (touched != null
                         && touched != behaviour
                         && isActive()

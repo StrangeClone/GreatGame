@@ -2,8 +2,10 @@ package com.greatgame.explorationBehaviourState;
 
 import com.badlogic.gdx.math.Vector2;
 import com.greatgame.application.Mode;
+import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.ModeName;
+import com.greatgame.fightBehaviourState.RunningFightBehaviourState;
 
 import static com.greatgame.environment.RandomMap.randomGenerator;
 
@@ -20,6 +22,9 @@ public class IdleExplorationBehaviourState extends ExplorationBehaviourState {
 
     @Override
     public void changeMode(Mode newMode) {
+        if(newMode instanceof FightMode && !behaviour.isHostile()) {
+            behaviour.setState(new RunningFightBehaviourState(behaviour));
+        }
     }
 
     @Override

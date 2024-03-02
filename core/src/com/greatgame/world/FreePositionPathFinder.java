@@ -120,7 +120,7 @@ public class FreePositionPathFinder implements PathFinder {
     }
 
     private void expand(Node c, CreatureBehaviour creature, Set<Node> done, Set<Node> current, Set<Node> checking) {
-        if(c.distance + creature.getWidth() / 2 > creature.getSpeed() * PIXELS_PER_METER) {
+        if(c.distance + creature.getWidth() / 2 > creature.getSpeed() * Math.sqrt(2) * PIXELS_PER_METER) {
             throw new RuntimeException("We have gone too far...");
         }
         Vector2 position = c.position;

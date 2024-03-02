@@ -43,7 +43,7 @@ public class GreatGame extends ApplicationAdapter {
 
 		world.getEnvironment().checkContents(0,0);
 
-		world.getEnvironment().triggerModeChange(ModeName.fightMode);
+		world.getEnvironment().triggerModeChange(ModeName.explorationMode);
 		manageModeChange();
 	}
 

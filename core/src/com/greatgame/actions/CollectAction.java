@@ -24,8 +24,11 @@ public class CollectAction extends Action {
     public void start(long durationInMillis) {
         super.start(durationInMillis);
         Creature player = behaviour.getEnvironment().getPlayer().getCreature();
+        int previousInventorySize = player.getInventory().size();
         behaviour.getItem().collect(player);
-        behaviour.remove();
+        if(player.getInventory().size() != previousInventorySize) {
+            behaviour.remove();
+        }
     }
 
     @Override

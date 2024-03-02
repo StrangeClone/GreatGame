@@ -11,6 +11,6 @@ public class PlayerBehaviourModifier implements CreatureBehaviourModifier {
     }
     @Override
     public void modify(CreatureBehaviour behaviour) {
-        behaviour.setState(new PlayerExplorationBehaviourState(behaviour));
+        behaviour.setState(new PlayerExplorationBehaviourState(behaviour, null));
     }
 }

@@ -5,20 +5,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.greatgame.actions.AllowedActionDialog;
+import com.greatgame.actions.FightModeAllowedActionDialog;
 import com.greatgame.actions.FightModeMovementAction;
 import com.greatgame.application.Mode;
 import com.greatgame.application.explorationMode.ExplorationMode;
+import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
 
 public class PlayerFightBehaviourState extends FightBehaviourState {
+    InputListener listener;
     public PlayerFightBehaviourState(CreatureBehaviour behaviour, Stage uiStage) {
         super(behaviour);
 
-        InputListener inputListener = new InputListener() {
+        listener = new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Behaviour touched = getEnvironment().behaviourInPosition(x,y);
@@ -35,19 +37,23 @@ public class PlayerFightBehaviourState extends FightBehaviourState {
                         && isActive()
                         && currentAction == null
                         && button == Input.Buttons.RIGHT) {
-                    AllowedActionDialog dialog = new AllowedActionDialog(touched, getEnvironment().getPlayer());
+                    FightModeAllowedActionDialog dialog = new FightModeAllowedActionDialog(touched, getEnvironment().getPlayer());
                     dialog.show(uiStage);
                 }
                 return false;
             }
         };
-        getEnvironment().getStage().addListener(inputListener);
+        getEnvironment().getStage().addListener(listener);
     }
 
     @Override
     public void changeMode(Mode newMode) {
+        getEnvironment().getStage().removeListener(listener);
         if (newMode instanceof ExplorationMode) {
-            behaviour.setState(new PlayerExplorationBehaviourState(behaviour));
+            behaviour.setState(new PlayerExplorationBehaviourState(behaviour, newMode.getStage()));
+        }
+        if (newMode instanceof FightMode) {
+            behaviour.setState(new PlayerFightBehaviourState(behaviour, newMode.getStage()));
         }
     }
 }

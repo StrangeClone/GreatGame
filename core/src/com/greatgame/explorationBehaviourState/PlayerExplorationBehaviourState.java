@@ -3,19 +3,25 @@ package com.greatgame.explorationBehaviourState;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.greatgame.actions.ExplorationModeAllowedActionDialog;
+import com.greatgame.actions.FightModeAllowedActionDialog;
 import com.greatgame.application.Mode;
+import com.greatgame.application.explorationMode.ExplorationMode;
 import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.behaviour.CreatureBehaviour;
+import com.greatgame.environment.Behaviour;
 import com.greatgame.fightBehaviourState.PlayerFightBehaviourState;
 
 import static com.greatgame.contentGenerators.ContentGenerator.PIXELS_PER_LOCATION;
 
 public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
     private float directionX = 0, directionY = 0;
+    private final InputListener listener;
 
-    public PlayerExplorationBehaviourState(CreatureBehaviour behaviour) {
+    public PlayerExplorationBehaviourState(CreatureBehaviour behaviour, Stage uiStage) {
         super(behaviour);
-        InputListener listener = new InputListener() {
+        listener = new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.A) {
@@ -44,6 +50,18 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
                 }
                 return true;
             }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Behaviour touched = getEnvironment().behaviourInPosition(x,y);
+                if (touched != null
+                    && touched != behaviour
+                    && button == Input.Buttons.RIGHT) {
+                ExplorationModeAllowedActionDialog dialog = new ExplorationModeAllowedActionDialog(touched, getEnvironment().getPlayer());
+                dialog.show(uiStage);
+            }
+                return true;
+            }
         };
 
         getEnvironment().getStage().addListener(listener);
@@ -55,6 +73,10 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
 
     @Override
     public void changeMode(Mode newMode) {
+        getEnvironment().getStage().removeListener(listener);
+        if (newMode instanceof ExplorationMode) {
+            behaviour.setState(new PlayerExplorationBehaviourState(behaviour, newMode.getStage()));
+        }
         if(newMode instanceof FightMode) {
             behaviour.setState(new PlayerFightBehaviourState(behaviour, newMode.getStage()));
         }

@@ -11,9 +11,9 @@ import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.fightBehaviourState.FightBehaviourState;
 
-public class AllowedActionDialog extends Dialog {
+public class FightModeAllowedActionDialog extends Dialog {
 
-    public AllowedActionDialog(Behaviour selectedBehaviour, CreatureBehaviour player) {
+    public FightModeAllowedActionDialog(Behaviour selectedBehaviour, CreatureBehaviour player) {
         super("", Mode.skin);
 
         text(selectedBehaviour.getType());
@@ -30,7 +30,7 @@ public class AllowedActionDialog extends Dialog {
                     if (!button.isDisabled()) {
                         FightBehaviourState state = (FightBehaviourState) player.getState();
                         state.startAction(action, 1000);
-                        AllowedActionDialog.this.remove();
+                        FightModeAllowedActionDialog.this.remove();
                     }
                 }
             });

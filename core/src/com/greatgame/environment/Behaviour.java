@@ -17,8 +17,10 @@ public abstract class Behaviour extends Actor {
 
     public Behaviour(Texture texture, String type) {
         this.texture = texture;
-        setWidth(texture.getWidth() * 2);
-        setHeight(texture.getHeight() * 2);
+        if (texture != null) {
+            setWidth(texture.getWidth() * 2);
+            setHeight(texture.getHeight() * 2);
+        }
         this.type = type;
         this.allowedActions = new ArrayList<>();
     }

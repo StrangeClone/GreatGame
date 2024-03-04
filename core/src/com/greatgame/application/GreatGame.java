@@ -43,11 +43,7 @@ public class GreatGame extends ApplicationAdapter {
 
 		world.getEnvironment().checkContents(0,0);
 
-		CreatureBehaviour fox = creaturesFactory.create("fox");
-		fox.setPosition(100, 100);
-		world.getEnvironment().addBehaviour(fox);
-
-		world.getEnvironment().triggerModeChange(ModeName.fightMode);
+		world.getEnvironment().triggerModeChange(ModeName.explorationMode);
 		manageModeChange();
 	}
 

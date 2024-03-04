@@ -2,6 +2,7 @@ package com.greatgame.items;
 
 import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
+import com.greatgame.entities.Weapon;
 
 public class ConcreteItem implements Item {
     String type;
@@ -122,6 +123,15 @@ public class ConcreteItem implements Item {
     public void unEquip() {
         if(canBeEquipped()) {
             equipManager.unEquip(this);
+        }
+    }
+
+    @Override
+    public Weapon toWeapon() {
+        if (equipManager instanceof WeaponManager) {
+            return ((WeaponManager)equipManager).weapon;
+        } else {
+            return null;
         }
     }
 

@@ -1,16 +1,17 @@
 package com.greatgame.itemsFactory;
 
 import com.greatgame.items.ConcreteItem;
-import com.greatgame.items.Weapon;
+import com.greatgame.items.ConcreteWeapon;
+import com.greatgame.items.WeaponManager;
 
 public class WeaponModifier implements ItemPatternModifier {
-    private final Weapon weapon;
+    private final WeaponManager weaponManager;
     public WeaponModifier(int damage, float range, String skill) {
-        weapon = new Weapon(damage, range, skill);
+        weaponManager = new WeaponManager(new ConcreteWeapon(range, damage, skill));
     }
 
     @Override
     public void modify(ConcreteItem item) {
-        item.setEquipManager(weapon);
+        item.setEquipManager(weaponManager);
     }
 }

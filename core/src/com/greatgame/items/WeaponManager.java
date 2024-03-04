@@ -3,15 +3,12 @@ package com.greatgame.items;
 import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
 import com.greatgame.entities.ItemSlot;
+import com.greatgame.entities.Weapon;
 
-public class Weapon extends EquipManager {
-    int damage;
-    float range;
-    String skill;
-    public Weapon(int damage, float range, String skill) {
-        this.damage = damage;
-        this.range = range;
-        this.skill = skill;
+public class WeaponManager extends EquipManager {
+    Weapon weapon;
+    public WeaponManager(Weapon weapon) {
+        this.weapon = weapon;
     }
 
     @Override

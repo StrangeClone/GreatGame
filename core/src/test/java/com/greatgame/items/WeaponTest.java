@@ -10,7 +10,8 @@ public class WeaponTest extends TestCase {
 
     public void testEquip() {
         Creature dude = new ConcreteCreature();
-        Item sword = new ConcreteItem("", 10, 10, 0, null, new Weapon(8, 1, "fencing"));
+        Item sword = new ConcreteItem("", 10, 10, 0, null, new WeaponManager(
+                new ConcreteWeapon(8, 1, "fencing")));
         sword.equip(dude);
         assertSame(sword, dude.getItem(ItemSlot.Primary));
         sword.unEquip();

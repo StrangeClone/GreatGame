@@ -5,14 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.greatgame.application.Mode;
-import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
-import com.greatgame.fightBehaviourState.FightBehaviourState;
 
 public class ExplorationModeAllowedActionDialog extends Dialog {
 
-    public ExplorationModeAllowedActionDialog(Behaviour selectedBehaviour, CreatureBehaviour player) {
+    public ExplorationModeAllowedActionDialog(Behaviour selectedBehaviour) {
         super("", Mode.skin);
 
         text(selectedBehaviour.getType());
@@ -27,7 +25,7 @@ public class ExplorationModeAllowedActionDialog extends Dialog {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (!button.isDisabled()) {
-                        action.start(1000);
+                        action.start();
                         ExplorationModeAllowedActionDialog.this.remove();
                     }
                 }

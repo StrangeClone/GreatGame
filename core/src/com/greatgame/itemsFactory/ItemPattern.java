@@ -2,7 +2,6 @@ package com.greatgame.itemsFactory;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.greatgame.actions.CollectAction;
 import com.greatgame.behaviour.ItemBehaviour;
 import com.greatgame.factory.Pattern;
 import com.greatgame.items.ConcreteItem;
@@ -39,9 +38,6 @@ public class ItemPattern extends Pattern<ItemBehaviour> {
             modifier.modify(item);
         }
         ItemBehaviour behaviour = new ItemBehaviour(texture, item);
-        if(item.canBeCollected()) {
-            behaviour.allowAction(new CollectAction(behaviour));
-        }
         if(!touchable) {
             behaviour.setTouchable(Touchable.disabled);
         }

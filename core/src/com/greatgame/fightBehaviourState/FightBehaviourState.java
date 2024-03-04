@@ -9,6 +9,7 @@ import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Action;
 
 public abstract class FightBehaviourState extends BehaviourState {
+    protected boolean validatingMovement = false;
     int actions;
     Action currentAction;
     boolean active = false;
@@ -42,21 +43,21 @@ public abstract class FightBehaviourState extends BehaviourState {
         selector.setPatch(new NinePatch(new Texture("textures/selector.png"), 5, 5, 5,5));
         Batch batch = getEnvironment().getStage().getBatch();
         batch.begin();
-        float width = behaviour.getWidth() * 1.25f, height = behaviour.getHeight() * 1.25f;
+        float width = behaviour.getWidth() * 1.1f, height = behaviour.getHeight() * 1.1f;
         selector.draw(getEnvironment().getStage().getBatch(),
                 behaviour.getX() - width / 2, behaviour.getY() - height / 2, width, height);
         Texture actionIcon = new Texture("textures/action.png");
         for(int i = 0; i < actions; i++) {
             batch.draw(actionIcon, behaviour.getX() - width / 2 + i * (actionIcon.getWidth() + 5),
-                    behaviour.getY() - height / 2 - actionIcon.getHeight() - 10);
+                    behaviour.getY() - height / 2 - actionIcon.getHeight() - 2);
         }
         batch.end();
     }
 
-    public void startAction(Action action, long durationInMillis) {
+    public void startAction(Action action) {
         if(isActive() && currentAction == null) {
             currentAction = action;
-            action.start(durationInMillis);
+            action.start();
         }
     }
 

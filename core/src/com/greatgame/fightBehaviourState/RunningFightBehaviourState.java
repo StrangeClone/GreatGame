@@ -9,8 +9,6 @@ import static com.greatgame.explorationBehaviourState.ExplorationBehaviourState.
 
 public class RunningFightBehaviourState extends FightBehaviourState {
 
-    boolean validatingMovement = false;
-
     public RunningFightBehaviourState(CreatureBehaviour behaviour) {
         super(behaviour);
     }
@@ -32,7 +30,7 @@ public class RunningFightBehaviourState extends FightBehaviourState {
                     FightModeMovementAction action = new FightModeMovementAction(getEnvironment(), behaviour, destination);
                     if(action.validate()) {
                         currentAction = action;
-                        action.start(3000);
+                        action.start();
                         validatingMovement = false;
                         break;
                     }

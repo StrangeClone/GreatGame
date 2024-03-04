@@ -5,6 +5,7 @@ import com.greatgame.entities.Characteristic;
 
 import static com.greatgame.behaviour.CreatureBehaviour.creaturesFactory;
 import static com.greatgame.behaviour.ItemBehaviour.itemsFactory;
+import static com.greatgame.factory.BehaviourRefiner.behaviourRefiner;
 
 public class CreatureInitializer {
     public static void initializeCreatures() {
@@ -18,6 +19,8 @@ public class CreatureInitializer {
                 modify(new ItemEquipper(itemsFactory.create("leather armor").getItem())).
                 modify(new ItemGiver(itemsFactory.create("silver coins").getItem())).
                 modify(new StandardCreatureBehaviourModifier(true, true)));
+        behaviourRefiner.addPattern(new CreatureRefiningPattern("bandit"));
+
         creaturesFactory.addPattern(new CreatureCompositePattern("wolf", new Texture("textures/creatures/wolf.png")).
                 modify(new SpeedSetter(12)).
                 modify(new CharacteristicSetter(Characteristic.Physique, 14)).
@@ -27,6 +30,8 @@ public class CreatureInitializer {
                 modify(new ItemEquipper(itemsFactory.create("wolf fangs").getItem())).
                 modify(new ItemGiver(itemsFactory.create("fur").getItem())).
                 modify(new StandardCreatureBehaviourModifier(true, true)));
+        behaviourRefiner.addPattern(new CreatureRefiningPattern("wolf"));
+
         creaturesFactory.addPattern(new CreatureCompositePattern("bear", new Texture("textures/creatures/bear.png")).
                 modify(new SpeedSetter(12)).
                 modify(new CharacteristicSetter(Characteristic.Physique, 16)).
@@ -36,6 +41,8 @@ public class CreatureInitializer {
                 modify(new ItemGiver(itemsFactory.create("fur").getItem(),
                         itemsFactory.create("fur").getItem())).
                 modify(new StandardCreatureBehaviourModifier(true, true)));
+        behaviourRefiner.addPattern(new CreatureRefiningPattern("bear"));
+
         creaturesFactory.addPattern(new CreatureCompositePattern("fox", new Texture("textures/creatures/fox.png")).
                 modify(new CharacteristicSetter(Characteristic.Physique, 8)).
                 modify(new CharacteristicSetter(Characteristic.Agility, 14)).
@@ -44,6 +51,8 @@ public class CreatureInitializer {
                 modify(new ItemEquipper(itemsFactory.create("fox fangs").getItem())).
                 modify(new ItemGiver(itemsFactory.create("fur").getItem())).
                 modify(new StandardCreatureBehaviourModifier(false, true)));
+        behaviourRefiner.addPattern(new CreatureRefiningPattern("fox"));
+
         CreaturePatternModifier weaponSmithModifier = new ItemGiver(itemsFactory.create("short sword").getItem(),
                 itemsFactory.create("short sword").getItem(),
                 itemsFactory.create("long sword").getItem(),

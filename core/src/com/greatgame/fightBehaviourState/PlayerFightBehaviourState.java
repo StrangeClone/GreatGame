@@ -32,7 +32,7 @@ public class PlayerFightBehaviourState extends FightBehaviourState {
                     Thread thread = new Thread(() -> {
                         if (movement.validate()) {
                             currentAction = movement;
-                            movement.start(3000);
+                            movement.start();
                         }
                     });
                     thread.start();

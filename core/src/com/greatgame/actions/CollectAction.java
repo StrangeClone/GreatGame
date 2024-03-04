@@ -3,32 +3,36 @@ package com.greatgame.actions;
 import com.greatgame.behaviour.ItemBehaviour;
 import com.greatgame.entities.Creature;
 import com.greatgame.environment.Action;
-import com.greatgame.environment.Environment;
-
-import static com.greatgame.explorationBehaviourState.ExplorationBehaviourState.PIXELS_PER_METER;
 
 public class CollectAction extends Action {
     ItemBehaviour behaviour;
+    ActionValidator validator;
+    long endTime;
     public CollectAction(ItemBehaviour behaviour) {
         super("Collect");
         this.behaviour = behaviour;
+        this.validator = new CollectValidator(behaviour.getEnvironment().getPlayer(), behaviour);
+    }
+
+    @Override
+    public boolean finished() {
+        return System.currentTimeMillis() > endTime;
     }
 
     @Override
     public boolean validate() {
-        Environment environment = behaviour.getEnvironment();
-        return environment.dist(environment.getPlayer().getPosition(), behaviour.getPosition()) < PIXELS_PER_METER;
+        return validator.validate(behaviour.getEnvironment());
     }
 
     @Override
-    public void start(long durationInMillis) {
-        super.start(durationInMillis);
+    public void start() {
         Creature player = behaviour.getEnvironment().getPlayer().getCreature();
         int previousInventorySize = player.getInventory().size();
         behaviour.getItem().collect(player);
         if(player.getInventory().size() != previousInventorySize) {
             behaviour.remove();
         }
+        endTime = System.currentTimeMillis() + 1000;
     }
 
     @Override

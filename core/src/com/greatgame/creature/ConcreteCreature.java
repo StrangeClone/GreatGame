@@ -118,7 +118,7 @@ public class ConcreteCreature implements Creature {
         int bonus = getCharacteristicBonus(Characteristic.Physique);
         int oldValue = maxHealthPoints;
         maxHealthPoints = (6 + bonus) * (level + 1);
-        setHP(healthPoints / oldValue * maxHealthPoints);
+        setHP((int)((healthPoints / (float)oldValue) * maxHealthPoints));
     }
 
     @Override

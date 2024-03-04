@@ -31,6 +31,11 @@ public class FightModeMovementAction extends Action {
     }
 
     @Override
+    public void start() {
+
+    }
+
+    @Override
     public boolean finished() {
         return currentIndex == 0;
     }

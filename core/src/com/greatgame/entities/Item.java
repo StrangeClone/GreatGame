@@ -14,4 +14,5 @@ public interface Item {
     boolean canBeEquipped();
     void equip(Creature creature);
     void unEquip();
+    Weapon toWeapon();
 }

@@ -1,6 +1,8 @@
 package com.greatgame.behaviour;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.greatgame.application.Mode;
 import com.greatgame.entities.Creature;
 import com.greatgame.environment.Behaviour;
@@ -33,7 +35,19 @@ public class CreatureBehaviour extends Behaviour {
     @Override
     public void act(float delta) {
         super.act(delta);
+        showHP();
         state.act(delta);
+    }
+
+    private void showHP() {
+        Batch batch = environment.getStage().getBatch();
+        batch.begin();
+        TextureRegion heart = Mode.skin.getRegion("heart");
+        for (int i = 0; i < creature.getHP(); i++) {
+            batch.draw(heart, getX() - getWidth() / 2 + (i % 5) * heart.getRegionWidth(),
+                    getY() + getHeight() / 2 + 5 + (float) (i / 5) * heart.getRegionHeight());
+        }
+        batch.end();
     }
 
     @Override
@@ -53,6 +67,9 @@ public class CreatureBehaviour extends Behaviour {
     public void damage(int damage) {
         int currentHP = creature.getHP();
         creature.setHP(currentHP - damage);
+        if (creature.getHP() <= 0) {
+            remove();
+        }
         saveBehaviourInfo();
     }
 
@@ -63,7 +80,9 @@ public class CreatureBehaviour extends Behaviour {
 
     @Override
     public void saveBehaviourInfo() {
-        originalLocation.addInfo(new CreatureBehaviourInfo(this));
+        if(originalLocation != null) {
+            originalLocation.addInfo(new CreatureBehaviourInfo(this));
+        }
     }
 
     public Creature getCreature() {

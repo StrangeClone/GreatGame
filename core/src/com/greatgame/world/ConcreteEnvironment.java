@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.greatgame.factory.BehaviourRefiner.behaviourRefiner;
+
 public class ConcreteEnvironment implements Environment {
     World world;
     Stage stage;
@@ -32,6 +34,7 @@ public class ConcreteEnvironment implements Environment {
     public void addBehaviour(Behaviour behaviour) {
         stage.addActor(behaviour);
         behaviour.setEnvironment(world.getEnvironment());
+        behaviourRefiner.refine(behaviour);
     }
 
     @Override
@@ -238,7 +241,9 @@ public class ConcreteEnvironment implements Environment {
             if(horizontal()) {
                 return y1 == yLine && ((x1 < this.x1 && this.x1 < x2) || (x1 < this.x2 && this.x2 < x2));
             } else if (vertical()) {
-              return x1 < this.x1 && this.x1 < x2;
+              return x1 < this.x1 && this.x1 < x2 &&
+                      (this.y1 < this.y2 ? this.y1 < yLine && yLine < this.y2 :
+                              this.y2 < yLine && yLine < this.y1);
             } else {
                 float xIntersection = (yLine - q) / m;
                 return x1 < xIntersection && xIntersection < x2 &&

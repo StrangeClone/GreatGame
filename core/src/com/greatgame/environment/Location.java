@@ -42,11 +42,25 @@ public class Location {
         return biome;
     }
 
+    public Structure getStructure() {
+        return structure;
+    }
+
     public void generate(long seed, Environment environment, int x, int y) {
         long s = (seed + x) * 23 + y;
         if(structure != null) {
             structure.generate(environment, this, s);
         }
         biome.generate(environment, this, s);
+    }
+
+    @Override
+    public String toString() {
+        String result = "[position: (" + x + "," + y + ") " + biome.getName() + " ";
+        if (structure != null) {
+            result += structure.getName() + " ";
+        }
+        result += "screen: (" + screenX + "," + screenY + ")]";
+        return result;
     }
 }

@@ -965,8 +965,8 @@ classDiagram
 
 The PlayerTripBehaviourState, in its constructor, creates an InputProcessor that will move it in the TripMode map,
 using WASD keys. Every time the player moves, if he arrives near a Location that hadn't been generated, it will trigger
-its generation with the gameWorld reference. The same thing will happen if the Player enters a Location with a camp or
-a village: he can't avoid them.
+its generation with the gameWorld reference. If the Player enters a Location with a camp or a village, the game will
+pass to exploration mode: he can't avoid them.
 
 The player can press esc to pause the game.
 

@@ -35,19 +35,21 @@ public class CreatureBehaviour extends Behaviour {
     @Override
     public void act(float delta) {
         super.act(delta);
-        showHP();
         state.act(delta);
     }
 
-    private void showHP() {
-        Batch batch = environment.getStage().getBatch();
-        batch.begin();
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        showHP(batch);
+    }
+
+    private void showHP(Batch batch) {
         TextureRegion heart = Mode.skin.getRegion("heart");
         for (int i = 0; i < creature.getHP(); i++) {
             batch.draw(heart, getX() - getWidth() / 2 + (i % 5) * heart.getRegionWidth(),
                     getY() + getHeight() / 2 + 5 + (float) (i / 5) * heart.getRegionHeight());
         }
-        batch.end();
     }
 
     @Override

@@ -5,17 +5,15 @@ import com.greatgame.contentGenerators.ConcreteBiome;
 import com.greatgame.contentGenerators.ConcreteStructure;
 import com.greatgame.environment.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class StandardWorldGenerator implements WorldGenerator {
     Map<Vector2, Location> locationMap;
-    Random random;
+    long seed;
 
     public StandardWorldGenerator(long seed) {
         locationMap = new HashMap<>();
-        random = new Random(seed);
+        this.seed = seed;
     }
 
     @Override
@@ -25,16 +23,21 @@ public class StandardWorldGenerator implements WorldGenerator {
             return l;
         }
 
-        RandomMap<BiomeNames> randomMap = new RandomMap<>();
+        RandomMap<BiomeNames> randomMap = new RandomMap<>((seed + x) * 23 + y);
         randomMap.setWeight(BiomeNames.GrassLand, 1);
         randomMap.setWeight(BiomeNames.Forest, 1);
         updateRandomMap(randomMap, x - 1, y);
         updateRandomMap(randomMap, x + 1, y);
         updateRandomMap(randomMap, x, y - 1);
         updateRandomMap(randomMap, x, y + 1);
-        Biome biome = new ConcreteBiome(randomMap.generate(random));
+        Biome biome = new ConcreteBiome(randomMap.generate());
         l = defineNewLocation(biome, x, y);
         return l;
+    }
+
+    @Override
+    public Map<Vector2, Location> getGeneratedLocations() {
+        return locationMap;
     }
 
     private void updateRandomMap(RandomMap<BiomeNames> randomMap, int x, int y) {
@@ -46,14 +49,16 @@ public class StandardWorldGenerator implements WorldGenerator {
     }
 
     private Location defineNewLocation(Biome biome, int x, int y) {
-        Structure structure = null;
+        Structure structure;
         if(biome.getName() == BiomeNames.GrassLand) {
-            float r = random.nextFloat(0, 1);
-            if(r < 0.05f) {
-                structure = new ConcreteStructure(StructureNames.Village);
-            } else if (r < 0.10f) {
-                structure = new ConcreteStructure(StructureNames.Camp);
-            }
+            RandomMap<StructureNames> structureMap = new RandomMap<>((seed + x) * 23 + y);
+            structureMap.setWeight(StructureNames.Village, 1);
+            structureMap.setWeight(StructureNames.Camp, 1);
+            structureMap.setWeight(null, 18);
+            StructureNames name = structureMap.generate();
+            structure = name != null ? new ConcreteStructure(name) : null;
+        } else {
+            structure = null;
         }
         Location l = new Location(x, y, biome, structure);
         locationMap.put(new Vector2(x, y), l);

@@ -29,7 +29,7 @@ public class FightModeAllowedActionDialog extends Dialog {
                 public void clicked(InputEvent event, float x, float y) {
                     if (!button.isDisabled()) {
                         FightBehaviourState state = (FightBehaviourState) player.getState();
-                        state.startAction(action, 1000);
+                        state.startAction(action);
                         FightModeAllowedActionDialog.this.remove();
                     }
                 }

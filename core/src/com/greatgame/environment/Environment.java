@@ -16,6 +16,9 @@ public interface Environment {
     List<Location> getLoadedLocations();
     void setWorld(World world);
     void update(float delta);
+    void setOriginalLocation(int x, int y);
+    int getOriginalLocationX();
+    int getOriginalLocationY();
     void checkContents(int x, int y);
     boolean freePoint(float x, float y);
     Behaviour behaviourInPosition(float x, float y);
@@ -25,6 +28,7 @@ public interface Environment {
     boolean freeView(Vector2 pos1, Vector2 pos2);
     void triggerModeChange(ModeName newMode);
     ModeName getCurrentMode();
+    void setCurrentMode(ModeName name);
     ModeName getNextMode();
     List<Vector2> findPath(CreatureBehaviour creature, Vector2 start, Vector2 end);
 }

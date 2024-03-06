@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.greatgame.environment.Environment;
+import com.greatgame.world.World;
 
 public abstract class Mode {
     protected GreatGame app;
@@ -21,16 +22,28 @@ public abstract class Mode {
         stage.draw();
     }
 
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    protected Environment getEnvironment() {
+        return app.world.getEnvironment();
+    }
+
+    protected World getWorld() {
+        return app.world;
+    }
+
     public Stage getStage() {
         return stage;
     }
 
-    protected void addPlayerUI(Environment environment) {
+    protected void addPlayerUI() {
         Button skillButton = new TextButton("Skills", skin);
         skillButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                SkillDialog skillDialog = new SkillDialog(environment.getPlayer());
+                SkillDialog skillDialog = new SkillDialog(getEnvironment().getPlayer());
                 skillDialog.show(stage);
             }
         });
@@ -39,7 +52,7 @@ public abstract class Mode {
         inventoryButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                InventoryDialog inventoryDialog = new InventoryDialog(environment.getPlayer());
+                InventoryDialog inventoryDialog = new InventoryDialog(getEnvironment().getPlayer());
                 inventoryDialog.show(stage);
             }
         });

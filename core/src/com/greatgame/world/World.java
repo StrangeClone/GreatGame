@@ -1,7 +1,10 @@
 package com.greatgame.world;
 
+import com.badlogic.gdx.math.Vector2;
 import com.greatgame.environment.Environment;
 import com.greatgame.environment.Location;
+
+import java.util.Map;
 
 public class World {
     private final long seed;
@@ -17,6 +20,10 @@ public class World {
     }
     public Location generate(int x, int y) {
         return generator.generate(x,y);
+    }
+
+    public Map<Vector2, Location> getGeneratedLocations() {
+        return generator.getGeneratedLocations();
     }
 
     public void generateContents(int x, int y) {

@@ -25,6 +25,7 @@ public class ConcreteEnvironment implements Environment {
     ModeName nextMode;
     int originalScreenX = 0, originalScreenY = 0;
     PathFinder pathFinder = new FreePositionPathFinder(this);
+    boolean newModeTriggered = false;
 
     public ConcreteEnvironment() {
         stage = new Stage(new ScreenViewport());
@@ -64,12 +65,12 @@ public class ConcreteEnvironment implements Environment {
 
     @Override
     public void update(float delta) {
-        currentMode = nextMode;
         stage.act(delta);
 
         stage.getViewport().getCamera().
-                position.set(world.getEnvironment().getPlayer().getX(),
-                        world.getEnvironment().getPlayer().getY(), 1);
+                    position.set(world.getEnvironment().getPlayer().getX(),
+                            world.getEnvironment().getPlayer().getY(), 1);
+
         stage.getActors().sort((o1, o2) -> {
             float bottom1 = o1.getY() - o1.getHeight() / 2;
             float bottom2 = o2.getY() - o2.getHeight() / 2;
@@ -82,6 +83,22 @@ public class ConcreteEnvironment implements Environment {
         });
 
         stage.draw();
+    }
+
+    @Override
+    public void setOriginalLocation(int x, int y) {
+        originalScreenX = x;
+        originalScreenY = y;
+    }
+
+    @Override
+    public int getOriginalLocationX() {
+        return originalScreenX;
+    }
+
+    @Override
+    public int getOriginalLocationY() {
+        return originalScreenY;
     }
 
     @Override
@@ -194,11 +211,17 @@ public class ConcreteEnvironment implements Environment {
     @Override
     public void triggerModeChange(ModeName newMode) {
         nextMode = newMode;
+        newModeTriggered  = true;
     }
 
     @Override
     public ModeName getCurrentMode() {
         return currentMode;
+    }
+
+    @Override
+    public void setCurrentMode(ModeName name) {
+        currentMode = name;
     }
 
     @Override

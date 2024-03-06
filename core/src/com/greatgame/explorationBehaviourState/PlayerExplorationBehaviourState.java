@@ -5,13 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.greatgame.actions.ExplorationModeAllowedActionDialog;
-import com.greatgame.actions.FightModeAllowedActionDialog;
 import com.greatgame.application.Mode;
 import com.greatgame.application.explorationMode.ExplorationMode;
 import com.greatgame.application.fightMode.FightMode;
+import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.fightBehaviourState.PlayerFightBehaviourState;
+import com.greatgame.tripBehaviourState.PlayerTripBehaviourState;
 
 import static com.greatgame.contentGenerators.ContentGenerator.PIXELS_PER_LOCATION;
 
@@ -57,7 +58,7 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
                 if (touched != null
                     && touched != behaviour
                     && button == Input.Buttons.RIGHT) {
-                ExplorationModeAllowedActionDialog dialog = new ExplorationModeAllowedActionDialog(touched, getEnvironment().getPlayer());
+                ExplorationModeAllowedActionDialog dialog = new ExplorationModeAllowedActionDialog(touched);
                 dialog.show(uiStage);
             }
                 return true;
@@ -80,6 +81,9 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
         if(newMode instanceof FightMode) {
             behaviour.setState(new PlayerFightBehaviourState(behaviour, newMode.getStage()));
         }
+        if (newMode instanceof TripMode) {
+            behaviour.setState(new PlayerTripBehaviourState(behaviour));
+        }
     }
 
     @Override
@@ -89,20 +93,23 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
             float deltaY = directionY * delta * behaviour.getSpeed() / 3 * PIXELS_PER_METER;
             float previousX = behaviour.getX(), previousY = behaviour.getY();
             setPosition(previousX + deltaX, previousY + deltaY);
-            int currentLocationX = locationCoordinate(behaviour.getX());
-            int currentLocationY = locationCoordinate(behaviour.getY());
-            if(locationCoordinate(previousX) != currentLocationX || locationCoordinate(previousY) != currentLocationY) {
+            int currentLocationX = locationCoordinate(behaviour.getX(), getEnvironment().getOriginalLocationX());
+            int currentLocationY = locationCoordinate(behaviour.getY(), getEnvironment().getOriginalLocationY());
+            if(locationCoordinate(previousX, getEnvironment().getOriginalLocationX()) != currentLocationX ||
+                    locationCoordinate(previousY, getEnvironment().getOriginalLocationY()) != currentLocationY) {
                 getEnvironment().checkContents(currentLocationX, currentLocationY);
             }
         }
     }
 
-    private int locationCoordinate(float value) {
+    public static int locationCoordinate(float value, int originalLocation) {
         float pos = value / PIXELS_PER_LOCATION;
+        int xLocation;
         if(pos > 0) {
-            return (int) pos;
+            xLocation = (int) pos + originalLocation;
         } else {
-            return (int) (pos - 1);
+            xLocation = (int) (pos - 1) + originalLocation;
         }
+        return xLocation;
     }
 }

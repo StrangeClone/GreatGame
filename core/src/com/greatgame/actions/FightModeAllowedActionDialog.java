@@ -6,14 +6,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.greatgame.application.Mode;
-import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.fightBehaviourState.FightBehaviourState;
 
 public class FightModeAllowedActionDialog extends Dialog {
 
-    public FightModeAllowedActionDialog(Behaviour selectedBehaviour, CreatureBehaviour player) {
+    public FightModeAllowedActionDialog(Behaviour selectedBehaviour) {
         super("", Mode.skin);
 
         text(selectedBehaviour.getType());
@@ -28,7 +27,8 @@ public class FightModeAllowedActionDialog extends Dialog {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (!button.isDisabled()) {
-                        FightBehaviourState state = (FightBehaviourState) player.getState();
+                        FightBehaviourState state = (FightBehaviourState) selectedBehaviour.
+                                getEnvironment().getPlayer().getState();
                         state.startAction(action);
                         FightModeAllowedActionDialog.this.remove();
                     }

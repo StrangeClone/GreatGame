@@ -11,7 +11,7 @@ public interface Environment {
 
     void addBehaviour(Behaviour behaviour);
     CreatureBehaviour getPlayer();
-    void setPlayer(CreatureBehaviour behaviour);
+    void setPlayer(CreatureBehaviour behaviour, Stage uiStage);
     Stage getStage();
     List<Location> getLoadedLocations();
     void setWorld(World world);

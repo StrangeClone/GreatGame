@@ -1,8 +1,9 @@
-package com.greatgame.application;
+package com.greatgame.application.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.greatgame.application.Mode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.skills.SkillInitializer;
 

@@ -22,15 +22,13 @@ public class TripMode extends Mode {
     Texture playerIcon;
     public TripMode(GreatGame app) {
         this.app = app;
-        getEnvironment().getPlayer().remove();
-        getEnvironment().getStage().getActors().clear();
-        getEnvironment().getLoadedLocations().clear();
-        getEnvironment().getStage().getActors().add(getEnvironment().getPlayer());
 
         mapStage = new Stage(new ScreenViewport());
         for (Location l : getWorld().getGeneratedLocations().values()) {
             mapStage.addActor(new LocationIcon(l));
         }
+        getEnvironment().getPlayer().setPosition(0,0);
+        getEnvironment().getLoadedLocations().clear();
 
         playerIcon = new Texture("textures/action.png");
 

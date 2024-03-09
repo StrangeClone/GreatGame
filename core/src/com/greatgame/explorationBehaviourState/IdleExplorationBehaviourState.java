@@ -13,12 +13,10 @@ import static com.greatgame.environment.RandomMap.randomGenerator;
 public class IdleExplorationBehaviourState extends ExplorationBehaviourState {
     private final Vector2 direction;
     private long nextChangeTime = System.currentTimeMillis();
-    boolean moves;
 
-    public IdleExplorationBehaviourState(CreatureBehaviour behaviour, boolean moves) {
+    public IdleExplorationBehaviourState(CreatureBehaviour behaviour) {
         super(behaviour);
         direction = new Vector2();
-        this.moves = moves;
     }
 
     @Override
@@ -32,14 +30,14 @@ public class IdleExplorationBehaviourState extends ExplorationBehaviourState {
 
     @Override
     public void act(float delta) {
-        if(moves && delta != 0) {
-            generateDirection();
-            move(delta);
-        } if (behaviour.isHostile() && getEnvironment().freeView(behaviour, getEnvironment().getPlayer()) &&
+        if (behaviour.isHostile() && getEnvironment().freeView(behaviour, getEnvironment().getPlayer()) &&
                 getEnvironment().dist(new Vector2(behaviour.getX(), behaviour.getY()),
                         new Vector2(getEnvironment().getPlayer().getX(),
                                 getEnvironment().getPlayer().getY())) < 4 * PIXELS_PER_METER) {
             getEnvironment().triggerModeChange(ModeName.fightMode);
+        } else {
+            generateDirection();
+            move(delta);
         }
     }
 

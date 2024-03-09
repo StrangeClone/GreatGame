@@ -5,9 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.greatgame.application.Mode;
 import com.greatgame.application.explorationMode.ExplorationMode;
+import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.behaviour.BehaviourState;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
+import com.greatgame.fightBehaviourState.PlayerFightBehaviourState;
 
 import static com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState.locationCoordinate;
 
@@ -60,6 +62,9 @@ public class PlayerTripBehaviourState extends BehaviourState {
         getEnvironment().getStage().removeListener(listener);
         if (newMode instanceof ExplorationMode) {
             behaviour.setState(new PlayerExplorationBehaviourState(behaviour, newMode.getStage()));
+        }
+        if (newMode instanceof FightMode) {
+            behaviour.setState(new PlayerFightBehaviourState(behaviour, newMode.getStage()));
         }
     }
 

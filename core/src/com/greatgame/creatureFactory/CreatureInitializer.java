@@ -17,9 +17,8 @@ public class CreatureInitializer {
                 modify(new ItemEquipper(itemsFactory.create("short sword").getItem())).
                 modify(new ItemEquipper(itemsFactory.create("helm").getItem())).
                 modify(new ItemEquipper(itemsFactory.create("leather armor").getItem())).
-                modify(new ItemGiver(itemsFactory.create("silver coins").getItem())).
-                modify(new StandardCreatureBehaviourModifier(true, true)));
-        behaviourRefiner.addPattern(new CreatureRefiningPattern("bandit"));
+                modify(new ItemGiver(itemsFactory.create("silver coins").getItem())));
+        behaviourRefiner.addPattern(new StandardCreatureRefiningPattern("bandit", true));
 
         creaturesFactory.addPattern(new CreatureCompositePattern("wolf", new Texture("textures/creatures/wolf.png")).
                 modify(new SpeedSetter(12)).
@@ -28,9 +27,8 @@ public class CreatureInitializer {
                 modify(new SkillGiver("bite", 2)).
                 modify(new SkillGiver("vitality", 1)).
                 modify(new ItemEquipper(itemsFactory.create("wolf fangs").getItem())).
-                modify(new ItemGiver(itemsFactory.create("fur").getItem())).
-                modify(new StandardCreatureBehaviourModifier(true, true)));
-        behaviourRefiner.addPattern(new CreatureRefiningPattern("wolf"));
+                modify(new ItemGiver(itemsFactory.create("fur").getItem())));
+        behaviourRefiner.addPattern(new StandardCreatureRefiningPattern("wolf", true));
 
         creaturesFactory.addPattern(new CreatureCompositePattern("bear", new Texture("textures/creatures/bear.png")).
                 modify(new SpeedSetter(12)).
@@ -39,9 +37,8 @@ public class CreatureInitializer {
                 modify(new SkillGiver("vitality", 2)).
                 modify(new ItemEquipper(itemsFactory.create("bear fangs").getItem())).
                 modify(new ItemGiver(itemsFactory.create("fur").getItem(),
-                        itemsFactory.create("fur").getItem())).
-                modify(new StandardCreatureBehaviourModifier(true, true)));
-        behaviourRefiner.addPattern(new CreatureRefiningPattern("bear"));
+                        itemsFactory.create("fur").getItem())));
+        behaviourRefiner.addPattern(new StandardCreatureRefiningPattern("bear", true));
 
         creaturesFactory.addPattern(new CreatureCompositePattern("fox", new Texture("textures/creatures/fox.png")).
                 modify(new CharacteristicSetter(Characteristic.Physique, 8)).
@@ -49,9 +46,8 @@ public class CreatureInitializer {
                 modify(new SkillGiver("bite", 1)).
                 modify(new SkillGiver("vitality", 1)).
                 modify(new ItemEquipper(itemsFactory.create("fox fangs").getItem())).
-                modify(new ItemGiver(itemsFactory.create("fur").getItem())).
-                modify(new StandardCreatureBehaviourModifier(false, true)));
-        behaviourRefiner.addPattern(new CreatureRefiningPattern("fox"));
+                modify(new ItemGiver(itemsFactory.create("fur").getItem())));
+        behaviourRefiner.addPattern(new StandardCreatureRefiningPattern("fox", false));
 
         CreaturePatternModifier weaponSmithModifier = new ItemGiver(itemsFactory.create("short sword").getItem(),
                 itemsFactory.create("short sword").getItem(),
@@ -73,8 +69,10 @@ public class CreatureInitializer {
                 modify(new RandomModifier().addModifier(weaponSmithModifier, 1).
                         addModifier(armorerModifier, 1).
                         addModifier(hunterModifier, 1).
-                        addModifier(healerModifier, 1)).
-                modify(new StandardCreatureBehaviourModifier(false, false)));
+                        addModifier(healerModifier, 1)));
+        behaviourRefiner.addPattern(new VillageRefiningPattern("villager"));
+
         creaturesFactory.addPattern(new CreatureCompositePattern("player", new Texture("textures/creatures/villager.png")));
+        behaviourRefiner.addPattern(new PlayerRefiningPattern("player"));
     }
 }

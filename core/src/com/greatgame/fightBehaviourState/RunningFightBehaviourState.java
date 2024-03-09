@@ -3,7 +3,10 @@ package com.greatgame.fightBehaviourState;
 import com.badlogic.gdx.math.Vector2;
 import com.greatgame.actions.FightModeMovementAction;
 import com.greatgame.application.Mode;
+import com.greatgame.application.explorationMode.ExplorationMode;
+import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
+import com.greatgame.explorationBehaviourState.IdleExplorationBehaviourState;
 
 import static com.greatgame.explorationBehaviourState.ExplorationBehaviourState.PIXELS_PER_METER;
 
@@ -48,6 +51,11 @@ public class RunningFightBehaviourState extends FightBehaviourState {
 
     @Override
     public void changeMode(Mode newMode) {
-
+        if (newMode instanceof ExplorationMode) {
+            behaviour.setState(new IdleExplorationBehaviourState(behaviour));
+        }
+        if (newMode instanceof TripMode) {
+            behaviour.remove();
+        }
     }
 }

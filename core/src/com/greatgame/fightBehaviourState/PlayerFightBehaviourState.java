@@ -9,11 +9,12 @@ import com.greatgame.actions.FightModeAllowedActionDialog;
 import com.greatgame.actions.FightModeMovementAction;
 import com.greatgame.application.Mode;
 import com.greatgame.application.explorationMode.ExplorationMode;
-import com.greatgame.application.fightMode.FightMode;
+import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
+import com.greatgame.tripBehaviourState.PlayerTripBehaviourState;
 
 public class PlayerFightBehaviourState extends FightBehaviourState {
     InputListener listener;
@@ -41,7 +42,7 @@ public class PlayerFightBehaviourState extends FightBehaviourState {
                         && isActive()
                         && currentAction == null
                         && button == Input.Buttons.RIGHT) {
-                    FightModeAllowedActionDialog dialog = new FightModeAllowedActionDialog(touched, getEnvironment().getPlayer());
+                    FightModeAllowedActionDialog dialog = new FightModeAllowedActionDialog(touched);
                     dialog.show(uiStage);
                 }
                 return false;
@@ -56,8 +57,8 @@ public class PlayerFightBehaviourState extends FightBehaviourState {
         if (newMode instanceof ExplorationMode) {
             behaviour.setState(new PlayerExplorationBehaviourState(behaviour, newMode.getStage()));
         }
-        if (newMode instanceof FightMode) {
-            behaviour.setState(new PlayerFightBehaviourState(behaviour, newMode.getStage()));
+        if (newMode instanceof TripMode) {
+            behaviour.setState(new PlayerTripBehaviourState(behaviour));
         }
     }
 }

@@ -9,6 +9,7 @@ import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.Environment;
 import com.greatgame.environment.Location;
 import com.greatgame.environment.ModeName;
+import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +35,7 @@ public class ConcreteEnvironment implements Environment {
 
     public void addBehaviour(Behaviour behaviour) {
         stage.addActor(behaviour);
-        behaviour.setEnvironment(world.getEnvironment());
+        behaviour.setEnvironment(this);
         behaviourRefiner.refine(behaviour);
     }
 
@@ -44,8 +45,13 @@ public class ConcreteEnvironment implements Environment {
     }
 
     @Override
-    public void setPlayer(CreatureBehaviour behaviour) {
+    public void setPlayer(CreatureBehaviour behaviour, Stage uiStage) {
         this.player = behaviour;
+        stage.addActor(player);
+        player.setEnvironment(this);
+        behaviourRefiner.refine(player);
+        PlayerExplorationBehaviourState state = (PlayerExplorationBehaviourState) player.getState();
+        state.setUiStageReference(uiStage);
     }
 
     @Override

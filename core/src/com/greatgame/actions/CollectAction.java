@@ -4,6 +4,8 @@ import com.greatgame.behaviour.ItemBehaviour;
 import com.greatgame.entities.Creature;
 import com.greatgame.environment.Action;
 
+import static com.greatgame.explorationBehaviourState.ExplorationBehaviourState.PIXELS_PER_METER;
+
 public class CollectAction extends Action {
     ItemBehaviour behaviour;
     ActionValidator validator;
@@ -11,7 +13,7 @@ public class CollectAction extends Action {
     public CollectAction(ItemBehaviour behaviour) {
         super("Collect");
         this.behaviour = behaviour;
-        this.validator = new CollectValidator(behaviour.getEnvironment().getPlayer(), behaviour);
+        this.validator = new NearToValidator(behaviour.getEnvironment().getPlayer(), behaviour, PIXELS_PER_METER);
     }
 
     @Override

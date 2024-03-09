@@ -6,6 +6,7 @@ public interface Item {
     int getAC();
     void setHP(int value);
     int getHP();
+    int getPrice();
     boolean canBeUsed();
     void use(Creature creature);
     boolean canBeCollected();

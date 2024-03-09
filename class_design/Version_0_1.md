@@ -696,6 +696,10 @@ classDiagram
         - move()
     }
     ExplorationBehaviourState <|-- IdleExplorationBehaviourState
+    class VillagerExplorationState {
+        + act(delta)
+    }
+    ExplorationBehaviourState <|-- VillagerExplorationState
 ```
 
 The setPosition(x,y) method of the ExplorationBehaviourState abstract class will modify the values of the position of the 
@@ -785,6 +789,8 @@ sequenceDiagram
     end
 ```
 
+The VillagerExplorationState does nothing: the village simply stays still.
+
 ### FightBehaviourState package
 
 ```mermaid
@@ -816,6 +822,10 @@ classDiagram
         + act(delta)
     }
     FightBehaviourState <|-- PlayerFightBehaviourState
+    class VillagerFightState {
+        + act(delta)
+    }
+    FightBehaviourState <|-- VillagerFightState
 ```
 
 In the FightBehaviourState, the attribute active is true if it's this Creature turn. Every Creature, at the
@@ -838,6 +848,8 @@ The Player Fight Behaviour State will:
 allowedActionList (action instantiated, validated, then started when the button is pressed)
 - move the player visual with WASD (not an action)
 - The player can press esc to pause the game.
+
+The villagerFightState does nothing: it simply stays still
 
 ### Action package
 

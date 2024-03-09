@@ -12,21 +12,14 @@ import java.util.List;
 public class CreatureCompositePattern extends Pattern<CreatureBehaviour> {
     Texture texture;
     List<CreaturePatternModifier> modifiers;
-    List<CreatureBehaviourModifier> behaviourModifiers;
     public CreatureCompositePattern(String name, Texture texture) {
         super(name);
         this.texture = texture;
         modifiers = new ArrayList<>();
-        behaviourModifiers = new ArrayList<>();
     }
 
     public CreatureCompositePattern modify(CreaturePatternModifier modifier) {
         modifiers.add(modifier);
-        return this;
-    }
-
-    public CreatureCompositePattern modify(CreatureBehaviourModifier modifier) {
-        behaviourModifiers.add(modifier);
         return this;
     }
 
@@ -36,10 +29,6 @@ public class CreatureCompositePattern extends Pattern<CreatureBehaviour> {
         for (CreaturePatternModifier m : modifiers) {
             m.modify(creature);
         }
-        CreatureBehaviour result = new CreatureBehaviour(texture, creature);
-        for(CreatureBehaviourModifier m : behaviourModifiers) {
-            m.modify(result);
-        }
-        return result;
+        return new CreatureBehaviour(texture, creature);
     }
 }

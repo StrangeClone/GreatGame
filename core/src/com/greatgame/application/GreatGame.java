@@ -11,14 +11,14 @@ import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.application.tripMode.LocationIcon;
 import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
-import com.greatgame.creatureFactory.CreatureBehaviourModifier;
 import com.greatgame.creatureFactory.CreatureInitializer;
-import com.greatgame.creatureFactory.PlayerBehaviourModifier;
 import com.greatgame.environment.ModeName;
 import com.greatgame.itemsFactory.ItemInitializer;
 import com.greatgame.skills.SkillInitializer;
 import com.greatgame.world.ConcreteEnvironment;
 import com.greatgame.world.World;
+
+import java.util.Iterator;
 
 import static com.greatgame.behaviour.CreatureBehaviour.creaturesFactory;
 
@@ -35,17 +35,24 @@ public class GreatGame extends ApplicationAdapter {
 
 		Mode.skin = new Skin(Gdx.files.internal("skin/craftacular-ui.skin"));
 
+		world = new World(45, new ConcreteEnvironment());
 
-		world = new World(23, new ConcreteEnvironment());
+		mode = new ExplorationMode(this);
+
 		CreatureBehaviour player = creaturesFactory.create("player");
-		world.getEnvironment().addBehaviour(player);
-		CreatureBehaviourModifier playerModifier = PlayerBehaviourModifier.getInstance();
-		playerModifier.modify(player);
+		world.getEnvironment().setPlayer(player, mode.getStage());
 		player.increaseEP(1000);
+		player.getCreature().setCoins(100);
 
 		world.getEnvironment().checkContents(0,0);
 
-		world.getEnvironment().triggerModeChange(ModeName.explorationMode);
+		updateCreatureBehaviourStates();
+
+		InputMultiplexer multiProcessor = new InputMultiplexer();
+		multiProcessor.addProcessor(mode.stage);
+		multiProcessor.addProcessor(world.getEnvironment().getStage());
+		Gdx.input.setInputProcessor(multiProcessor);
+
 		manageModeChange();
 	}
 
@@ -78,12 +85,19 @@ public class GreatGame extends ApplicationAdapter {
 			multiProcessor.addProcessor(world.getEnvironment().getStage());
 			Gdx.input.setInputProcessor(multiProcessor);
 
-			for(Actor actor : world.getEnvironment().getStage().getActors()) {
-				if(actor instanceof CreatureBehaviour) {
-					((CreatureBehaviour)actor).changeMode(mode);
-				}
-			}
+			updateCreatureBehaviourStates();
 			world.getEnvironment().setCurrentMode(world.getEnvironment().getNextMode());
+		}
+	}
+
+	private void updateCreatureBehaviourStates() {
+		for(Iterator<Actor> iterator = world.getEnvironment().getStage().getActors().iterator(); iterator.hasNext();) {
+			Actor actor = iterator.next();
+			if(actor instanceof CreatureBehaviour) {
+				((CreatureBehaviour)actor).changeMode(mode);
+			} else if (world.getEnvironment().getNextMode() == ModeName.tripMode) {
+				iterator.remove();
+			}
 		}
 	}
 }

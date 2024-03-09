@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.greatgame.actions.ExplorationModeAllowedActionDialog;
 import com.greatgame.application.Mode;
-import com.greatgame.application.explorationMode.ExplorationMode;
 import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
@@ -19,9 +18,11 @@ import static com.greatgame.contentGenerators.ContentGenerator.PIXELS_PER_LOCATI
 public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
     private float directionX = 0, directionY = 0;
     private final InputListener listener;
+    private Stage uiStageReference;
 
     public PlayerExplorationBehaviourState(CreatureBehaviour behaviour, Stage uiStage) {
         super(behaviour);
+        this.uiStageReference = uiStage;
         listener = new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -59,25 +60,22 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
                     && touched != behaviour
                     && button == Input.Buttons.RIGHT) {
                 ExplorationModeAllowedActionDialog dialog = new ExplorationModeAllowedActionDialog(touched);
-                dialog.show(uiStage);
+                dialog.show(uiStageReference);
             }
                 return true;
             }
         };
 
         getEnvironment().getStage().addListener(listener);
-        if (getEnvironment().getPlayer() == null) {
-            getEnvironment().setPlayer(behaviour);
-        }
+    }
 
+    public void setUiStageReference(Stage uiStageReference) {
+        this.uiStageReference = uiStageReference;
     }
 
     @Override
     public void changeMode(Mode newMode) {
         getEnvironment().getStage().removeListener(listener);
-        if (newMode instanceof ExplorationMode) {
-            behaviour.setState(new PlayerExplorationBehaviourState(behaviour, newMode.getStage()));
-        }
         if(newMode instanceof FightMode) {
             behaviour.setState(new PlayerFightBehaviourState(behaviour, newMode.getStage()));
         }
@@ -105,7 +103,7 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
     public static int locationCoordinate(float value, int originalLocation) {
         float pos = value / PIXELS_PER_LOCATION;
         int xLocation;
-        if(pos > 0) {
+        if(pos >= 0) {
             xLocation = (int) pos + originalLocation;
         } else {
             xLocation = (int) (pos - 1) + originalLocation;

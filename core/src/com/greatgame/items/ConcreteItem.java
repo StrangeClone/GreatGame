@@ -68,6 +68,11 @@ public class ConcreteItem implements Item {
     }
 
     @Override
+    public int getPrice() {
+        return price;
+    }
+
+    @Override
     public boolean canBeUsed() {
         return useManager != null;
     }

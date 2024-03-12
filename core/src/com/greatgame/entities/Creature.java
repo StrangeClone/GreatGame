@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface Creature {
     String getType();
+    int getCharacteristic(Characteristic characteristic);
     int getCharacteristicBonus(Characteristic characteristic);
     void setCharacteristic(Characteristic characteristic, int value);
     int check(String skillName);

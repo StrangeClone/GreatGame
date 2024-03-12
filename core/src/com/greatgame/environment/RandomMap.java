@@ -24,6 +24,11 @@ public class RandomMap<V> {
         return w != null ? w : 0;
     }
 
+    public V generate(int seed) {
+        generator.setSeed(seed);
+        return generate();
+    }
+
     public V generate() {
         int sum = 0;
         for(Map.Entry<V, Integer> entry : weights.entrySet()) {

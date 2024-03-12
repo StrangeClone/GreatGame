@@ -11,7 +11,7 @@ public class RandomModifier implements CreaturePatternModifier {
     }
     @Override
     public void modify(Creature creature) {
-        modifiersMap.generate().modify(creature);
+        modifiersMap.generate(creature.hashCode()).modify(creature);
     }
 
     public RandomModifier addModifier(CreaturePatternModifier modifier, int weight) {

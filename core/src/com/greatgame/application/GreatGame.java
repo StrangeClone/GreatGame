@@ -3,11 +3,13 @@ package com.greatgame.application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.greatgame.application.explorationMode.ExplorationMode;
 import com.greatgame.application.fightMode.FightMode;
+import com.greatgame.application.mainMenuMode.MainMenuMode;
 import com.greatgame.application.tripMode.LocationIcon;
 import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
@@ -15,16 +17,14 @@ import com.greatgame.creatureFactory.CreatureInitializer;
 import com.greatgame.environment.ModeName;
 import com.greatgame.itemsFactory.ItemInitializer;
 import com.greatgame.skills.SkillInitializer;
-import com.greatgame.world.ConcreteEnvironment;
 import com.greatgame.world.World;
 
 import java.util.Iterator;
 
-import static com.greatgame.behaviour.CreatureBehaviour.creaturesFactory;
-
 public class GreatGame extends ApplicationAdapter {
 	Mode mode;
 	World world;
+	private Color backgroundColor;
 	
 	@Override
 	public void create () {
@@ -35,30 +35,16 @@ public class GreatGame extends ApplicationAdapter {
 
 		Mode.skin = new Skin(Gdx.files.internal("skin/craftacular-ui.skin"));
 
-		world = new World(45, new ConcreteEnvironment());
+		mode = new MainMenuMode(this);
 
-		mode = new ExplorationMode(this);
+		setBackgroundColor(Color.DARK_GRAY);
 
-		CreatureBehaviour player = creaturesFactory.create("player");
-		world.getEnvironment().setPlayer(player, mode.getStage());
-		player.increaseEP(1000);
-		player.getCreature().setCoins(100);
-
-		world.getEnvironment().checkContents(0,0);
-
-		updateCreatureBehaviourStates();
-
-		InputMultiplexer multiProcessor = new InputMultiplexer();
-		multiProcessor.addProcessor(mode.stage);
-		multiProcessor.addProcessor(world.getEnvironment().getStage());
-		Gdx.input.setInputProcessor(multiProcessor);
-
-		manageModeChange();
+		updateInputMultiplexer();
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(0, 1, 0, 1);
+		ScreenUtils.clear(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 
 		mode.update(Gdx.graphics.getDeltaTime());
 
@@ -68,11 +54,13 @@ public class GreatGame extends ApplicationAdapter {
 	@Override
 	public void resize(int width, int height) {
 		mode.resize(width, height);
-		world.getEnvironment().getStage().getViewport().update(width, height, true);
+		if (world != null) {
+			world.getEnvironment().getStage().getViewport().update(width, height, true);
+		}
 	}
 
 	private void manageModeChange() {
-		if(world.getEnvironment().getCurrentMode() != world.getEnvironment().getNextMode()) {
+		if(world != null && world.getEnvironment().getCurrentMode() != world.getEnvironment().getNextMode()) {
 			if(world.getEnvironment().getNextMode() == ModeName.explorationMode) {
 				mode = new ExplorationMode(this);
 			} else if(world.getEnvironment().getNextMode() == ModeName.fightMode) {
@@ -80,12 +68,9 @@ public class GreatGame extends ApplicationAdapter {
 			} else if (world.getEnvironment().getNextMode() == ModeName.tripMode) {
 				mode = new TripMode(this);
 			}
-			InputMultiplexer multiProcessor = new InputMultiplexer();
-			multiProcessor.addProcessor(mode.stage);
-			multiProcessor.addProcessor(world.getEnvironment().getStage());
-			Gdx.input.setInputProcessor(multiProcessor);
-
 			updateCreatureBehaviourStates();
+			updateInputMultiplexer();
+
 			world.getEnvironment().setCurrentMode(world.getEnvironment().getNextMode());
 		}
 	}
@@ -99,5 +84,22 @@ public class GreatGame extends ApplicationAdapter {
 				iterator.remove();
 			}
 		}
+	}
+
+	public void updateInputMultiplexer() {
+		InputMultiplexer multiProcessor = new InputMultiplexer();
+		multiProcessor.addProcessor(mode.stage);
+		if (world != null) {
+			multiProcessor.addProcessor(world.getEnvironment().getStage());
+		}
+		Gdx.input.setInputProcessor(multiProcessor);
+	}
+
+	public void setWorld(World world) {
+		this.world = world;
+	}
+
+	public void setBackgroundColor(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
 	}
 }

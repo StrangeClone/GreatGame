@@ -48,6 +48,11 @@ public class ConcreteCreature implements Creature {
     }
 
     @Override
+    public int getCharacteristic(Characteristic characteristic) {
+        return characteristicValues.get(characteristic);
+    }
+
+    @Override
     public int getCharacteristicBonus(Characteristic characteristic) {
         int value = characteristicValues.get(characteristic);
         return (int) Math.floor((value - 10d) / 2);

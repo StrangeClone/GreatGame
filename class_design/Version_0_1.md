@@ -1581,7 +1581,7 @@ classDiagram
         - Stage currentStage
         + MainMenuMode()
     }
-    Mode <|-- PauseMode
+    Mode <|-- MainMenuMode
 ```
 
 This mode will be used both for main menu and for pause. It will show one of these stages:

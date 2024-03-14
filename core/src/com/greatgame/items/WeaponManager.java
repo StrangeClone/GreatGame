@@ -14,11 +14,7 @@ public class WeaponManager extends EquipManager {
     @Override
     public void equip(Item item, Creature creature) {
         super.equip(item, creature);
-        if(equippedCreature.getItem(ItemSlot.Primary) == null) {
-            equippedCreature.setItem(ItemSlot.Primary, item);
-        } else {
-            throw new IllegalStateException("Primary slot taken");
-        }
+        putItemInSlot(item, ItemSlot.Primary);
     }
 
     @Override

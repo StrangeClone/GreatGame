@@ -15,12 +15,7 @@ public class Armor extends EquipManager {
     @Override
     public void equip(Item item, Creature creature) {
         super.equip(item, creature);
-        if(equippedCreature.getItem(slot) == null) {
-            equippedCreature.setItem(slot, item);
-            equippedCreature.increaseAC(value);
-        } else {
-            throw new IllegalStateException("Slot " + slot + " is taken");
-        }
+        putItemInSlot(item, slot);
     }
 
     @Override

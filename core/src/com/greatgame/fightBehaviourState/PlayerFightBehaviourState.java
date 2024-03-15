@@ -13,6 +13,7 @@ import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
+import com.greatgame.environment.ModeName;
 import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
 import com.greatgame.tripBehaviourState.PlayerTripBehaviourState;
 
@@ -44,6 +45,14 @@ public class PlayerFightBehaviourState extends FightBehaviourState {
                         && button == Input.Buttons.RIGHT) {
                     FightModeAllowedActionDialog dialog = new FightModeAllowedActionDialog(touched);
                     dialog.show(uiStage);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean keyUp(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    getEnvironment().triggerModeChange(ModeName.mainMenuMode);
                 }
                 return false;
             }

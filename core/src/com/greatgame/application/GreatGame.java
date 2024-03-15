@@ -22,84 +22,90 @@ import com.greatgame.world.World;
 import java.util.Iterator;
 
 public class GreatGame extends ApplicationAdapter {
-	Mode mode;
-	World world;
-	private Color backgroundColor;
-	
-	@Override
-	public void create () {
-		SkillInitializer.initializeSkills();
-		ItemInitializer.initializeItems();
-		CreatureInitializer.initializeCreatures();
-		LocationIcon.initializeIcons();
+    Mode mode;
+    World world;
+    private Color backgroundColor;
 
-		Mode.skin = new Skin(Gdx.files.internal("skin/craftacular-ui.skin"));
+    @Override
+    public void create() {
+        SkillInitializer.initializeSkills();
+        ItemInitializer.initializeItems();
+        CreatureInitializer.initializeCreatures();
+        LocationIcon.initializeIcons();
 
-		mode = new MainMenuMode(this);
+        Mode.skin = new Skin(Gdx.files.internal("skin/craftacular-ui.skin"));
 
-		setBackgroundColor(Color.DARK_GRAY);
+        mode = new MainMenuMode(this, null, false);
 
-		updateInputMultiplexer();
-	}
+        setBackgroundColor(Color.DARK_GRAY);
 
-	@Override
-	public void render () {
-		ScreenUtils.clear(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+        updateInputMultiplexer();
+    }
 
-		mode.update(Gdx.graphics.getDeltaTime());
+    @Override
+    public void render() {
+        ScreenUtils.clear(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 
-		manageModeChange();
-	}
+        mode.update(Gdx.graphics.getDeltaTime());
 
-	@Override
-	public void resize(int width, int height) {
-		mode.resize(width, height);
-		if (world != null) {
-			world.getEnvironment().getStage().getViewport().update(width, height, true);
-		}
-	}
+        manageModeChange();
+    }
 
-	private void manageModeChange() {
-		if(world != null && world.getEnvironment().getCurrentMode() != world.getEnvironment().getNextMode()) {
-			if(world.getEnvironment().getNextMode() == ModeName.explorationMode) {
-				mode = new ExplorationMode(this);
-			} else if(world.getEnvironment().getNextMode() == ModeName.fightMode) {
-				mode = new FightMode(this);
-			} else if (world.getEnvironment().getNextMode() == ModeName.tripMode) {
-				mode = new TripMode(this);
-			}
-			updateCreatureBehaviourStates();
-			updateInputMultiplexer();
+    @Override
+    public void resize(int width, int height) {
+        mode.resize(width, height);
+        if (world != null) {
+            world.getEnvironment().getStage().getViewport().update(width, height, true);
+        }
+    }
 
-			world.getEnvironment().setCurrentMode(world.getEnvironment().getNextMode());
-		}
-	}
+    private void manageModeChange() {
+        if (world != null && world.getEnvironment().getCurrentMode() != world.getEnvironment().getNextMode()) {
+            if (mode instanceof MainMenuMode && ((MainMenuMode) mode).getPreviousMode() != null) {
+                mode = ((MainMenuMode) mode).getPreviousMode();
+            } else if (world.getEnvironment().getNextMode() == ModeName.explorationMode) {
+                mode = new ExplorationMode(this);
+                updateCreatureBehaviourStates();
+            } else if (world.getEnvironment().getNextMode() == ModeName.fightMode) {
+                mode = new FightMode(this);
+                updateCreatureBehaviourStates();
+            } else if (world.getEnvironment().getNextMode() == ModeName.tripMode) {
+                mode = new TripMode(this);
+                updateCreatureBehaviourStates();
+            } else if (world.getEnvironment().getNextMode() == ModeName.mainMenuMode) {
+                mode = new MainMenuMode(this, mode, true);
+            }
+            updateInputMultiplexer();
 
-	private void updateCreatureBehaviourStates() {
-		for(Iterator<Actor> iterator = world.getEnvironment().getStage().getActors().iterator(); iterator.hasNext();) {
-			Actor actor = iterator.next();
-			if(actor instanceof CreatureBehaviour) {
-				((CreatureBehaviour)actor).changeMode(mode);
-			} else if (world.getEnvironment().getNextMode() == ModeName.tripMode) {
-				iterator.remove();
-			}
-		}
-	}
+            world.getEnvironment().setCurrentMode(world.getEnvironment().getNextMode());
+        }
+    }
 
-	public void updateInputMultiplexer() {
-		InputMultiplexer multiProcessor = new InputMultiplexer();
-		multiProcessor.addProcessor(mode.stage);
-		if (world != null) {
-			multiProcessor.addProcessor(world.getEnvironment().getStage());
-		}
-		Gdx.input.setInputProcessor(multiProcessor);
-	}
+    private void updateCreatureBehaviourStates() {
+        for (Iterator<Actor> iterator = world.getEnvironment().getStage().getActors().iterator(); iterator.hasNext(); ) {
+            Actor actor = iterator.next();
+            if (actor instanceof CreatureBehaviour) {
+                ((CreatureBehaviour) actor).changeMode(mode);
+            } else if (world.getEnvironment().getNextMode() == ModeName.tripMode) {
+                iterator.remove();
+            }
+        }
+    }
 
-	public void setWorld(World world) {
-		this.world = world;
-	}
+    public void updateInputMultiplexer() {
+        InputMultiplexer multiProcessor = new InputMultiplexer();
+        multiProcessor.addProcessor(mode.stage);
+        if (world != null) {
+            multiProcessor.addProcessor(world.getEnvironment().getStage());
+        }
+        Gdx.input.setInputProcessor(multiProcessor);
+    }
 
-	public void setBackgroundColor(Color backgroundColor) {
-		this.backgroundColor = backgroundColor;
-	}
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
 }

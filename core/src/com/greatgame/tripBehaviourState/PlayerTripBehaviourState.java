@@ -8,6 +8,7 @@ import com.greatgame.application.explorationMode.ExplorationMode;
 import com.greatgame.application.fightMode.FightMode;
 import com.greatgame.behaviour.BehaviourState;
 import com.greatgame.behaviour.CreatureBehaviour;
+import com.greatgame.environment.ModeName;
 import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
 import com.greatgame.fightBehaviourState.PlayerFightBehaviourState;
 
@@ -42,6 +43,14 @@ public class PlayerTripBehaviourState extends BehaviourState {
                         yMap++;
                         nextMovement = currentTime + delta;
                     }
+                }
+                return false;
+            }
+
+            @Override
+            public boolean keyUp(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    getEnvironment().triggerModeChange(ModeName.mainMenuMode);
                 }
                 return false;
             }

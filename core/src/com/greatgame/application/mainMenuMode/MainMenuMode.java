@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.greatgame.application.GreatGame;
 import com.greatgame.application.Mode;
+import com.greatgame.application.fightMode.FightMode;
+import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.entities.Characteristic;
 import com.greatgame.environment.ModeName;
@@ -21,14 +23,26 @@ import java.util.Random;
 import static com.greatgame.behaviour.CreatureBehaviour.creaturesFactory;
 
 public class MainMenuMode extends Mode {
+    Mode previousMode;
     Stage mainMenuStage;
     Stage newGameStage;
+    Stage pauseStage;
 
-    public MainMenuMode(GreatGame app) {
+    public MainMenuMode(GreatGame app, Mode previousMode, boolean pause) {
+        this.previousMode = previousMode;
         this.app = app;
         initMainMenuStage();
         initNewGameStage();
-        stage = mainMenuStage;
+        initPauseStage();
+        if (pause) {
+            stage = pauseStage;
+        } else {
+            stage = mainMenuStage;
+        }
+    }
+
+    public Mode getPreviousMode() {
+        return previousMode;
     }
 
     @Override
@@ -166,5 +180,48 @@ public class MainMenuMode extends Mode {
             }
         }
         return result;
+    }
+
+    private void initPauseStage() {
+        pauseStage = new Stage(new ScreenViewport());
+
+        Table table = new Table();
+        Label title = new Label("Pause", skin);
+        table.add(title).padBottom(10).row();
+        Button backToMenu = new TextButton("Back to main menu", skin);
+        backToMenu.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage = mainMenuStage;
+                app.updateInputMultiplexer();
+            }
+        });
+        table.add(backToMenu).padBottom(10).row();
+        Button backToGame = new TextButton("Back to game", skin);
+        backToGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ModeName name;
+                if (previousMode instanceof FightMode) {
+                    name = ModeName.fightMode;
+                } else if (previousMode instanceof TripMode) {
+                    name = ModeName.tripMode;
+                } else {
+                    name = ModeName.explorationMode;
+                }
+                getEnvironment().triggerModeChange(name);
+            }
+        });
+        table.add(backToGame).padBottom(10).row();
+        Button exitButton = new TextButton("Quit Game", skin);
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+        table.add(exitButton);
+        table.setFillParent(true);
+        pauseStage.addActor(table);
     }
 }

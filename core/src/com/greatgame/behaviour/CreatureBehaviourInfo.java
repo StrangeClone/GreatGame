@@ -9,7 +9,6 @@ import com.greatgame.environment.BehaviourInfo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.greatgame.behaviour.ItemBehaviour.itemsFactory;
@@ -26,14 +25,12 @@ public class CreatureBehaviourInfo extends BehaviourInfo {
     }
 
     @Override
-    public void apply(List<Behaviour> locationContents) {
-        Optional<Behaviour> b = getCorrespondentBehaviour(locationContents);
-        b.ifPresent((behaviour) -> {
-            CreatureBehaviour creatureBehaviour = (CreatureBehaviour) behaviour;
-            creatureBehaviour.getCreature().setHP(HP);
-            creatureBehaviour.setPosition(position.x, position.y);
-            fixInventory(creatureBehaviour.getCreature());
-        });
+    public boolean apply(Behaviour behaviour) {
+        CreatureBehaviour b = (CreatureBehaviour)behaviour;
+        b.getCreature().setHP(HP);
+        b.setPosition(position.x, position.y);
+        fixInventory(b.getCreature());
+        return HP >= 0;
     }
 
     private void fixInventory(Creature c) {

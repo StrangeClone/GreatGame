@@ -6,7 +6,7 @@ public class Location {
     public final int x, y;
     public final Biome biome;
     public final Structure structure;
-    private final Map<String, BehaviourInfo> behaviourInfos;
+    private final Map<String, BehaviourInfo> behavioursInfo;
     private int screenX, screenY;
 
     public Location(int x, int y, Biome biome, Structure structure) {
@@ -14,7 +14,7 @@ public class Location {
         this.y = y;
         this.biome = biome;
         this.structure = structure;
-        behaviourInfos = new HashMap<>();
+        behavioursInfo = new HashMap<>();
     }
 
     public void setScreenPosition(int screenX, int screenY) {
@@ -31,11 +31,11 @@ public class Location {
     }
 
     public void addInfo(BehaviourInfo info) {
-        behaviourInfos.put(info.getBehaviourName(), info);
+        behavioursInfo.put(info.getBehaviourName(), info);
     }
 
-    public Map<String, BehaviourInfo> getBehaviourInfos() {
-        return behaviourInfos;
+    public Map<String, BehaviourInfo> getBehaviourInfo() {
+        return behavioursInfo;
     }
 
     public Biome getBiome() {
@@ -52,6 +52,16 @@ public class Location {
             structure.generate(environment, this, s);
         }
         biome.generate(environment, this, s);
+        for (BehaviourInfo current : behavioursInfo.values()) {
+            Behaviour b = findBehaviour(environment, current.behaviourName);
+            if (!current.apply(b)) {
+                b.remove();
+            }
+        }
+    }
+
+    private Behaviour findBehaviour(Environment environment, String name) {
+        return environment.getStage().getRoot().findActor(name);
     }
 
     @Override

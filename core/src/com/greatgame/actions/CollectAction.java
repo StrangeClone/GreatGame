@@ -31,6 +31,7 @@ public class CollectAction extends Action {
         Creature player = behaviour.getEnvironment().getPlayer().getCreature();
         int previousInventorySize = player.getInventory().size();
         behaviour.getItem().collect(player);
+        behaviour.saveBehaviourInfo();
         if(player.getInventory().size() != previousInventorySize) {
             behaviour.remove();
         }

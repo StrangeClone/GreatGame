@@ -89,6 +89,7 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
         }
         if (newMode instanceof TripMode) {
             behaviour.setState(new PlayerTripBehaviourState(behaviour));
+            behaviour.setPosition(0,0);
         }
     }
 

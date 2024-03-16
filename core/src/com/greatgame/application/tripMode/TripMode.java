@@ -27,7 +27,6 @@ public class TripMode extends Mode {
         for (Location l : getWorld().getGeneratedLocations().values()) {
             mapStage.addActor(new LocationIcon(l));
         }
-        getEnvironment().getPlayer().setPosition(0,0);
         getEnvironment().getLoadedLocations().clear();
 
         playerIcon = new Texture("textures/action.png");

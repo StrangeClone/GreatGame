@@ -61,6 +61,7 @@ public class GreatGame extends ApplicationAdapter {
 
     private void manageModeChange() {
         if (world != null && world.getEnvironment().getCurrentMode() != world.getEnvironment().getNextMode()) {
+            setBackgroundColor(Color.GREEN);
             if (mode instanceof MainMenuMode && ((MainMenuMode) mode).getPreviousMode() != null) {
                 mode = ((MainMenuMode) mode).getPreviousMode();
             } else if (world.getEnvironment().getNextMode() == ModeName.explorationMode) {
@@ -73,6 +74,7 @@ public class GreatGame extends ApplicationAdapter {
                 mode = new TripMode(this);
                 updateCreatureBehaviourStates();
             } else if (world.getEnvironment().getNextMode() == ModeName.mainMenuMode) {
+                setBackgroundColor(Color.DARK_GRAY);
                 mode = new MainMenuMode(this, mode, true);
             }
             updateInputMultiplexer();
@@ -86,7 +88,8 @@ public class GreatGame extends ApplicationAdapter {
             Actor actor = iterator.next();
             if (actor instanceof CreatureBehaviour) {
                 ((CreatureBehaviour) actor).changeMode(mode);
-            } else if (world.getEnvironment().getNextMode() == ModeName.tripMode) {
+            }
+            if (world.getEnvironment().getNextMode() == ModeName.tripMode && actor != world.getEnvironment().getPlayer()) {
                 iterator.remove();
             }
         }

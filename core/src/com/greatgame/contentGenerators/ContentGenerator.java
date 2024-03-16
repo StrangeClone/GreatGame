@@ -9,7 +9,7 @@ import static com.greatgame.behaviour.ItemBehaviour.itemsFactory;
 import static com.greatgame.environment.RandomMap.randomGenerator;
 
 public abstract class ContentGenerator {
-    public static final float PIXELS_PER_LOCATION = 2000f;
+    public static final float PIXELS_PER_LOCATION = 2500f;
 
     protected void generate(Environment environment, Location location, long seed) {
         randomGenerator.setSeed(seed);
@@ -32,6 +32,7 @@ public abstract class ContentGenerator {
     protected void setLocalPosition(Behaviour behaviour, Location location, float localX, float localY) {
         behaviour.setPosition(location.getScreenX() * PIXELS_PER_LOCATION + localX,
                 location.getScreenY() * PIXELS_PER_LOCATION + localY);
+        behaviour.setOriginalLocation(location);
     }
 
     protected void placeCreaturesAtRandomPositions(Environment environment, Location location, String type, int n) {

@@ -9,13 +9,11 @@ import com.greatgame.actions.FightModeAllowedActionDialog;
 import com.greatgame.actions.FightModeMovementAction;
 import com.greatgame.application.Mode;
 import com.greatgame.application.explorationMode.ExplorationMode;
-import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.ModeName;
 import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
-import com.greatgame.tripBehaviourState.PlayerTripBehaviourState;
 
 public class PlayerFightBehaviourState extends FightBehaviourState {
     InputListener listener;
@@ -65,9 +63,6 @@ public class PlayerFightBehaviourState extends FightBehaviourState {
         getEnvironment().getStage().removeListener(listener);
         if (newMode instanceof ExplorationMode) {
             behaviour.setState(new PlayerExplorationBehaviourState(behaviour, newMode.getStage()));
-        }
-        if (newMode instanceof TripMode) {
-            behaviour.setState(new PlayerTripBehaviourState(behaviour));
         }
     }
 }

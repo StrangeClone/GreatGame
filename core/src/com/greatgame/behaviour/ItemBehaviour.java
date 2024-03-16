@@ -26,6 +26,7 @@ public class ItemBehaviour extends Behaviour {
     @Override
     public void damage(int damage) {
         item.breakItem(damage);
+        saveBehaviourInfo();
         if (item.getHP() < 0) {
             remove();
         }

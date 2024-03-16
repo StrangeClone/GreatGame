@@ -14,6 +14,7 @@ public abstract class ExplorationBehaviourState extends BehaviourState {
     protected boolean setPosition(float x, float y) {
         if(getEnvironment().allowedPosition(behaviour, x, y, true)) {
             behaviour.setPosition(x,y);
+            behaviour.saveBehaviourInfo();
             return true;
         }
         return false;

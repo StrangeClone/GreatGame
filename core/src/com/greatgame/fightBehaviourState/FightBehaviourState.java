@@ -34,6 +34,7 @@ public abstract class FightBehaviourState extends BehaviourState {
             if(currentAction.finished()) {
                 actions--;
                 currentAction = null;
+                behaviour.saveBehaviourInfo();
             }
         }
     }

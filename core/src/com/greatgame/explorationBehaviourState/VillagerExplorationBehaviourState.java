@@ -5,7 +5,6 @@ import com.greatgame.actions.TalkAction;
 import com.greatgame.application.Mode;
 import com.greatgame.application.explorationMode.ExplorationMode;
 import com.greatgame.application.fightMode.FightMode;
-import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.fightBehaviourState.VillagerFightBehaviourState;
 
@@ -23,9 +22,6 @@ public class VillagerExplorationBehaviourState extends ExplorationBehaviourState
         }
         if (newMode instanceof ExplorationMode) {
             behaviour.setState(new VillagerExplorationBehaviourState(behaviour, newMode.getStage()));
-        }
-        if (newMode instanceof TripMode) {
-            behaviour.remove();
         }
     }
 

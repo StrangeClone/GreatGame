@@ -36,7 +36,20 @@ public class ConcreteEnvironment implements Environment {
     public void addBehaviour(Behaviour behaviour) {
         stage.addActor(behaviour);
         behaviour.setEnvironment(this);
+        behaviour.setName(behaviour.getOriginalLocation().x + " " + behaviour.getOriginalLocation().y +
+                " " + behavioursInLocation(behaviour.getOriginalLocation()));
         behaviourRefiner.refine(behaviour);
+    }
+
+    private int behavioursInLocation(Location l) {
+        int result = 0;
+        for (Actor actor : stage.getActors()) {
+            Behaviour behaviour = (Behaviour) actor;
+            if (behaviour.getOriginalLocation() == l) {
+                result++;
+            }
+        }
+        return result;
     }
 
     @Override

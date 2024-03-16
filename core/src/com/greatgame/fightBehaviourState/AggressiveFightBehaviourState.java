@@ -5,7 +5,6 @@ import com.greatgame.actions.AttackAction;
 import com.greatgame.actions.FightModeMovementAction;
 import com.greatgame.application.Mode;
 import com.greatgame.application.explorationMode.ExplorationMode;
-import com.greatgame.application.tripMode.TripMode;
 import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.explorationBehaviourState.IdleExplorationBehaviourState;
 
@@ -49,7 +48,7 @@ public class AggressiveFightBehaviourState extends FightBehaviourState {
                         }
                     }
                 } else {
-                    for(float angle = 0; angle < Math.PI * 2; angle += Math.PI / 6) {
+                    for(float angle = 0; angle < Math.PI * 2; angle += (float) Math.PI / 6) {
                         float d = player.getWidth() * 1.25f;
                         Vector2 delta = new Vector2(d * (float) Math.sin(angle), d * (float) Math.cos(angle));
                         destination = new Vector2(player.getPosition()).add(delta);
@@ -82,8 +81,6 @@ public class AggressiveFightBehaviourState extends FightBehaviourState {
     public void changeMode(Mode newMode) {
         if (newMode instanceof ExplorationMode) {
             behaviour.setState(new IdleExplorationBehaviourState(behaviour));
-        } if (newMode instanceof TripMode) {
-            behaviour.remove();
         }
     }
 }

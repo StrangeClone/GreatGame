@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.greatgame.application.GreatGame;
@@ -18,6 +21,10 @@ import com.greatgame.skills.SkillInitializer;
 import com.greatgame.world.ConcreteEnvironment;
 import com.greatgame.world.World;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Random;
 
 import static com.greatgame.behaviour.CreatureBehaviour.creaturesFactory;
@@ -64,14 +71,10 @@ public class MainMenuMode extends Mode {
             }
         });
         table.add(newGameButton).padBottom(10).row();
-        Button exitButton = new TextButton("Quit Game", skin);
-        exitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-            }
-        });
-        table.add(exitButton);
+        contributeButton(table);
+        reportBugButton(table);
+        shareIdeaButton(table);
+        quitGameButton(table);
         table.setFillParent(true);
         mainMenuStage.addActor(table);
     }
@@ -113,7 +116,7 @@ public class MainMenuMode extends Mode {
         Label ep = new Label("EP: " + player.getEP(), skin);
         table.add(ep).colspan(3).left().padLeft(10).padTop(15).row();
 
-        for(String skillName : SkillInitializer.playerAvailableSkills()) {
+        for (String skillName : SkillInitializer.playerAvailableSkills()) {
             Label skillLabel = new Label(skillName, skin);
             Label levelLabel = new Label(Integer.toString(player.getCreature().getLevel(skillName)), skin);
             Button levelUpButton = new TextButton("+", skin);
@@ -121,7 +124,7 @@ public class MainMenuMode extends Mode {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     int currentLevel = player.getCreature().getLevel(skillName);
-                    if(player.getEP() >= (currentLevel + 1) * 200) {
+                    if (player.getEP() >= (currentLevel + 1) * 200) {
                         player.decreaseEP((currentLevel + 1) * 200);
                         ep.setText("EP: " + player.getEP());
                         player.getCreature().upgradeSkill(skillName);
@@ -153,7 +156,7 @@ public class MainMenuMode extends Mode {
                 getWorld().getEnvironment().setPlayer(player, getEnvironment().getStage());
                 player.getCreature().setCoins(100);
 
-                getEnvironment().checkContents(0,0);
+                getEnvironment().checkContents(0, 0);
 
                 app.setBackgroundColor(Color.GREEN);
                 getEnvironment().triggerModeChange(ModeName.explorationMode);
@@ -165,10 +168,10 @@ public class MainMenuMode extends Mode {
     }
 
     private int characteristicValue(Random random) {
-        int t1 = random.nextInt(1,7);
-        int t2 = random.nextInt(1,7);
-        int t3 = random.nextInt(1,7);
-        int t4 = random.nextInt(1,7);
+        int t1 = random.nextInt(1, 7);
+        int t2 = random.nextInt(1, 7);
+        int t3 = random.nextInt(1, 7);
+        int t4 = random.nextInt(1, 7);
         return t1 + t2 + t3 + t4 - min(t1, t2, t3, t4);
     }
 
@@ -213,6 +216,58 @@ public class MainMenuMode extends Mode {
             }
         });
         table.add(backToGame).padBottom(10).row();
+        contributeButton(table);
+        reportBugButton(table);
+        shareIdeaButton(table);
+        quitGameButton(table);
+        table.setFillParent(true);
+        pauseStage.addActor(table);
+    }
+
+    private void contributeButton(Table table) {
+        Button contributeButton = new TextButton("Contribute", skin);
+        contributeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openUrl("https://github.com/StrangeClone/GreatGame");
+            }
+        });
+        table.add(contributeButton).padBottom(10).row();
+    }
+
+    private void reportBugButton(Table table) {
+        Button bugButton = new TextButton("Report a bug", skin);
+        bugButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openUrl("https://github.com/StrangeClone/GreatGame/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=");
+            }
+        });
+        table.add(bugButton).padBottom(10).row();
+    }
+
+    private void shareIdeaButton(Table table) {
+        Button ideaButton = new TextButton("Share an idea", skin);
+        ideaButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openUrl("https://github.com/StrangeClone/GreatGame/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=");
+            }
+        });
+        table.add(ideaButton).padBottom(10).row();
+    }
+
+    private void openUrl(String url) {
+        Desktop desktop = java.awt.Desktop.getDesktop();
+        try {
+            URI uri = new URI(url);
+            desktop.browse(uri);
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void quitGameButton(Table table) {
         Button exitButton = new TextButton("Quit Game", skin);
         exitButton.addListener(new ClickListener() {
             @Override
@@ -221,7 +276,5 @@ public class MainMenuMode extends Mode {
             }
         });
         table.add(exitButton);
-        table.setFillParent(true);
-        pauseStage.addActor(table);
     }
 }

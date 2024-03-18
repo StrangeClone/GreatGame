@@ -19,7 +19,7 @@ public class TalkAction extends Action {
         super("Talk");
         this.client = client;
         this.vendor = vendor;
-        talkDialog = new TalkDialog(client.getCreature(), vendor.getCreature());
+        talkDialog = new TalkDialog(client, vendor);
         validator = new NearToValidator(client, vendor, 3 * PIXELS_PER_METER);
     }
 

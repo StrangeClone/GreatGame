@@ -1,13 +1,16 @@
 package com.greatgame.application.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.greatgame.application.Mode;
+import com.greatgame.behaviour.CreatureBehaviour;
 import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
 
 public class TalkDialog extends Dialog {
+    CreatureBehaviour first, second;
     Container<Image> selectedItemImage1;
     Item selectedItem1;
     Label priceLabel1;
@@ -15,15 +18,17 @@ public class TalkDialog extends Dialog {
     Item selectedItem2;
     Label priceLabel2;
     Table inventoryTable;
-    public TalkDialog(Creature first, Creature second) {
+    public TalkDialog(CreatureBehaviour first, CreatureBehaviour second) {
         super("", Mode.skin);
+        this.first = first;
+        this.second = second;
 
-        selectedItemImage1 = InventoryDialog.createItemIcon(first, 9);
+        selectedItemImage1 = InventoryDialog.createItemIcon(first.getCreature(), 9);
         getContentTable().add(selectedItemImage1).width(75).height(75).left();
         priceLabel1 = new Label("Price: 0", getSkin());
         getContentTable().add(priceLabel1).colspan(3).width(255).left();
 
-        selectedItemImage2 = InventoryDialog.createItemIcon(second, 9);
+        selectedItemImage2 = InventoryDialog.createItemIcon(second.getCreature(), 9);
         getContentTable().add(selectedItemImage2).width(75).height(75).left();
         priceLabel2 = new Label("Price: 0", getSkin());
         getContentTable().add(priceLabel2).colspan(3).width(225).left();
@@ -33,14 +38,16 @@ public class TalkDialog extends Dialog {
         sellButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (selectedItem1 != null && second.getCoins() > selectedItem1.getPrice()) {
-                    second.setCoins(second.getCoins() - selectedItem1.getPrice());
-                    first.setCoins(first.getCoins() + selectedItem1.getPrice());
-                    first.getInventory().remove(selectedItem1);
-                    second.getInventory().add(selectedItem1);
+                if (selectedItem1 != null && second.getCreature().getCoins() > selectedItem1.getPrice()) {
+                    second.getCreature().setCoins(second.getCreature().getCoins() - selectedItem1.getPrice());
+                    first.getCreature().setCoins(first.getCreature().getCoins() + selectedItem1.getPrice());
+                    first.getCreature().getInventory().remove(selectedItem1);
+                    second.getCreature().getInventory().add(selectedItem1);
+                    first.saveBehaviourInfo();
+                    second.saveBehaviourInfo();
                     selectedItem1 = null;
                     selectedItemImage1.setActor(null);
-                    setUpInventory(first, second);
+                    setUpInventory();
                 }
             }
         });
@@ -49,14 +56,16 @@ public class TalkDialog extends Dialog {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (selectedItem2 != null && first.getCoins() > selectedItem2.getPrice()) {
-                    first.setCoins(first.getCoins() - selectedItem2.getPrice());
-                    second.setCoins(second.getCoins() + selectedItem2.getPrice());
-                    second.getInventory().remove(selectedItem2);
-                    first.getInventory().add(selectedItem2);
+                if (selectedItem2 != null && first.getCreature().getCoins() > selectedItem2.getPrice()) {
+                    first.getCreature().setCoins(first.getCreature().getCoins() - selectedItem2.getPrice());
+                    second.getCreature().setCoins(second.getCreature().getCoins() + selectedItem2.getPrice());
+                    second.getCreature().getInventory().remove(selectedItem2);
+                    first.getCreature().getInventory().add(selectedItem2);
+                    first.saveBehaviourInfo();
+                    second.saveBehaviourInfo();
                     selectedItem2 = null;
                     selectedItemImage2.setActor(null);
-                    setUpInventory(first, second);
+                    setUpInventory();
                 }
             }
         });
@@ -64,7 +73,6 @@ public class TalkDialog extends Dialog {
         getContentTable().row();
 
         inventoryTable = new Table();
-        setUpInventory(first, second);
         getContentTable().add(inventoryTable).colspan(8);
 
         button("back");
@@ -75,19 +83,25 @@ public class TalkDialog extends Dialog {
         buyer
     }
 
-    private void setUpInventory(Creature first, Creature second) {
+    @Override
+    public Dialog show(Stage stage) {
+        setUpInventory();
+        return super.show(stage);
+    }
+
+    private void setUpInventory() {
 
         inventoryTable.clear();
-        createInventoryRow(Role.seller, first, 0, 4);
-        createInventoryRow(Role.buyer, second, 0, 4);
+        createInventoryRow(Role.seller, first.getCreature(), 0, 4);
+        createInventoryRow(Role.buyer, second.getCreature(), 0, 4);
         inventoryTable.row();
-        createInventoryRow(Role.seller, first, 4, 8);
-        createInventoryRow(Role.buyer, second, 4, 8);
+        createInventoryRow(Role.seller, first.getCreature(), 4, 8);
+        createInventoryRow(Role.buyer, second.getCreature(), 4, 8);
         inventoryTable.row();
 
-        Label coins1 = new Label("Coins: " + first.getCoins(), getSkin());
+        Label coins1 = new Label("Coins: " + first.getCreature().getCoins(), getSkin());
         inventoryTable.add(coins1).colspan(4).left();
-        Label coins2 = new Label("Coins: " + second.getCoins(), getSkin());
+        Label coins2 = new Label("Coins: " + second.getCreature().getCoins(), getSkin());
         inventoryTable.add(coins2).colspan(4).left();
     }
 

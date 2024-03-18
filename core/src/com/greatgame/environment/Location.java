@@ -66,11 +66,14 @@ public class Location {
 
     @Override
     public String toString() {
-        String result = "[position: (" + x + "," + y + ") " + biome.getName() + " ";
+        StringBuilder result = new StringBuilder("position: (" + x + "," + y + ") " + biome.getName() + " ");
         if (structure != null) {
-            result += structure.getName() + " ";
+            result.append(structure.getName()).append(" ");
         }
-        result += "screen: (" + screenX + "," + screenY + ")]";
-        return result;
+        result.append("screen: (").append(screenX).append(",").append(screenY).append(") ");
+        for (BehaviourInfo info : behavioursInfo.values()) {
+            result.append(info).append(", ");
+        }
+        return result.toString();
     }
 }

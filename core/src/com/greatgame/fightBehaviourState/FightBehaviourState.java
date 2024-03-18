@@ -24,6 +24,10 @@ public abstract class FightBehaviourState extends BehaviourState {
         actions = 2;
     }
 
+    public int getActions() {
+        return actions;
+    }
+
     @Override
     public void act(float delta) {
         if(isActive()) {

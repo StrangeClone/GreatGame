@@ -8,6 +8,7 @@ import com.greatgame.application.GreatGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setMaximized(true);
 		config.setForegroundFPS(60);
 		config.setTitle("GreatGame");
 		new Lwjgl3Application(new GreatGame(), config);

@@ -160,4 +160,24 @@ public class ConcreteCreature implements Creature {
     public void setCoins(int value) {
         coins = value;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<Characteristic, Integer> e : characteristicValues.entrySet()) {
+            result.append(e.getKey()).append(" ").append(e.getValue()).append(", ");
+        }
+        for (Map.Entry<String, Skill> e : skillMap.entrySet()) {
+            result.append(e.getKey()).append(" ").append(e.getValue().getLevel()).append(", ");
+        }
+        result.append(maxHealthPoints).append(" ").append(healthPoints).append(" ");
+        result.append(coins).append(" ");
+        for (Map.Entry<ItemSlot, Item> e : equippedItemsMap.entrySet()) {
+            result.append(e.getKey()).append(" ").append(e.getValue().getType()).append(" ");
+        }
+        for (Item item : getInventory()) {
+            result.append(item.getType()).append(" ");
+        }
+        return result.toString();
+    }
 }

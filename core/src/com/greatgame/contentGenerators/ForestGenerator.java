@@ -18,9 +18,9 @@ public class ForestGenerator extends ContentGenerator {
         super.generate(environment, location, seed);
         placeItemsAtRandomPositions(environment, location, "tree", randomGenerator.nextInt(10, 21));
         placeItemsAtRandomPositions(environment, location, "bush", randomGenerator.nextInt(10, 21));
-        placeItemsAtRandomPositions(environment, location, "big rock", randomGenerator.nextInt(3, 7));
-        placeItemsAtRandomPositions(environment, location, "little bush", randomGenerator.nextInt(15, 26));
-        placeItemsAtRandomPositions(environment, location, "little rock", randomGenerator.nextInt(10, 21));
+        placeItemsAtRandomPositions(environment, location, "big_rock", randomGenerator.nextInt(3, 7));
+        placeItemsAtRandomPositions(environment, location, "little_bush", randomGenerator.nextInt(15, 26));
+        placeItemsAtRandomPositions(environment, location, "little_rock", randomGenerator.nextInt(10, 21));
         placeItemsAtRandomPositions(environment, location, "flower", randomGenerator.nextInt(30, 51));
         if(randomGenerator.nextFloat(0, 1) < 0.05f) {
             placeCreaturesAtRandomPositions(environment, location, "fox", randomGenerator.nextInt(1,3));

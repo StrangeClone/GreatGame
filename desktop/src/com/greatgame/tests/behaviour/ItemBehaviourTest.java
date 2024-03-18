@@ -11,7 +11,7 @@ import static com.greatgame.tests.TestLauncher.assertEquals;
 public class ItemBehaviourTest {
     public static void main(String[] args) {
         TestLauncher.launchTest("ItemBehaviour", () -> {
-            ItemBehaviour behaviour = new ItemBehaviour(new Texture("textures/items/healing potion.png"),
+            ItemBehaviour behaviour = new ItemBehaviour(new Texture("textures/items/healing_potion.png"),
                     new ConcreteItem("", 10, 10, 0, null, null));
             behaviour.setName("thing");
             behaviour.setOriginalLocation(new Location(0, 0, null, null));

@@ -7,6 +7,7 @@ import com.greatgame.application.Mode;
 import com.greatgame.entities.Creature;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.factory.Factory;
+import com.greatgame.fightBehaviourState.FightBehaviourState;
 
 public class CreatureBehaviour extends Behaviour {
     public static Factory<CreatureBehaviour> creaturesFactory = new Factory<>();
@@ -102,5 +103,15 @@ public class CreatureBehaviour extends Behaviour {
 
     public void changeMode(Mode newMode) {
         state.changeMode(newMode);
+    }
+
+    @Override
+    public String toString() {
+        String result = creature + " ";
+        result += EP;
+        if (state instanceof FightBehaviourState) {
+            result += ((FightBehaviourState) state).getActions();
+        }
+        return result;
     }
 }

@@ -20,7 +20,7 @@ public class ItemBehaviourInfoTest {
 
             Environment environment = new ConcreteEnvironment();
 
-            ItemBehaviour behaviour = new ItemBehaviour(new Texture("textures/items/healing potion.png"),
+            ItemBehaviour behaviour = new ItemBehaviour(new Texture("textures/items/healing_potion.png"),
                     new ConcreteItem(null, 10, 10, 10,
                     new StandardCollectManager(), null));
             behaviour.setName("thing");

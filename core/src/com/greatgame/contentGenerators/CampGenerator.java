@@ -34,7 +34,7 @@ public class CampGenerator extends ContentGenerator {
 
     private void addLegEasterEgg(Environment environment, Location location) {
         if(legRandomWorld()) {
-            Behaviour leg = ItemBehaviour.itemsFactory.create("wooden leg");
+            Behaviour leg = ItemBehaviour.itemsFactory.create("wooden_leg");
             setLocalPosition(leg, location, PIXELS_PER_LOCATION / 2 + 200, PIXELS_PER_LOCATION / 2);
             environment.addBehaviour(leg);
         }

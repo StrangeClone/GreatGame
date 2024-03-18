@@ -1573,33 +1573,33 @@ classDiagram
         <<abstract>>
     }
     class MainMenuMode {
-        - Stage mainMenuStage
-        - Stage pauseStage
-        - Stage newGameStage
-        - Stage saveGameStage
-        - Stage loadGameStage
-        - Stage currentStage
         + MainMenuMode()
     }
     Mode <|-- MainMenuMode
+    class Page {
+        <<abstract>>
+        - Stage pageStage
+    }
 ```
 
-This mode will be used both for main menu and for pause. It will show one of these stages:
-- mainMenuStage: the starting page of the game, with the title and some buttons:
-    - New Game: will show newGameStage
-    - Load Game: will show loadGameStage
+This mode will be used both for main menu and for pause. The stage of the mode will be the stage of one of these implementations
+of Page abstract class:
+- mainMenuPage: the starting page of the game, with the title and some buttons:
+    - New Game: will go to newGamePage
+    - Load Game: will go to loadGamePage
+    - Contribute: will go to gitHub, in this project page
     - Quit Game: closes the Application
-- pauseStage: the page that will open if the player pauses the game. It has some buttons:
-    - Save Game: will show saveGameStage
-    - Load Game: will show loadGameStage
-    - Back to Main menu: will show mainMenuStage
+- pausePage: the page that will open if the player pauses the game. It has some buttons:
+    - Save Game: will go to saveGamePage
+    - Load Game: will go to loadGamePage
+    - Back to Main menu: will go to mainMenuPage
     - Quit Game: closes the Application
-- saveGameStage: the stage where the player can save the current game, to load it another time. It contains a list with
+- saveGamePage: the stage where the player can save the current game, to load it another time. It contains a list with
 the games already saved (stored in a directory), a button to create a new save and a button to override an existing
 save.
-- loadGameStage: the page where the player can load a game already created (stored in a directory). It contains a list
+- loadGamePage: the page where the player can load a game already created (stored in a directory). It contains a list
 with the games already saved, a button to load them, starting the game where it was saved.
-- newGameStage: the page where the player can define his character: he will determine the Characteristics
+- newGamePage: the page where the player can define his character: he will determine the Characteristics
 (random generated) and the skills (they're stored in a list). The player has a starting amount of 1000 EP. 
 Increase a Skill to the 1st level costs 200 EP, to the 2nd level costs 400 EP more. When the player is done (click "Done"
 button), the game will start: a player CreatureBehaviour will be created, modified according to the choices the player

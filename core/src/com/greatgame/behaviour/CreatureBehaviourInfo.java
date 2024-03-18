@@ -5,6 +5,7 @@ import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.BehaviourInfo;
+import com.greatgame.fightBehaviourState.FightBehaviourState;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,12 +17,18 @@ import static com.greatgame.behaviour.ItemBehaviour.itemsFactory;
 public class CreatureBehaviourInfo extends BehaviourInfo {
     Vector2 position;
     public final List<String> inventory;
+    int coins;
+    boolean active;
 
     public CreatureBehaviourInfo(CreatureBehaviour behaviour) {
         super(behaviour.getName(), behaviour.getCreature().getHP());
         this.position = new Vector2(behaviour.getX(), behaviour.getY());
         this.inventory = behaviour.getCreature().getInventory().stream().
                 map(Item::getType).collect(Collectors.toList());
+        this.coins = behaviour.getCreature().getCoins();
+        if (behaviour.state instanceof FightBehaviourState) {
+            this.active = ((FightBehaviourState) behaviour.state).isActive();
+        }
     }
 
     @Override
@@ -29,7 +36,11 @@ public class CreatureBehaviourInfo extends BehaviourInfo {
         CreatureBehaviour b = (CreatureBehaviour)behaviour;
         b.getCreature().setHP(HP);
         b.setPosition(position.x, position.y);
+        b.getCreature().setCoins(coins);
         fixInventory(b.getCreature());
+        if (active) {
+            ((FightBehaviourState)b.state).activate();
+        }
         return HP >= 0;
     }
 
@@ -56,5 +67,14 @@ public class CreatureBehaviourInfo extends BehaviourInfo {
                 }
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        String result = "Creature " + behaviourName + " " + HP + " " + position + " " + coins + " " + inventory;
+        if (active) {
+            result += true;
+        }
+        return result;
     }
 }

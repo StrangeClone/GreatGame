@@ -11,18 +11,18 @@ public class ItemInitializer {
         itemsFactory.addPattern(new ItemPattern("tree", new Texture("textures/items/tree.png"), 50, 10, 0, true));
         behaviourRefiner.addPattern(new ItemRefiningPattern("tree", true));
 
-        itemsFactory.addPattern(new ItemPattern("big rock", new Texture("textures/items/big rock.png"), 100, 10, 0, true));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("big rock", true));
+        itemsFactory.addPattern(new ItemPattern("big_rock", new Texture("textures/items/big_rock.png"), 100, 10, 0, true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("big_rock", true));
 
-        itemsFactory.addPattern(new ItemPattern("little rock", new Texture("textures/items/little rock.png"), 25, 12, 2, false).
+        itemsFactory.addPattern(new ItemPattern("little_rock", new Texture("textures/items/little_rock.png"), 25, 12, 2, false).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("little rock", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("little_rock", true));
 
         itemsFactory.addPattern(new ItemPattern("bush", new Texture("textures/items/bush.png"), 25, 10, 0, true));
         behaviourRefiner.addPattern(new ItemRefiningPattern("bush", true));
 
-        itemsFactory.addPattern(new ItemPattern("little bush", new Texture("textures/items/little bush.png"), 15, 12, 0, false));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("little bush", true));
+        itemsFactory.addPattern(new ItemPattern("little_bush", new Texture("textures/items/little_bush.png"), 15, 12, 0, false));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("little_bush", true));
 
         itemsFactory.addPattern(new ItemPattern("flower", new Texture("textures/items/flower.png"), 1, 12, 1, false).
                 modify(new EnableCollectModifier()));
@@ -33,45 +33,45 @@ public class ItemInitializer {
                 modify(new EnableCollectModifier()));
         behaviourRefiner.addPattern(new ItemRefiningPattern("helm", true));
 
-        itemsFactory.addPattern(new ItemPattern("leather armor", new Texture("textures/items/leather armor.png"), 25, 12, 10, false).
+        itemsFactory.addPattern(new ItemPattern("leather_armor", new Texture("textures/items/leather_armor.png"), 25, 12, 10, false).
                 modify(new ArmorModifier(ItemSlot.Chest, 2)).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("leather armor", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("leather_armor", true));
 
-        itemsFactory.addPattern(new ItemPattern("chain mail", new Texture("textures/items/chain mail.png"), 40, 12, 50, false).
+        itemsFactory.addPattern(new ItemPattern("chain_mail", new Texture("textures/items/chain_mail.png"), 40, 12, 50, false).
                 modify(new ArmorModifier(ItemSlot.Chest, 4)).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("chain mail", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("chain_mail", true));
 
-        itemsFactory.addPattern(new ItemPattern("chest plate", new Texture("textures/items/chest plate.png"), 50, 12, 150, false).
+        itemsFactory.addPattern(new ItemPattern("chest_plate", new Texture("textures/items/chest_plate.png"), 50, 12, 150, false).
                 modify(new ArmorModifier(ItemSlot.Chest, 5)).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("chest plate", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("chest_plate", true));
 
-        itemsFactory.addPattern(new ItemPattern("short sword", new Texture("textures/items/short sword.png"), 40, 13, 30, false).
+        itemsFactory.addPattern(new ItemPattern("short_sword", new Texture("textures/items/short_sword.png"), 40, 13, 30, false).
                 modify(new WeaponModifier(6, 1.5f, "fencing")).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("short sword", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("short_sword", true));
 
-        itemsFactory.addPattern(new ItemPattern("long sword", new Texture("textures/items/long sword.png"), 40, 13, 40, false).
+        itemsFactory.addPattern(new ItemPattern("long_sword", new Texture("textures/items/long_sword.png"), 40, 13, 40, false).
                 modify(new WeaponModifier(8, 1.5f, "fencing")).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("long sword", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("long_sword", true));
 
         itemsFactory.addPattern(new ItemPattern("dagger", new Texture("textures/items/dagger.png"), 30, 13, 25, false).
                 modify(new WeaponModifier(4, 1.5f, "fencing")).
                 modify(new EnableCollectModifier()));
         behaviourRefiner.addPattern(new ItemRefiningPattern("dagger", true));
 
-        itemsFactory.addPattern(new ItemPattern("short bow", new Texture("textures/items/short bow.png"), 20, 13, 40, false).
+        itemsFactory.addPattern(new ItemPattern("short_bow", new Texture("textures/items/short_bow.png"), 20, 13, 40, false).
                 modify(new WeaponModifier(6, 30, "archery")).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("short bow", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("short_bow", true));
 
-        itemsFactory.addPattern(new ItemPattern("long bow", new Texture("textures/items/long bow.png"), 20, 13, 50, false).
+        itemsFactory.addPattern(new ItemPattern("long_bow", new Texture("textures/items/long_bow.png"), 20, 13, 50, false).
                 modify(new WeaponModifier(8, 45, "archery")).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("long bow", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("long_bow", true));
 
         itemsFactory.addPattern(new ItemPattern("improvised weapon", null, 25, 10, 0, false).
                 modify(new WeaponModifier(3, 1.5f, "unarmed fight")));
@@ -85,36 +85,36 @@ public class ItemInitializer {
         itemsFactory.addPattern(new ItemPattern("fireplace", new Texture("textures/items/fireplace.png"), 20, 8, 0, true));
         behaviourRefiner.addPattern(new ItemRefiningPattern("fireplace", true));
 
-        itemsFactory.addPattern(new ItemPattern("wooden leg", new Texture("textures/items/wooden leg.png"), 1000, 20, 170_000_000, true).
+        itemsFactory.addPattern(new ItemPattern("wooden_leg", new Texture("textures/items/wooden_leg.png"), 1000, 20, 170_000_000, true).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("wooden leg", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("wooden_leg", true));
 
-        itemsFactory.addPattern(new ItemPattern("silver coins", new Texture("textures/items/silver coins.png"), 10, 10, 0, false).
+        itemsFactory.addPattern(new ItemPattern("silver_coins", new Texture("textures/items/silver_coins.png"), 10, 10, 0, false).
                 modify(new CoinsModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("silver coins", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("silver_coins", true));
 
         itemsFactory.addPattern(new ItemPattern("fur", new Texture("textures/items/fur.png"), 10, 10, 5, false).
                 modify(new EnableCollectModifier()));
         behaviourRefiner.addPattern(new ItemRefiningPattern("fur", true));
 
-        itemsFactory.addPattern(new ItemPattern("wolf fangs", new Texture("textures/items/fangs.png"), 10, 12, 3, false).
+        itemsFactory.addPattern(new ItemPattern("wolf_fangs", new Texture("textures/items/wolf_fangs.png"), 10, 12, 3, false).
                 modify(new WeaponModifier(4, 1.5f, "bite")).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("wolf fangs", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("wolf_fangs", true));
 
-        itemsFactory.addPattern(new ItemPattern("bear fangs", new Texture("textures/items/fangs.png"), 15, 12, 4, false).
+        itemsFactory.addPattern(new ItemPattern("bear_fangs", new Texture("textures/items/bear_fangs.png"), 15, 12, 4, false).
                 modify(new WeaponModifier(6, 1.5f, "bite")).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("bear fangs", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("bear_fangs", true));
 
-        itemsFactory.addPattern(new ItemPattern("fox fangs", new Texture("textures/items/fangs.png"), 7, 12, 2, false).
+        itemsFactory.addPattern(new ItemPattern("fox_fangs", new Texture("textures/items/fox_fangs.png"), 7, 12, 2, false).
                 modify(new WeaponModifier(2, 1.5f, "bite")).
                 modify(new EnableCollectModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("fox fangs", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("fox_fangs", true));
 
-        itemsFactory.addPattern(new ItemPattern("healing potion", new Texture("textures/items/healing potion.png"), 5, 10, 20, false).
+        itemsFactory.addPattern(new ItemPattern("healing_potion", new Texture("textures/items/healing_potion.png"), 5, 10, 20, false).
                 modify(new EnableCollectModifier()).
                 modify(new PotionModifier()));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("healing fangs", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("healing_fangs", true));
     }
 }

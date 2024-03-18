@@ -21,4 +21,9 @@ public class ItemBehaviourInfo extends BehaviourInfo {
             return HP > 0;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Item " + behaviourName + " " + HP + " " + collected;
+    }
 }

@@ -18,6 +18,11 @@ public class World {
         this.environment = environment;
         environment.setWorld(this);
     }
+
+    public long getSeed() {
+        return seed;
+    }
+
     public Location generate(int x, int y) {
         return generator.generate(x,y);
     }

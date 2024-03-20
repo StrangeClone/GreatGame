@@ -22,10 +22,10 @@ public class ForestGenerator extends ContentGenerator {
         placeItemsAtRandomPositions(environment, location, "little_bush", randomGenerator.nextInt(15, 26));
         placeItemsAtRandomPositions(environment, location, "little_rock", randomGenerator.nextInt(10, 21));
         placeItemsAtRandomPositions(environment, location, "flower", randomGenerator.nextInt(30, 51));
-        if(randomGenerator.nextFloat(0, 1) < 0.05f) {
+        if(randomGenerator.nextFloat() < 0.05f) {
             placeCreaturesAtRandomPositions(environment, location, "fox", randomGenerator.nextInt(1,3));
         }
-        if(randomGenerator.nextFloat(0,1) < 0.05f) {
+        if(randomGenerator.nextFloat() < 0.05f) {
             placeCreaturesAtRandomPositions(environment, location, "bear", 1);
         }
     }

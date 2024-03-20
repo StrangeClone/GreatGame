@@ -10,6 +10,7 @@ import com.greatgame.fightBehaviourState.FightBehaviourState;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import static com.greatgame.behaviour.ItemBehaviour.itemsFactory;
@@ -29,6 +30,18 @@ public class CreatureBehaviourInfo extends BehaviourInfo {
         if (behaviour.state instanceof FightBehaviourState) {
             this.active = ((FightBehaviourState) behaviour.state).isActive();
         }
+    }
+
+    public CreatureBehaviourInfo(Scanner scanner) {
+        super(scanner);
+        position = new Vector2(scanner.nextFloat(), scanner.nextFloat());
+        coins = scanner.nextInt();
+        inventory = new ArrayList<>();
+        String token;
+        for (token = scanner.next(); !"false".equals(token) && !"true".equals(token); token = scanner.next()) {
+            inventory.add(token);
+        }
+        active = Boolean.parseBoolean(token);
     }
 
     @Override
@@ -71,10 +84,11 @@ public class CreatureBehaviourInfo extends BehaviourInfo {
 
     @Override
     public String toString() {
-        String result = "Creature " + behaviourName + " " + HP + " " + position + " " + coins + " " + inventory;
-        if (active) {
-            result += true;
+        StringBuilder result = new StringBuilder("Creature " + super.toString() + " " + position.x + " " + position.y + " " + coins + " ");
+        for (String str : inventory) {
+            result.append(str).append(" ");
         }
-        return result;
+        result.append(active);
+        return result.toString();
     }
 }

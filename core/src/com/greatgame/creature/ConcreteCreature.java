@@ -2,12 +2,8 @@ package com.greatgame.creature;
 
 import com.greatgame.entities.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static com.greatgame.environment.RandomMap.randomGenerator;
 import static com.greatgame.skills.ConcreteSkill.skillFactory;
 
 public class ConcreteCreature implements Creature {
@@ -70,7 +66,7 @@ public class ConcreteCreature implements Creature {
     public int check(String skillName) {
         Skill skill = skillMap.get(skillName);
         int bonus = skill == null ? 0 : skill.getBonus(this);
-        return randomGenerator.nextInt(1,21) + bonus;
+        return new Random().nextInt(1,21) + bonus;
     }
 
     @Override
@@ -165,12 +161,12 @@ public class ConcreteCreature implements Creature {
     public String toString() {
         StringBuilder result = new StringBuilder();
         for (Map.Entry<Characteristic, Integer> e : characteristicValues.entrySet()) {
-            result.append(e.getKey()).append(" ").append(e.getValue()).append(", ");
+            result.append(e.getKey()).append(" ").append(e.getValue()).append(" ");
         }
         for (Map.Entry<String, Skill> e : skillMap.entrySet()) {
-            result.append(e.getKey()).append(" ").append(e.getValue().getLevel()).append(", ");
+            result.append(e.getKey()).append(" ").append(e.getValue().getLevel()).append(" ");
         }
-        result.append(maxHealthPoints).append(" ").append(healthPoints).append(" ");
+        result.append("HP: ").append(healthPoints).append(" ");
         result.append(coins).append(" ");
         for (Map.Entry<ItemSlot, Item> e : equippedItemsMap.entrySet()) {
             result.append(e.getKey()).append(" ").append(e.getValue().getType()).append(" ");

@@ -17,8 +17,8 @@ public abstract class ContentGenerator {
 
     protected boolean setRandomPosition(Behaviour behaviour, Environment environment, Location location) {
         for (int i = 0; i < 10; i++) {
-            float x = randomGenerator.nextFloat(0, PIXELS_PER_LOCATION);
-            float y = randomGenerator.nextFloat(0, PIXELS_PER_LOCATION);
+            float x = randomGenerator.nextFloat(behaviour.getWidth() / 2, PIXELS_PER_LOCATION - behaviour.getWidth() / 2);
+            float y = randomGenerator.nextFloat(behaviour.getHeight() / 2, PIXELS_PER_LOCATION - behaviour.getHeight() / 2);
             if (environment.allowedPosition(behaviour, x + location.getScreenX() * PIXELS_PER_LOCATION,
                     y + location.getScreenY() * PIXELS_PER_LOCATION, false)) {
                 setLocalPosition(behaviour, location, x, y);

@@ -108,7 +108,8 @@ public class CreatureBehaviour extends Behaviour {
     @Override
     public String toString() {
         String result = creature + " ";
-        result += EP;
+        result += "pos: " + getX() + " " + getY() + " ";
+        result += EP + " ";
         if (state instanceof FightBehaviourState) {
             result += ((FightBehaviourState) state).getActions();
         }

@@ -16,6 +16,12 @@ public class MainMenuPage extends Page {
                 mode.changePage(new NewGamePage(mode));
             }
         });
+        addButton(table, "Load Game", new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mode.changePage(new LoadPage(mode));
+            }
+        });
         addButton(table, "Contribute", new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

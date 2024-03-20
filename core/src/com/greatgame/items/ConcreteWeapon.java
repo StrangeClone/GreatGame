@@ -2,7 +2,7 @@ package com.greatgame.items;
 
 import com.greatgame.entities.Weapon;
 
-import static com.greatgame.environment.RandomMap.randomGenerator;
+import java.util.Random;
 
 public class ConcreteWeapon implements Weapon {
 
@@ -23,7 +23,7 @@ public class ConcreteWeapon implements Weapon {
 
     @Override
     public int damage() {
-        return randomGenerator.nextInt(1,maxDamage + 1);
+        return new Random().nextInt(1,maxDamage + 1);
     }
 
     @Override

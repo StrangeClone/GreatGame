@@ -1,5 +1,11 @@
 package com.greatgame.environment;
 
+import com.greatgame.behaviour.CreatureBehaviourInfo;
+import com.greatgame.behaviour.ItemBehaviourInfo;
+import com.greatgame.contentGenerators.ConcreteBiome;
+import com.greatgame.contentGenerators.ConcreteStructure;
+import sun.security.pkcs.ParsingException;
+
 import java.util.*;
 
 public class Location {
@@ -17,9 +23,71 @@ public class Location {
         behavioursInfo = new HashMap<>();
     }
 
+    public Location(Scanner scanner) throws ParsingException {
+        String token = scanner.next();
+        if (!"position:".equals(token)) {
+            throw new ParsingException("No position of location");
+        }
+        x = scanner.nextInt();
+        y = scanner.nextInt();
+        biome = parseBiome(scanner);
+        structure = parseStructure(scanner);
+        screenX = scanner.nextInt();
+        screenY = scanner.nextInt();
+
+        behavioursInfo = new HashMap<>();
+        parseBehaviourInfo(scanner);
+    }
+
+    private Biome parseBiome(Scanner scanner) throws ParsingException {
+        String token = scanner.next();
+        for (BiomeNames s : BiomeNames.values()) {
+            if (s.toString().equals(token)) {
+                return new ConcreteBiome(s);
+            }
+        }
+        throw new ParsingException("Unexpected biome in position " + x + " " + y);
+    }
+
+    private Structure parseStructure(Scanner scanner) throws ParsingException {
+        String token = scanner.next();
+        if ("screen:".equals(token)) {
+            return null;
+        }
+        for (StructureNames s : StructureNames.values()) {
+            if (s.toString().equals(token)) {
+                scanner.next();
+                return new ConcreteStructure(s);
+            }
+        }
+        throw new ParsingException("Unexpected structure in position " + x + " " + y);
+    }
+
+    private void parseBehaviourInfo(Scanner scanner) throws ParsingException {
+        for (String token = scanner.next(); !"over".equals(token); token = scanner.next()) {
+            BehaviourInfo newInfo;
+            if ("Creature".equals(token)) {
+                newInfo = new CreatureBehaviourInfo(scanner);
+            } else if ("Item".equals(token)) {
+                newInfo = new ItemBehaviourInfo(scanner);
+            } else {
+                throw new ParsingException("Unexpected behaviour info in position " + x + " " + y);
+            }
+            behavioursInfo.put(newInfo.behaviourName, newInfo);
+        }
+    }
+
     public void setScreenPosition(int screenX, int screenY) {
         this.screenX = screenX;
         this.screenY = screenY;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public int getScreenX() {
@@ -66,14 +134,15 @@ public class Location {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("position: (" + x + "," + y + ") " + biome.getName() + " ");
+        StringBuilder result = new StringBuilder("position: " + x + " " + y + " " + biome.getName() + " ");
         if (structure != null) {
             result.append(structure.getName()).append(" ");
         }
-        result.append("screen: (").append(screenX).append(",").append(screenY).append(") ");
+        result.append("screen: ").append(screenX).append(" ").append(screenY).append(" ");
         for (BehaviourInfo info : behavioursInfo.values()) {
-            result.append(info).append(", ");
+            result.append(info).append(" ");
         }
+        result.append("over");
         return result.toString();
     }
 }

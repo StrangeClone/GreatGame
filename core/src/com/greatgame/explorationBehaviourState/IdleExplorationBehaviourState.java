@@ -8,7 +8,7 @@ import com.greatgame.environment.ModeName;
 import com.greatgame.fightBehaviourState.AggressiveFightBehaviourState;
 import com.greatgame.fightBehaviourState.RunningFightBehaviourState;
 
-import static com.greatgame.environment.RandomMap.randomGenerator;
+import java.util.Random;
 
 public class IdleExplorationBehaviourState extends ExplorationBehaviourState {
     private final Vector2 direction;
@@ -62,9 +62,10 @@ public class IdleExplorationBehaviourState extends ExplorationBehaviourState {
                 getEnvironment().dist(thisPosition, playerPosition) < PIXELS_PER_METER * 4) {
             direction.set(thisPosition.sub(playerPosition)).nor();
         } else if (System.currentTimeMillis() > nextChangeTime) {
-            nextChangeTime += randomGenerator.nextLong(1, 6) * 1000;
-            if (randomGenerator.nextBoolean()) {
-                double randomAngle = randomGenerator.nextDouble(0,Math.PI * 2);
+            Random random = new Random();
+            nextChangeTime += random.nextLong(1, 6) * 1000;
+            if (random.nextBoolean()) {
+                double randomAngle = random.nextDouble(0,Math.PI * 2);
                 Vector2 randomDirection = new Vector2((float) Math.sin(randomAngle), (float) Math.cos(randomAngle));
                 direction.set(randomDirection).nor();
             } else {

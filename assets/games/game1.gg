@@ -1,0 +1,18 @@
+223
+Agility 13 Physique 9 HP: 5 80 flower healing_potion  pos: -264.9931 -809.32117 1000 
+explorationMode 0 0
+position: -1 0 GrassLand screen: -1 0 over
+position: -1 -1 GrassLand Village screen: -1 -1 Creature -1_-1_6 6 -400.06104 -834.5243 76 healing_potion healing_potion false Item -1_-1_88 1 true over
+position: -1 1 GrassLand screen: -1 1 over
+position: 0 -1 GrassLand screen: 0 -1 over
+position: 0 0 GrassLand screen: 0 0 over
+position: -2 -2 GrassLand screen: -2 -2 over
+position: -1 -2 GrassLand screen: -1 -2 over
+position: -2 -1 Forest screen: -2 -1 over
+position: 0 1 Forest screen: 0 1 over
+position: -2 0 Forest screen: -2 0 over
+position: 1 -1 GrassLand screen: 1 -1 over
+position: 1 -2 GrassLand screen: 1 -2 over
+position: 1 0 GrassLand screen: 1 0 over
+position: 1 1 Forest screen: 1 1 over
+position: 0 -2 GrassLand Village screen: 0 -2 over

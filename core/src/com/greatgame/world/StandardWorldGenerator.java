@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.greatgame.contentGenerators.ConcreteBiome;
 import com.greatgame.contentGenerators.ConcreteStructure;
 import com.greatgame.environment.*;
+import sun.security.pkcs.ParsingException;
 
 import java.util.*;
 
@@ -14,6 +15,24 @@ public class StandardWorldGenerator implements WorldGenerator {
     public StandardWorldGenerator(long seed) {
         locationMap = new HashMap<>();
         this.seed = seed;
+    }
+
+    public StandardWorldGenerator(long seed, Scanner alreadyGeneratedLocationsStream) throws ParsingException {
+        locationMap = new HashMap<>();
+        this.seed = seed;
+        readLocations(alreadyGeneratedLocationsStream);
+    }
+
+    private void readLocations(Scanner scanner) throws ParsingException {
+        boolean endOfFile = false;
+        while (!endOfFile) {
+            try {
+                Location newLocation = new Location(scanner);
+                locationMap.put(new Vector2(newLocation.getX(), newLocation.getY()), newLocation);
+            } catch (NoSuchElementException e) {
+                endOfFile = true;
+            }
+        }
     }
 
     @Override

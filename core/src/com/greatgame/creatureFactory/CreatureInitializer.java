@@ -44,7 +44,6 @@ public class CreatureInitializer {
                 modify(new CharacteristicSetter(Characteristic.Physique, 8)).
                 modify(new CharacteristicSetter(Characteristic.Agility, 14)).
                 modify(new SkillGiver("bite", 1)).
-                modify(new SkillGiver("vitality", 1)).
                 modify(new ItemEquipper(itemsFactory.create("fox_fangs").getItem())).
                 modify(new ItemGiver(itemsFactory.create("fur").getItem())));
         behaviourRefiner.addPattern(new StandardCreatureRefiningPattern("fox", false));

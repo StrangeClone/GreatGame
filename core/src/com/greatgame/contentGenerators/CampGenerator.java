@@ -24,8 +24,8 @@ public class CampGenerator extends ContentGenerator {
         environment.addBehaviour(fireCamp);
         for(int i = 0; i < 3; i++) {
             Behaviour tent = ItemBehaviour.itemsFactory.create("tent");
-            setLocalPosition(tent, location, PIXELS_PER_LOCATION / 10 * (float) Math.sin(Math.PI * 2 / 3 * i),
-                    PIXELS_PER_LOCATION / 10 * (float) Math.cos(Math.PI * 2 / 3 * i));
+            setLocalPosition(tent, location, PIXELS_PER_LOCATION / 2 + PIXELS_PER_LOCATION / 10 * (float) Math.sin(Math.PI * 2 / 3 * i),
+                    PIXELS_PER_LOCATION / 2 + PIXELS_PER_LOCATION / 10 * (float) Math.cos(Math.PI * 2 / 3 * i));
             environment.addBehaviour(tent);
         }
         placeCreaturesAtRandomPositions(environment, location, "bandit", randomGenerator.nextInt(3,7));

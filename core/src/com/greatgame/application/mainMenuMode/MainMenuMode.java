@@ -22,6 +22,14 @@ public class MainMenuMode extends Mode {
         return previousMode;
     }
 
+    public boolean hasPreviousMode() {
+        return previousMode != null;
+    }
+
+    void newGameLoaded() {
+        previousMode = null;
+    }
+
     GreatGame getApp() {
         return app;
     }

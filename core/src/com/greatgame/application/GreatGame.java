@@ -62,7 +62,7 @@ public class GreatGame extends ApplicationAdapter {
     private void manageModeChange() {
         if (world != null && world.getEnvironment().getCurrentMode() != world.getEnvironment().getNextMode()) {
             setBackgroundColor(Color.GREEN);
-            if (mode instanceof MainMenuMode && ((MainMenuMode) mode).getPreviousMode() != null) {
+            if (mode instanceof MainMenuMode && ((MainMenuMode) mode).hasPreviousMode()) {
                 mode = ((MainMenuMode) mode).getPreviousMode();
             } else if (world.getEnvironment().getNextMode() == ModeName.explorationMode) {
                 mode = new ExplorationMode(this);

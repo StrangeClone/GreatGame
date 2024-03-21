@@ -145,7 +145,6 @@ public class ConcreteEnvironment implements Environment {
         loadedLocations.add(l);
         l.setScreenPosition(x - originalScreenX, y - originalScreenY);
         world.generateContents(x,y);
-        System.out.println(behavioursInLocation(l) + " " + x + " " + y);
     }
 
     private void removeLocation(Location l) {

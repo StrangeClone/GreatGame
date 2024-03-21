@@ -45,6 +45,7 @@ public class LoadPage extends Page {
                     if (gameName.getText().notEmpty()) {
                         mode.getApp().setWorld(new World(Gdx.files.local("assets/games/" + gameName.getText())));
                         mode.getApp().setBackgroundColor(Color.GREEN);
+                        mode.newGameLoaded();
                     }
                 } catch (RuntimeException | IOException e) {
                     Dialog errorDialog = new ErrorDialog("File corrupted");

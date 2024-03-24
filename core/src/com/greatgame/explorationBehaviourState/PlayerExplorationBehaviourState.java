@@ -95,6 +95,7 @@ public class PlayerExplorationBehaviourState extends ExplorationBehaviourState {
 
     @Override
     public void act(float delta) {
+        super.act(delta);
         if(directionX != 0 || directionY != 0) {
             float deltaX = directionX * delta * behaviour.getSpeed() / 3 * PIXELS_PER_METER;
             float deltaY = directionY * delta * behaviour.getSpeed() / 3 * PIXELS_PER_METER;

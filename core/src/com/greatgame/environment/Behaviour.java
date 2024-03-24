@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
+import com.greatgame.application.Mode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ public abstract class Behaviour extends Actor {
     protected Location originalLocation;
     protected Environment environment;
     private final List<Action> allowedActions;
+    private String text = "";
+    private long textDisappearTime = 0;
 
     public Behaviour(Texture texture, String type) {
         this.texture = texture;
@@ -58,6 +62,14 @@ public abstract class Behaviour extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(texture, getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+        if (!text.isEmpty()) {
+            float diff = textDisappearTime - System.currentTimeMillis();
+            if (diff > 0) {
+                Mode.skin.getFont("font").draw(batch, text, getX() - 50, getY(), 100, Align.center, false);
+            } else {
+                text = "";
+            }
+        }
     }
 
     public List<Action> getAllowedActions() {
@@ -69,4 +81,9 @@ public abstract class Behaviour extends Actor {
     }
 
     public abstract void saveBehaviourInfo();
+
+    public void showText(String text) {
+        this.text = text;
+        textDisappearTime = System.currentTimeMillis() + 1000;
+    }
 }

@@ -37,6 +37,15 @@ public class NewGamePage extends Page {
         skillSelection(table, player);
         confirmButton(table, player);
 
+        Button backButton = new TextButton("Back", MainMenuMode.skin);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mode.changePage(new MainMenuPage(mode));
+            }
+        });
+        table.add(backButton).colspan(3).padTop(20);
+
         table.setFillParent(true);
         pageStage.addActor(table);
     }
@@ -114,7 +123,7 @@ public class NewGamePage extends Page {
                 mode.environment().triggerModeChange(ModeName.explorationMode);
             }
         });
-        table.add(createButton).padTop(50).colspan(3);
+        table.add(createButton).padTop(50).colspan(3).row();
     }
 
 

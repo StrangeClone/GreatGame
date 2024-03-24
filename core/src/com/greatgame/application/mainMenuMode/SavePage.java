@@ -43,7 +43,16 @@ public class SavePage extends Page {
                 mode.changePage(new PausePage(mode));
             }
         });
-        table.add(saveButton).width(200).row();
+        table.add(saveButton).width(200).padBottom(10).row();
+        TextButton backButton = new TextButton("Back", MainMenuMode.skin);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mode.changePage(new PausePage(mode));
+            }
+        });
+        table.add(backButton).width(400).colspan(2).row();
+
 
         table.setFillParent(true);
         pageStage.addActor(table);

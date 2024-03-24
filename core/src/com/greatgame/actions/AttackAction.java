@@ -24,6 +24,9 @@ public class AttackAction extends Action {
             int check = attacker.getCreature().check(weapon.getSkill());
             if(check >= target.getAC()) {
                 target.damage(weapon.damage());
+                target.showText("Hit");
+            } else {
+                target.showText("Missed");
             }
             return true;
         }

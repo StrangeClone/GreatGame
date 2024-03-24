@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.greatgame.application.Mode;
 import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
+import com.greatgame.explorationBehaviourState.ExplorationBehaviourState;
 
 public class ExplorationModeAllowedActionDialog extends Dialog {
 
@@ -25,6 +26,8 @@ public class ExplorationModeAllowedActionDialog extends Dialog {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (!button.isDisabled()) {
+                        ((ExplorationBehaviourState) selectedBehaviour.getEnvironment().getPlayer().getState()).
+                                setAction(action);
                         action.start();
                         ExplorationModeAllowedActionDialog.this.remove();
                     }

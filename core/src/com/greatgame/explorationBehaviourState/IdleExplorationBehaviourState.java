@@ -30,6 +30,7 @@ public class IdleExplorationBehaviourState extends ExplorationBehaviourState {
 
     @Override
     public void act(float delta) {
+        super.act(delta);
         if (behaviour.isHostile() && getEnvironment().freeView(behaviour, getEnvironment().getPlayer()) &&
                 getEnvironment().dist(new Vector2(behaviour.getX(), behaviour.getY()),
                         new Vector2(getEnvironment().getPlayer().getX(),

@@ -54,7 +54,15 @@ public class LoadPage extends Page {
                 }
             }
         });
-        table.add(loadButton).width(400).colspan(2).row();
+        table.add(loadButton).width(400).padBottom(10).colspan(2).row();
+        TextButton backButton = new TextButton("Back", MainMenuMode.skin);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mode.changePage(new MainMenuPage(mode));
+            }
+        });
+        table.add(backButton).width(400).colspan(2).row();
 
         table.setFillParent(true);
         pageStage.addActor(table);

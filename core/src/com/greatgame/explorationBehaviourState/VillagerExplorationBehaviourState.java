@@ -24,7 +24,4 @@ public class VillagerExplorationBehaviourState extends ExplorationBehaviourState
             behaviour.setState(new VillagerExplorationBehaviourState(behaviour, newMode.getStage()));
         }
     }
-
-    @Override
-    public void act(float delta) {}
 }

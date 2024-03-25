@@ -43,7 +43,7 @@ public class PausePage extends Page {
                 mode.changePage(new SavePage(mode));
             }
         });
-        addButton(table, "Contribute", new ClickListener() {
+        addButton(table, "To the repository", new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 openUrl("https://github.com/StrangeClone/GreatGame");

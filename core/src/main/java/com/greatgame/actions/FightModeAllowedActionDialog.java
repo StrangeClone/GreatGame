@@ -10,12 +10,14 @@ import com.greatgame.environment.Action;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.fightBehaviourState.FightBehaviourState;
 
+import static com.greatgame.actions.ExplorationModeAllowedActionDialog.removeUnderscores;
+
 public class FightModeAllowedActionDialog extends Dialog {
 
     public FightModeAllowedActionDialog(Behaviour selectedBehaviour) {
         super("", Mode.skin);
 
-        text(selectedBehaviour.getType());
+        text(removeUnderscores(selectedBehaviour.getType()));
         getContentTable().row();
 
         for(Action action : selectedBehaviour.getAllowedActions()) {

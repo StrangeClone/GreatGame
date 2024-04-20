@@ -25,6 +25,9 @@ public class AttackAction extends Action {
             if(check >= target.getAC()) {
                 target.damage(weapon.damage());
                 target.showText("Hit");
+                if (target instanceof CreatureBehaviour creatureBehaviour && creatureBehaviour.getCreature().getHP() <= 0) {
+                    attacker.increaseEP(100);
+                }
             } else {
                 target.showText("Missed");
             }

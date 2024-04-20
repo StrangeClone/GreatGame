@@ -59,8 +59,8 @@ public class CreatureBehaviourInfo extends BehaviourInfo {
 
     private void fixInventory(Creature c) {
         List<String> itemsThatAreThere = c.getInventory().stream().
-                map(Item::getType).
-                toList();
+            map(Item::getType).
+            collect(Collectors.toCollection(ArrayList::new));
         List<String> itemsThatShouldBeThere = new ArrayList<>(inventory);
         for(Iterator<String> typeIterator = itemsThatAreThere.iterator(); typeIterator.hasNext();) {
             String current = typeIterator.next();

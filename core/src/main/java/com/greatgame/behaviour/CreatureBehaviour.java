@@ -1,11 +1,15 @@
 package com.greatgame.behaviour;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.greatgame.application.Mode;
 import com.greatgame.entities.Creature;
+import com.greatgame.entities.Item;
 import com.greatgame.environment.Behaviour;
+import com.greatgame.environment.Location;
+import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
 import com.greatgame.factory.Factory;
 import com.greatgame.fightBehaviourState.FightBehaviourState;
 
@@ -72,8 +76,29 @@ public class CreatureBehaviour extends Behaviour {
         creature.setHP(currentHP - damage);
         if (creature.getHP() <= 0) {
             remove();
+            dropInventory();
         }
         saveBehaviourInfo();
+    }
+
+    private void dropInventory() {
+        for (Item item : creature.getInventory()) {
+            ItemBehaviour droppedItem = new ItemBehaviour(new Texture(Gdx.files.internal("textures/items/") + item.getType()), item);
+            droppedItem.setPosition(getX(), getY());
+            droppedItem.setOriginalLocation(getCurrentLocation());
+            getEnvironment().addBehaviour(droppedItem);
+        }
+    }
+
+    private Location getCurrentLocation() {
+        int x = PlayerExplorationBehaviourState.locationCoordinate(getX(), getEnvironment().getOriginalLocationX());
+        int y = PlayerExplorationBehaviourState.locationCoordinate(getY(), getEnvironment().getOriginalLocationY());
+        for (Location l : getEnvironment().getLoadedLocations()) {
+            if (l.x == x && l.y == y) {
+                return l;
+            }
+        }
+        return null;
     }
 
     @Override

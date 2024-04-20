@@ -14,7 +14,7 @@ public class ExplorationModeAllowedActionDialog extends Dialog {
     public ExplorationModeAllowedActionDialog(Behaviour selectedBehaviour) {
         super("", Mode.skin);
 
-        text(selectedBehaviour.getType());
+        text(removeUnderscores(selectedBehaviour.getType()));
         getContentTable().row();
 
         for(Action action : selectedBehaviour.getAllowedActions()) {
@@ -37,5 +37,13 @@ public class ExplorationModeAllowedActionDialog extends Dialog {
         }
 
         button("Back");
+    }
+
+    static String removeUnderscores(String s) {
+        StringBuilder result = new StringBuilder();
+        for (Character c : s.toCharArray()) {
+            result.append(c == '_' ? ' ' : c);
+        }
+        return result.toString();
     }
 }

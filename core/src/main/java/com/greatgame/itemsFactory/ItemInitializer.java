@@ -9,20 +9,20 @@ import static com.greatgame.factory.BehaviourRefiner.behaviourRefiner;
 public class ItemInitializer {
     public static void initializeItems() {
         itemsFactory.addPattern(new ItemPattern("tree", new Texture("textures/items/tree.png"), 50, 10, 0, true));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("tree", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("tree", false));
 
         itemsFactory.addPattern(new ItemPattern("big_rock", new Texture("textures/items/big_rock.png"), 100, 10, 0, true));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("big_rock", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("big_rock", false));
 
         itemsFactory.addPattern(new ItemPattern("little_rock", new Texture("textures/items/little_rock.png"), 25, 12, 2, false).
                 modify(new EnableCollectModifier()));
         behaviourRefiner.addPattern(new ItemRefiningPattern("little_rock", true));
 
         itemsFactory.addPattern(new ItemPattern("bush", new Texture("textures/items/bush.png"), 25, 10, 0, true));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("bush", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("bush", false));
 
         itemsFactory.addPattern(new ItemPattern("little_bush", new Texture("textures/items/little_bush.png"), 15, 12, 0, false));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("little_bush", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("little_bush", false));
 
         itemsFactory.addPattern(new ItemPattern("flower", new Texture("textures/items/flower.png"), 1, 12, 1, false).
                 modify(new EnableCollectModifier()));
@@ -77,13 +77,13 @@ public class ItemInitializer {
                 modify(new WeaponModifier(3, 1.5f, "unarmed fight")));
 
         itemsFactory.addPattern(new ItemPattern("house", new Texture("textures/items/house.png"), 1000, 15, 0, true));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("house", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("house", false));
 
         itemsFactory.addPattern(new ItemPattern("tent", new Texture("textures/items/tent.png"), 20, 8, 0, true));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("tent", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("tent", false));
 
         itemsFactory.addPattern(new ItemPattern("fireplace", new Texture("textures/items/fireplace.png"), 20, 8, 0, true));
-        behaviourRefiner.addPattern(new ItemRefiningPattern("fireplace", true));
+        behaviourRefiner.addPattern(new ItemRefiningPattern("fireplace", false));
 
         itemsFactory.addPattern(new ItemPattern("wooden_leg", new Texture("textures/items/wooden_leg.png"), 1000, 20, 170_000_000, true).
                 modify(new EnableCollectModifier()));

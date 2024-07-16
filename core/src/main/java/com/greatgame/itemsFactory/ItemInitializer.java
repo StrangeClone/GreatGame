@@ -2,13 +2,17 @@ package com.greatgame.itemsFactory;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.greatgame.entities.ItemSlot;
+import com.greatgame.environment.TreeDrawer;
 
 import static com.greatgame.behaviour.ItemBehaviour.itemsFactory;
 import static com.greatgame.factory.BehaviourRefiner.behaviourRefiner;
 
 public class ItemInitializer {
     public static void initializeItems() {
-        itemsFactory.addPattern(new ItemPattern("tree", new Texture("textures/items/tree.png"), 50, 10, 0, true));
+        itemsFactory.addPattern(new CompositeTexturePattern("tree",
+            new TreeDrawer(new Texture("textures/items/tree.png"),
+                new Texture("textures/items/tree2.png")),
+            50, 10, 0, true));
         behaviourRefiner.addPattern(new ItemRefiningPattern("tree", false));
 
         itemsFactory.addPattern(new ItemPattern("big_rock", new Texture("textures/items/big_rock.png"), 100, 10, 0, true));

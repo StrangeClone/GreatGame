@@ -1,6 +1,5 @@
 package com.greatgame.environment;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Behaviour extends Actor {
-    private final Texture texture;
+    private final BehaviourDrawer behaviourDrawer;
     protected final String type;
     protected Location originalLocation;
     protected Environment environment;
@@ -19,14 +18,14 @@ public abstract class Behaviour extends Actor {
     private String text = "";
     private long textDisappearTime = 0;
 
-    public Behaviour(Texture texture, String type) {
-        this.texture = texture;
-        if (texture != null) {
-            setWidth(texture.getWidth() * 2);
-            setHeight(texture.getHeight() * 2);
+    public Behaviour(BehaviourDrawer drawer, String type) {
+        if (drawer.getTexture() != null) {
+            setWidth(drawer.getTexture().getWidth() * 2);
+            setHeight(drawer.getTexture().getHeight() * 2);
         }
         this.type = type;
         this.allowedActions = new ArrayList<>();
+        this.behaviourDrawer = drawer;
     }
 
     public String getType() {
@@ -61,7 +60,7 @@ public abstract class Behaviour extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture, getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+        behaviourDrawer.draw(batch, this);
         if (!text.isEmpty()) {
             float diff = textDisappearTime - System.currentTimeMillis();
             if (diff > 0) {

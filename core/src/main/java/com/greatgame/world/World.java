@@ -43,7 +43,6 @@ public class World {
         generator = new StandardWorldGenerator(seed, scanner);
         this.environment = new ConcreteEnvironment();
         environment.setWorld(this);
-
         environment.setPlayer(player, null);
         environment.setOriginalLocation(originalX, originalY);
 

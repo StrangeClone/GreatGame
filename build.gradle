@@ -59,7 +59,7 @@ configure(subprojects) {
 }
 
 subprojects {
-  version = '0.1.27'
+  version = '0.1.29'
   ext.appName = 'GreatGame'
   repositories {
     mavenCentral()

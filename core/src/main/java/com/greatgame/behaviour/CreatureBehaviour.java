@@ -9,6 +9,7 @@ import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
 import com.greatgame.environment.Behaviour;
 import com.greatgame.environment.Location;
+import com.greatgame.environment.StaticDrawer;
 import com.greatgame.explorationBehaviourState.PlayerExplorationBehaviourState;
 import com.greatgame.factory.Factory;
 import com.greatgame.fightBehaviourState.FightBehaviourState;
@@ -21,7 +22,7 @@ public class CreatureBehaviour extends Behaviour {
     int EP = 0;
 
     public CreatureBehaviour(Texture texture, Creature creature) {
-        super(texture, creature.getType());
+        super(new StaticDrawer(texture), creature.getType());
         this.creature = creature;
     }
 
@@ -83,7 +84,8 @@ public class CreatureBehaviour extends Behaviour {
 
     private void dropInventory() {
         for (Item item : creature.getInventory()) {
-            ItemBehaviour droppedItem = new ItemBehaviour(new Texture(Gdx.files.internal("textures/items/") + item.getType()), item);
+            ItemBehaviour droppedItem = new ItemBehaviour(new StaticDrawer(
+                new Texture(Gdx.files.internal("textures/items/") + item.getType())), item);
             droppedItem.setPosition(getX(), getY());
             droppedItem.setOriginalLocation(getCurrentLocation());
             getEnvironment().addBehaviour(droppedItem);

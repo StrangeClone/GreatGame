@@ -3,10 +3,13 @@ package com.greatgame.items;
 import com.greatgame.creature.ConcreteCreature;
 import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class CoinsCollectManagerTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class CoinsCollectManagerTest {
+
+    @Test
     public void testCollect() {
         Creature creature = new ConcreteCreature();
         Item coins = new ConcreteItem("", 10, 10, 0, new CoinsCollectManager(30), null);

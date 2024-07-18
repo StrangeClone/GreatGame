@@ -3,18 +3,17 @@ package com.greatgame.creature;
 import com.greatgame.entities.Characteristic;
 import com.greatgame.entities.Creature;
 import com.greatgame.skills.SkillInitializer;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class ConcreteCreatureTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    Creature  creature;
-    @Override
-    protected void setUp() {
-        creature = new ConcreteCreature();
-        SkillInitializer.initializeSkills();
-    }
+public class ConcreteCreatureTest {
 
+    @Test
     public void testGetCharacteristicBonus() {
+        Creature creature = new ConcreteCreature();
+        SkillInitializer.initializeSkills();
         creature.setCharacteristic(Characteristic.Physique, 3);
         assertEquals(-4, creature.getCharacteristicBonus(Characteristic.Physique));
         creature.setCharacteristic(Characteristic.Physique, 4);
@@ -49,7 +48,10 @@ public class ConcreteCreatureTest extends TestCase {
         assertEquals(4, creature.getCharacteristicBonus(Characteristic.Physique));
     }
 
+    @Test
     public void testSetCharacteristic() {
+        Creature creature = new ConcreteCreature();
+        SkillInitializer.initializeSkills();
         creature.setCharacteristic(Characteristic.Physique, 12);
         assertEquals(7, creature.getMaxHP());
         assertEquals(7, creature.getHP());
@@ -58,7 +60,10 @@ public class ConcreteCreatureTest extends TestCase {
         assertEquals(10, creature.getHP());
     }
 
+    @Test
     public void testCheck() {
+        Creature creature = new ConcreteCreature();
+        SkillInitializer.initializeSkills();
         creature.upgradeSkill("archery");
         creature.upgradeSkill("archery");
         creature.upgradeSkill("archery");
@@ -69,7 +74,10 @@ public class ConcreteCreatureTest extends TestCase {
         }
     }
 
+    @Test
     public void testUpgradeSkill() {
+        Creature creature = new ConcreteCreature();
+        SkillInitializer.initializeSkills();
         assertEquals(0, creature.getLevel("archery"));
         creature.upgradeSkill("archery");
         assertEquals(1, creature.getLevel("archery"));

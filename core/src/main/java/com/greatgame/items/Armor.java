@@ -15,6 +15,7 @@ public class Armor extends EquipManager {
     @Override
     public void equip(Item item, Creature creature) {
         super.equip(item, creature);
+        equippedCreature.increaseAC(value);
         putItemInSlot(item, slot);
     }
 

@@ -1,9 +1,12 @@
 package com.greatgame.environment;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class ActionTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
 
+public class ActionTest {
+
+    @Test
     public void testFinished() {
         Action emptyAction = new Action("empty") {
             long endTime;

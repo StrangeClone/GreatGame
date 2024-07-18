@@ -3,16 +3,16 @@ package com.greatgame.skills;
 import com.greatgame.creature.ConcreteCreature;
 import com.greatgame.entities.Characteristic;
 import com.greatgame.entities.Creature;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class VitalityUpGraderTest extends TestCase {
-    @Override
-    protected void setUp() {
-        SkillInitializer.initializeSkills();
-    }
+public class VitalityUpGraderTest {
 
+    @Test
     public void testUpgrade() {
+        SkillInitializer.initializeSkills();
         Creature creature = new ConcreteCreature();
         creature.upgradeSkill("vitality");
         assertEquals(12, creature.getMaxHP());

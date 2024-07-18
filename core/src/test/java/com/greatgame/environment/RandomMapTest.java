@@ -1,10 +1,12 @@
 package com.greatgame.environment;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class RandomMapTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RandomMapTest {
     RandomMap<String> stringRandomMap;
-    @Override
+
     protected void setUp() {
         stringRandomMap = new RandomMap<>();
         stringRandomMap.setWeight("Hello", 1);
@@ -12,13 +14,17 @@ public class RandomMapTest extends TestCase {
         stringRandomMap.setWeight("GreatGame", 1);
     }
 
+    @Test
     public void testGetWeight() {
+        setUp();
         assertEquals(stringRandomMap.getWeight("Hello"), 1);
         assertEquals(stringRandomMap.getWeight("World!"), 2);
         assertEquals(stringRandomMap.getWeight("Dude"), 0);
     }
 
+    @Test
     public void testGenerate() {
+        setUp();
         int v1 = 0, v2 = 0, v3 = 0;
         int tests = 100000;
         for(int i = 0; i < tests; i++) {

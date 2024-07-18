@@ -1,6 +1,8 @@
 package com.greatgame.application.fightMode;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.greatgame.application.GreatGame;
 import com.greatgame.application.Mode;
 import com.greatgame.behaviour.CreatureBehaviour;
@@ -22,6 +24,17 @@ public class FightMode extends Mode {
         fighters = new ArrayList<>();
 
         handleFighters();
+
+        Label hint1 = new Label("You're in fight mode. The game will be turn based as long as there are enemies.", skin);
+        Label hint2 = new Label("Your turn start when your character is enlighten by a red square. Click to move or attack.", skin);
+
+        Table hintTable = new Table();
+        hintTable.add(hint1).row();
+        hintTable.add(hint2);
+        hintTable.top();
+        hintTable.padTop(20);
+        hintTable.setFillParent(true);
+        stage.addActor(hintTable);
 
         addPlayerUI();
     }

@@ -3,10 +3,13 @@ package com.greatgame.items;
 import com.greatgame.creature.ConcreteCreature;
 import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class PotionUseManagerTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class PotionUseManagerTest {
+
+    @Test
     public void testUseOn() {
         Creature dude = new ConcreteCreature();
         dude.setHP(0);

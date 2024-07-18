@@ -143,13 +143,21 @@ classDiagram
   }
   class Creature {
     <<interface>>
-    + getCharacteristicBonus(Characteristic)
+    + getType() String
+    + getCharacteristic(Characteristic) int
+    + getCharacteristicBonus(Characteristic) int
+    + setCharacteristic(Characteristic, int)
     + check(String) int
     + upgradeSkill(String)
+    + getLevel(String) int
+    + getAC() int
+    + increaseAC(int)
     + getHP() int
+    + setHP(int)
     + getMaxHP() int
     + updateMxHP()
     + getSpeed() int
+    + setSpeed(int)
     + getItem(ItemSlot) Item
     + setItem(ItemSlot, Item)
     + getInventory() List~Item~
@@ -158,11 +166,16 @@ classDiagram
   }
   class Item {
     <<interface>>
+    + getType() String
     + break(int)
     + getAC() int
+    + getHP() int
+    + setHP(int)
+    + getPrice() int
     + canBeUsed() boolean
     + use(Creature)
     + canBeCollected() boolean
+    + hasBeCollected() boolean
     + collect(Creature)
     + canBeEquipped() boolean
     + equip(Creature)
@@ -184,15 +197,16 @@ classDiagram
 ```
 
 The interfaces in this package represent basic concepts. The Characteristic enumeration simply defines the two
-Characteristics. The Skill interface defines the basic methods needed by the skill: two methods to get the values of
-the skill attributes, the name and the level, a method getBonus to get the Bonus associated to the Creature that is
+Characteristics. The Skill interface defines the basic methods needed by the skill: methods to get the values of
+the skill attributes, a method getBonus to get the Bonus associated to the Creature that is
 making the skill check, a method levelUp to increase the level that a Creature has in that skill.
 
 The Creature interface defines some methods to get the basic attributes of a Creature (characteristics, HP, MaxHP, speed, 
 level of a skill, etc.), a method to make a skill check, a method to upgrade a skill.
 
 The Item interface defines some methods to get the basic attributes of an Item and some methods about actions a
-Creature can do to an Item.
+Creature can do to an Item. Its method toWeapon does a sort of cast to the Weapon interface, returning a "version" of
+the items that only contains the attributes of the item as a weapon. It returns null if the item can't be used as a weapon.
 
 
 ### Environment package

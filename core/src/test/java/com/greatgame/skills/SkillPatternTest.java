@@ -1,18 +1,16 @@
 package com.greatgame.skills;
 
 import com.greatgame.entities.Skill;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import static com.greatgame.skills.ConcreteSkill.skillFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SkillPatternTest extends TestCase {
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        SkillInitializer.initializeSkills();
-    }
+public class SkillPatternTest {
 
+    @Test
     public void testBuild() {
+        SkillInitializer.initializeSkills();
         Skill skill = skillFactory.create("vitality");
         assertEquals("vitality", skill.getName());
         skill = skillFactory.create("fencing");

@@ -4,10 +4,14 @@ import com.greatgame.creature.ConcreteCreature;
 import com.greatgame.entities.Creature;
 import com.greatgame.entities.Item;
 import com.greatgame.entities.ItemSlot;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class WeaponTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
+public class WeaponTest {
+
+    @Test
     public void testEquip() {
         Creature dude = new ConcreteCreature();
         Item sword = new ConcreteItem("", 10, 10, 0, null, new WeaponManager(

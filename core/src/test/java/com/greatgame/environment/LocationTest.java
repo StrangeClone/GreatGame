@@ -1,9 +1,13 @@
 package com.greatgame.environment;
 
-import junit.framework.TestCase;
 
-public class LocationTest extends TestCase {
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class LocationTest {
+
+    @Test
     public void testGetBehaviourInfos() {
         Location l = new Location(0, 0, null, null);
         BehaviourInfo info1 = new BehaviourInfo("Info1",10) {
